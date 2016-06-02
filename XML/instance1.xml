@@ -1,0 +1,1126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Propis xmlns="http://www.skupstinans.rs/propis"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.skupstinans.rs/propis file:/E:/fax/IV%20god/II%20sem/XML/Projekat/Propis.xsd" xmlns:propis="http://www.skupstinans.rs/propis" propis:danStupanjaNaSnagu="2047508755" propis:nazivSluzbenogGlasila="SAMLjo" propis:godinaOdKojeSePrimenjuje="486466165"
+     propis:rokVazenja="2017-05-28" propis:brojPropisa="841">
+    <Preambula>
+        <PravniOsnov>
+            <MaterijalniPravniOsnov>rQ6HxNno3OtAPt0VbbE_KSPh54</MaterijalniPravniOsnov>
+            <FormalniPravniOsnov>IIjXD3A4zrcUHV2219KxKRYqFE9hRQ</FormalniPravniOsnov>
+        </PravniOsnov>
+        <DonosilacPropisa>
+            <NazivOrgana>ZBX</NazivOrgana>
+        </DonosilacPropisa>
+        <Saglasnost>
+            <NazivOrgana>D</NazivOrgana>
+            <Naznaka>X003jCfeVOEDksLDRwZ31hT</Naznaka>
+        </Saglasnost>
+    </Preambula>
+    <NazivPropisa>F</NazivPropisa>
+    <DeoBezNaziva propis:id="ID001">
+        <Glava propis:id="ID003">
+            <Naziv>ZBPx</Naziv>
+            <Clan propis:id="ID005">
+                <Naziv>E</Naziv>
+                <Stav propis:id="ID007">
+                    <Tekst>ojiF2Oo-IgSI44lgU8WAr4wHwUSS6</Tekst>
+                    <Tacka propis:id="ID009">
+                        <Tekst>MrwT8FH</Tekst>
+                        <Podtacka propis:id="ID011">
+                            <Tekst>J0PnD</Tekst>
+                            <Alineja propis:id="ID013">
+                                <Tekst>e1upNJeM6ppCkjW6b4whqej76JLt2</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID015">
+                                <Tekst>KQ1MJkqavCw6bDQ3EUunqlkMV</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                        <Podtacka propis:id="ID017">
+                            <Tekst>onjnPi1fSBxXak</Tekst>
+                            <Alineja propis:id="ID019">
+                                <Tekst>NfdRFc..CEKhR2ZH1lWugYO0CI2</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID021">
+                                <Tekst>Vr</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                    </Tacka>
+                    <Tacka propis:id="ID023">
+                        <Tekst>G.ZkdUkEjfcBg-LY</Tekst>
+                        <Podtacka propis:id="ID025">
+                            <Tekst>fmi8MC4XfCJEzQFTwMA4sxWD</Tekst>
+                            <Alineja propis:id="ID027">
+                                <Tekst>Uo</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID029">
+                                <Tekst>y</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                        <Podtacka propis:id="ID031">
+                            <Tekst>CSX3mH</Tekst>
+                            <Alineja propis:id="ID033">
+                                <Tekst>fcSgbZYgyTUS3TYFhgJZ1D1nvb</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID035">
+                                <Tekst>AqahWnOr8WjOW</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                    </Tacka>
+                </Stav>
+                <Stav propis:id="ID037">
+                    <Tekst>H8GUfPgQL4TsS1B</Tekst>
+                    <Tacka propis:id="ID039">
+                        <Tekst>nSDsD2gVbq5tYIAihhFn5O</Tekst>
+                        <Podtacka propis:id="ID041">
+                            <Tekst>Ago7yjqJ97HFp.</Tekst>
+                            <Alineja propis:id="ID043">
+                                <Tekst>SN4uxZalOaD6</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID045">
+                                <Tekst>MEu1h-mBlB-w8-ki</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                        <Podtacka propis:id="ID047">
+                            <Tekst>RqBMKPRB3h-PBxjF</Tekst>
+                            <Alineja propis:id="ID049">
+                                <Tekst>g8MhW</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID051">
+                                <Tekst>QOcxcdrU</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                    </Tacka>
+                    <Tacka propis:id="ID053">
+                        <Tekst>tTb5_</Tekst>
+                        <Podtacka propis:id="ID055">
+                            <Tekst>Iv3Qx8</Tekst>
+                            <Alineja propis:id="ID057">
+                                <Tekst>sFgw_8o4Zn-NcjtcYEc4</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID059">
+                                <Tekst>jR5wbcXM1cqYVB.V6lt7LT6Arx9K</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                        <Podtacka propis:id="ID061">
+                            <Tekst>mXQ</Tekst>
+                            <Alineja propis:id="ID063">
+                                <Tekst>UVxBI7c1JBWgSkTR</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID065">
+                                <Tekst>N1aX9j2VcEIwPqES</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                    </Tacka>
+                </Stav>
+            </Clan>
+            <Clan propis:id="ID067">
+                <Naziv>M</Naziv>
+                <Stav propis:id="ID069">
+                    <Tekst>OUflH</Tekst>
+                    <Tacka propis:id="ID071">
+                        <Tekst>mYy</Tekst>
+                        <Podtacka propis:id="ID073">
+                            <Tekst>LV4SOOVsFvwhQ4A.k.yJoQ2I5-jSgh</Tekst>
+                            <Alineja propis:id="ID075">
+                                <Tekst>l25Y</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID077">
+                                <Tekst>A0h-dtpgNJ4T4IFkwULntk2p</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                        <Podtacka propis:id="ID079">
+                            <Tekst>RMky5.7OUJQ-Al-</Tekst>
+                            <Alineja propis:id="ID081">
+                                <Tekst>cEw_hg</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID083">
+                                <Tekst>JVzbjw</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                    </Tacka>
+                    <Tacka propis:id="ID085">
+                        <Tekst>eF</Tekst>
+                        <Podtacka propis:id="ID087">
+                            <Tekst>nlviiEUSqDkV4xW8ePfBg-7</Tekst>
+                            <Alineja propis:id="ID089">
+                                <Tekst>ehti3zbuU1J</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID091">
+                                <Tekst>s5JZ.bIgY</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                        <Podtacka propis:id="ID093">
+                            <Tekst>Lxaadud-9zK5jj0jM.KfHM.MFpf</Tekst>
+                            <Alineja propis:id="ID095">
+                                <Tekst>tM6R8gz8XFWyNwcf4KJAeXuSA8nJ</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID097">
+                                <Tekst>WJNcpDBIQBXkp6H</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                    </Tacka>
+                </Stav>
+                <Stav propis:id="ID099">
+                    <Tekst>MtcbTFD9NMaVUnzK5Fbq</Tekst>
+                    <Tacka propis:id="ID101">
+                        <Tekst>_9oa8tOkP7.UWt5MnqsFLdB1v89gXr</Tekst>
+                        <Podtacka propis:id="ID103">
+                            <Tekst>o3qmPLIpKcXwyG_vByTTTC7o</Tekst>
+                            <Alineja propis:id="ID105">
+                                <Tekst>n-yKZ.uf5riR.Q5oX01rO</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID107">
+                                <Tekst>XuzdK_</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                        <Podtacka propis:id="ID109">
+                            <Tekst>uxwVLuhcnqD3HCldq6L7Yho4eY</Tekst>
+                            <Alineja propis:id="ID111">
+                                <Tekst>SEa-p1tCJ26I9onfJnEQSYajPoZuH7</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID113">
+                                <Tekst>mEV8yG-Qial0u9cc</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                    </Tacka>
+                    <Tacka propis:id="ID115">
+                        <Tekst>HXSuds88GUAEl</Tekst>
+                        <Podtacka propis:id="ID117">
+                            <Tekst>c</Tekst>
+                            <Alineja propis:id="ID119">
+                                <Tekst>Vb23y3U7nAbpCT56vyLcGWuU</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID121">
+                                <Tekst>OaE15Byw0JIaWlUpoYYi7</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                        <Podtacka propis:id="ID123">
+                            <Tekst>a4d0</Tekst>
+                            <Alineja propis:id="ID125">
+                                <Tekst>DoLL5Y_ymGpOS</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID127">
+                                <Tekst>UXL_xW7vixaLDv4vUjgJ104zvh9</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                    </Tacka>
+                </Stav>
+            </Clan>
+        </Glava>
+        <Glava propis:id="ID129">
+            <Naziv>G</Naziv>
+            <Odeljak propis:id="ID131">
+                <Naziv>O</Naziv>
+                <Pododeljak propis:id="ID133">
+                    <Naziv>AR</Naziv>
+                    <Clan propis:id="ID135">
+                        <Naziv>N</Naziv>
+                        <Stav propis:id="ID137">
+                            <Tekst>uoKg6Jn7HHthI.EjSgV</Tekst>
+                            <Tacka propis:id="ID139">
+                                <Tekst>kiUfr9cxZ</Tekst>
+                                <Podtacka propis:id="ID141">
+                                    <Tekst>i-XdN2Zg3-k</Tekst>
+                                    <Alineja propis:id="ID143">
+                                        <Tekst>EBntvzih</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID145">
+                                        <Tekst>GkqJ2D6</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                                <Podtacka propis:id="ID147">
+                                    <Tekst>kmp8jpTled.iVzIQo</Tekst>
+                                    <Alineja propis:id="ID149">
+                                        <Tekst>RBgBqeGQXxu-qjZV0dLUoeXN</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID151">
+                                        <Tekst>PQ99lkm</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                            </Tacka>
+                            <Tacka propis:id="ID153">
+                                <Tekst>ToNSYJrRK.sSvc_PsgR8h_swq</Tekst>
+                                <Podtacka propis:id="ID155">
+                                    <Tekst>PL0sjI19g1p0JvSLVj-7Ro5iWp.dhn</Tekst>
+                                    <Alineja propis:id="ID157">
+                                        <Tekst>TE</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID159">
+                                        <Tekst>uk9A86Tf2</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                                <Podtacka propis:id="ID161">
+                                    <Tekst>DF3MOcNM382ngch1</Tekst>
+                                    <Alineja propis:id="ID163">
+                                        <Tekst>fvVRDzSu</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID165">
+                                        <Tekst>QPlLT5</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                            </Tacka>
+                        </Stav>
+                        <Stav propis:id="ID167">
+                            <Tekst>xCCfS_L7wCYmDia1rQ76zre</Tekst>
+                            <Tacka propis:id="ID169">
+                                <Tekst>F2zBlE5OBJ3vqX2eQe4h</Tekst>
+                                <Podtacka propis:id="ID171">
+                                    <Tekst>NpmEcftgXRSO7SUlqPRSghb</Tekst>
+                                    <Alineja propis:id="ID173">
+                                        <Tekst>J8Gb2A4UZHYnLepzG1mwp2juBx</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID175">
+                                        <Tekst>CBq3MUozicsoLi8gV.oqhcCFZa4N</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                                <Podtacka propis:id="ID177">
+                                    <Tekst>ljww</Tekst>
+                                    <Alineja propis:id="ID179">
+                                        <Tekst>YQH2Gv3xtZT0RL-v6_NBTjsaE</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID181">
+                                        <Tekst>FQmlqXwv_gGozl5hGr16Xa</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                            </Tacka>
+                            <Tacka propis:id="ID183">
+                                <Tekst>c_1OVDP</Tekst>
+                                <Podtacka propis:id="ID185">
+                                    <Tekst>QlHE22agkellRGHtgHvf.YN8</Tekst>
+                                    <Alineja propis:id="ID187">
+                                        <Tekst>YlE-7VSqUNQdnrg</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID189">
+                                        <Tekst>aYSflNPrXAAtOkk7yspOSyv3</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                                <Podtacka propis:id="ID191">
+                                    <Tekst>Kx4uEzkDBS2zrD.wSl2t1Ok3</Tekst>
+                                    <Alineja propis:id="ID193">
+                                        <Tekst>fv2R8TK-nZcL0MKLHDU0i1hPoLux</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID195">
+                                        <Tekst>tVsX</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                            </Tacka>
+                        </Stav>
+                    </Clan>
+                    <Clan propis:id="ID197">
+                        <Naziv>N2</Naziv>
+                        <Stav propis:id="ID199">
+                            <Tekst>P3Bgyx</Tekst>
+                            <Tacka propis:id="ID201">
+                                <Tekst>yil-hpnSdQPCZlcvJu</Tekst>
+                                <Podtacka propis:id="ID203">
+                                    <Tekst>oqigF-TOIO</Tekst>
+                                    <Alineja propis:id="ID205">
+                                        <Tekst>L8RAx6ZrNOc-</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID207">
+                                        <Tekst>BSDp</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                                <Podtacka propis:id="ID209">
+                                    <Tekst>C1pEFWy-8</Tekst>
+                                    <Alineja propis:id="ID211">
+                                        <Tekst>BSxtBh6L5OwMGKjxS2M6Eoc1O-Rb</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID213">
+                                        <Tekst>VTWF6Qt6n2h71z.01Md</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                            </Tacka>
+                            <Tacka propis:id="ID215">
+                                <Tekst>Qo2Ph</Tekst>
+                                <Podtacka propis:id="ID217">
+                                    <Tekst>OF</Tekst>
+                                    <Alineja propis:id="ID219">
+                                        <Tekst>GUw7nU9XXEV9GkxM</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID221">
+                                        <Tekst>aX1</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                                <Podtacka propis:id="ID223">
+                                    <Tekst>OgxrU3.DkPtC5OUh2rZ</Tekst>
+                                    <Alineja propis:id="ID225">
+                                        <Tekst>YEe76bKGlAu7gq_gkcrqpfXq8</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID227">
+                                        <Tekst>gt</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                            </Tacka>
+                        </Stav>
+                        <Stav propis:id="ID229">
+                            <Tekst>v9G57Vz</Tekst>
+                            <Tacka propis:id="ID231">
+                                <Tekst>xKzdb11s6n7l5ktBL9sa</Tekst>
+                                <Podtacka propis:id="ID233">
+                                    <Tekst>Z7jgj0PHdMKushzvphYKA</Tekst>
+                                    <Alineja propis:id="ID235">
+                                        <Tekst>DwiWHuB</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID237">
+                                        <Tekst>PxecLcK-Fcpiq7</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                                <Podtacka propis:id="ID239">
+                                    <Tekst>JnohwRHQxJ2c7XyO8K</Tekst>
+                                    <Alineja propis:id="ID241">
+                                        <Tekst>buJVIHzlh6Xc.zgnsU6prPZIi</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID243">
+                                        <Tekst>H5zCO9DoItvwP</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                            </Tacka>
+                            <Tacka propis:id="ID245">
+                                <Tekst>xph</Tekst>
+                                <Podtacka propis:id="ID247">
+                                    <Tekst>ssExUCeDllp.C</Tekst>
+                                    <Alineja propis:id="ID249">
+                                        <Tekst>y</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID251">
+                                        <Tekst>cdQ-7CGTR.AaiJQ1hfoF-5CzPpl</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                                <Podtacka propis:id="ID253">
+                                    <Tekst>NHVIB</Tekst>
+                                    <Alineja propis:id="ID255">
+                                        <Tekst>w9WF7o-MQmafzhcsLcCxk77-</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID257">
+                                        <Tekst>kk4MWJdxS</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                            </Tacka>
+                        </Stav>
+                    </Clan>
+                    <ClanBezNaziva propis:id="ID259">
+                        <Stav propis:id="ID261">
+                            <Tekst>jA4zjxR</Tekst>
+                            <Tacka propis:id="ID263">
+                                <Tekst>oSFk</Tekst>
+                                <Podtacka propis:id="ID265">
+                                    <Tekst>WCmv</Tekst>
+                                    <Alineja propis:id="ID267">
+                                        <Tekst>FUy7NIOUOSDcc8jMF</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID269">
+                                        <Tekst>I.IKVtnxJ5ZdE4wf</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                                <Podtacka propis:id="ID271">
+                                    <Tekst>l0K</Tekst>
+                                    <Alineja propis:id="ID273">
+                                        <Tekst>gHpuV</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID275">
+                                        <Tekst>vI26</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                            </Tacka>
+                            <Tacka propis:id="ID277">
+                                <Tekst>lYWGYZmz7NYy</Tekst>
+                                <Podtacka propis:id="ID279">
+                                    <Tekst>bVQ</Tekst>
+                                    <Alineja propis:id="ID281">
+                                        <Tekst>ne1g3IyX2TiU</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID283">
+                                        <Tekst>tcf-3JPE6xFV_cNsv</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                                <Podtacka propis:id="ID285">
+                                    <Tekst>PW-VYjmJgVg.AR</Tekst>
+                                    <Alineja propis:id="ID287">
+                                        <Tekst>Jcf2EsTJP1ae</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID289">
+                                        <Tekst>txEwuCIoPjhRf</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                            </Tacka>
+                        </Stav>
+                    </ClanBezNaziva>
+                </Pododeljak>
+                <Pododeljak propis:id="ID291">
+                    <Naziv>M E</Naziv>
+                    <Clan propis:id="ID293">
+                        <Naziv>Lj</Naziv>
+                        <Stav propis:id="ID295">
+                            <Tekst>crgemuCp</Tekst>
+                            <Tacka propis:id="ID297">
+                                <Tekst>e1mWYEAa9M2</Tekst>
+                                <Podtacka propis:id="ID299">
+                                    <Tekst>cuUBS16zcF1pa</Tekst>
+                                    <Alineja propis:id="ID301">
+                                        <Tekst>gwV6j8vloESEohSJvDxmbVQbST6h</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID303">
+                                        <Tekst>xPT3YCezc_gGGRrpOPrNRH</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                                <Podtacka propis:id="ID305">
+                                    <Tekst>OG.JSz6FQ1WmbYhc2xQeJch</Tekst>
+                                    <Alineja propis:id="ID307">
+                                        <Tekst>FtPq22q.rBK</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID309">
+                                        <Tekst>TYIkut15oCtzFU_3Xq6</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                            </Tacka>
+                            <Tacka propis:id="ID311">
+                                <Tekst>YU4IqLyxx3qdo60SekykbGbPTrVqv</Tekst>
+                                <Podtacka propis:id="ID313">
+                                    <Tekst>b</Tekst>
+                                    <Alineja propis:id="ID315">
+                                        <Tekst>lrvXGdqzoLyiy</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID317">
+                                        <Tekst>cgtsidO_N2Vl9Lef07ro</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                                <Podtacka propis:id="ID319">
+                                    <Tekst>Epye0vRa</Tekst>
+                                    <Alineja propis:id="ID321">
+                                        <Tekst>VQPZyiYy</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID323">
+                                        <Tekst>MIvfCSIdv7uip-OpAtKE</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                            </Tacka>
+                        </Stav>
+                        <Stav propis:id="ID325">
+                            <Tekst>tm</Tekst>
+                            <Tacka propis:id="ID327">
+                                <Tekst>M2e</Tekst>
+                                <Podtacka propis:id="ID329">
+                                    <Tekst>s1tWUa5tEqkzO</Tekst>
+                                    <Alineja propis:id="ID331">
+                                        <Tekst>QlabIEc</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID333">
+                                        <Tekst>KTz7nCuGl_-8yRz</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                                <Podtacka propis:id="ID335">
+                                    <Tekst>SUmKe.ir</Tekst>
+                                    <Alineja propis:id="ID337">
+                                        <Tekst>WiXvhBAWd6JmX8Xa</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID339">
+                                        <Tekst>GM4v.Csu8lbPxd</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                            </Tacka>
+                            <Tacka propis:id="ID341">
+                                <Tekst>J8i_wgVjNzs99Z622YYNUN</Tekst>
+                                <Podtacka propis:id="ID343">
+                                    <Tekst>ZG.ce9hVzRdmX9L2ePppKmfljR</Tekst>
+                                    <Alineja propis:id="ID345">
+                                        <Tekst>ic-70</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID347">
+                                        <Tekst>uDSvXIQgeu-nA5</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                                <Podtacka propis:id="ID349">
+                                    <Tekst>NG_KHsAFKD</Tekst>
+                                    <Alineja propis:id="ID351">
+                                        <Tekst>cn3Fy69zenjxFRIfqcSvhem</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID353">
+                                        <Tekst>Jzi3-uWJVIyVNRFog</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                            </Tacka>
+                        </Stav>
+                    </Clan>
+                    <Clan propis:id="ID355">
+                        <Naziv>GIB</Naziv>
+                        <Stav propis:id="ID357">
+                            <Tekst>b0xXb1T1RXhv6YSnIOIQ0</Tekst>
+                            <Tacka propis:id="ID359">
+                                <Tekst>xC8WT2QWesB89c6CEy6Q.c3-_-ot7</Tekst>
+                                <Podtacka propis:id="ID361">
+                                    <Tekst>w</Tekst>
+                                    <Alineja propis:id="ID363">
+                                        <Tekst>IF14pOhiIjMPUmNWG</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID365">
+                                        <Tekst>zqM3F</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                                <Podtacka propis:id="ID367">
+                                    <Tekst>W-qQ1nNQGPXI_MHagAG6hc8</Tekst>
+                                    <Alineja propis:id="ID369">
+                                        <Tekst>NpaL3s5eXorAJ9O_75s</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID371">
+                                        <Tekst>m56y7OzDK6EPJ.g4vpPb8zO</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                            </Tacka>
+                            <Tacka propis:id="ID373">
+                                <Tekst>XlGo</Tekst>
+                                <Podtacka propis:id="ID375">
+                                    <Tekst>MoojIpDP</Tekst>
+                                    <Alineja propis:id="ID377">
+                                        <Tekst>ijP5cg4cILFlkuEfJB4</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID379">
+                                        <Tekst>u4ZHA9L9r</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                                <Podtacka propis:id="ID381">
+                                    <Tekst>HidW7o6pNTDkBNbWU</Tekst>
+                                    <Alineja propis:id="ID383">
+                                        <Tekst>kx_UJ41</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID385">
+                                        <Tekst>Gvtnc-xF</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                            </Tacka>
+                        </Stav>
+                        <Stav propis:id="ID387">
+                            <Tekst>WCLvbTiEXh8B_OCDjKB</Tekst>
+                            <Tacka propis:id="ID389">
+                                <Tekst>gx.c2-P</Tekst>
+                                <Podtacka propis:id="ID391">
+                                    <Tekst>J9Z7Zs0t</Tekst>
+                                    <Alineja propis:id="ID393">
+                                        <Tekst>NLakG3</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID395">
+                                        <Tekst>K8-MZqIAf6Kfe</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                                <Podtacka propis:id="ID397">
+                                    <Tekst>PMcrbqSboaa2pcetnsmTqXFi9h</Tekst>
+                                    <Alineja propis:id="ID399">
+                                        <Tekst>iDKYr9sd6SxZ1kd</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID401">
+                                        <Tekst>JtQytobxHb97iWlXlUm</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                            </Tacka>
+                            <Tacka propis:id="ID403">
+                                <Tekst>Bz2q.aGthKCVVU30wcA</Tekst>
+                                <Podtacka propis:id="ID405">
+                                    <Tekst>blPjwKnPUdRw3BnDGTMKiSvg6D</Tekst>
+                                    <Alineja propis:id="ID407">
+                                        <Tekst>oO8GPqbc</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID409">
+                                        <Tekst>w4cUkCy9aDoD.4yviD</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                                <Podtacka propis:id="ID411">
+                                    <Tekst>B1DZiBLQnv7DA</Tekst>
+                                    <Alineja propis:id="ID413">
+                                        <Tekst>EhJHASqI4pvUo</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID415">
+                                        <Tekst>knKYuWCyoMe2XCzLGS</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                            </Tacka>
+                        </Stav>
+                    </Clan>
+                    <ClanBezNaziva propis:id="ID417">
+                        <Stav propis:id="ID419">
+                            <Tekst>G8vFOXLnjk1klaISOolqN70</Tekst>
+                            <Tacka propis:id="ID421">
+                                <Tekst>osQNwE</Tekst>
+                                <Podtacka propis:id="ID423">
+                                    <Tekst>hvWfEcybuY_MzHK1obvQNqvsrlPyF</Tekst>
+                                    <Alineja propis:id="ID425">
+                                        <Tekst>_7QM6dzkQP8gSbaq7N</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID427">
+                                        <Tekst>dGU1a</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                                <Podtacka propis:id="ID429">
+                                    <Tekst>j</Tekst>
+                                    <Alineja propis:id="ID431">
+                                        <Tekst>cXcGLa0fBJ9PElZNM</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID433">
+                                        <Tekst>VREWUe4xn_9UuYtG4S</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                            </Tacka>
+                            <Tacka propis:id="ID435">
+                                <Tekst>cqtZkGVydEBGLGGpvv1ifrqg</Tekst>
+                                <Podtacka propis:id="ID437">
+                                    <Tekst>Mf3u_NJY.</Tekst>
+                                    <Alineja propis:id="ID439">
+                                        <Tekst>G0HsBeD</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID441">
+                                        <Tekst>inlT-0fp-TbsDhaekF8B</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                                <Podtacka propis:id="ID443">
+                                    <Tekst>q8YbM</Tekst>
+                                    <Alineja propis:id="ID445">
+                                        <Tekst>kj7VCFsoRX2m5b1qFOgEX</Tekst>
+                                    </Alineja>
+                                    <Alineja propis:id="ID447">
+                                        <Tekst>c.9GN0FR3F-f2nsgV8V9</Tekst>
+                                    </Alineja>
+                                </Podtacka>
+                            </Tacka>
+                        </Stav>
+                    </ClanBezNaziva>
+                </Pododeljak>
+            </Odeljak>
+            <Odeljak propis:id="ID449">
+                <Naziv>B</Naziv>
+                <Clan propis:id="ID451">
+                    <Naziv>I</Naziv>
+                    <Stav propis:id="ID453">
+                        <Tekst>egVs</Tekst>
+                        <Tacka propis:id="ID455">
+                            <Tekst>ZPp</Tekst>
+                            <Podtacka propis:id="ID457">
+                                <Tekst>kiW</Tekst>
+                                <Alineja propis:id="ID459">
+                                    <Tekst>afrWBTHNGllIIX</Tekst>
+                                </Alineja>
+                                <Alineja propis:id="ID461">
+                                    <Tekst>b</Tekst>
+                                </Alineja>
+                            </Podtacka>
+                            <Podtacka propis:id="ID463">
+                                <Tekst>ZdX2</Tekst>
+                                <Alineja propis:id="ID465">
+                                    <Tekst>TzsPwzINk4LZ2uFd2yLFnLuS6</Tekst>
+                                </Alineja>
+                                <Alineja propis:id="ID467">
+                                    <Tekst>xwww</Tekst>
+                                </Alineja>
+                            </Podtacka>
+                        </Tacka>
+                        <Tacka propis:id="ID469">
+                            <Tekst>udMcgwTAoOX1CZc</Tekst>
+                            <Podtacka propis:id="ID471">
+                                <Tekst>rzmH67</Tekst>
+                                <Alineja propis:id="ID473">
+                                    <Tekst>XalZBGxMjaWg5cN6CPCuRPZC-YrARF</Tekst>
+                                </Alineja>
+                                <Alineja propis:id="ID475">
+                                    <Tekst>tzsyHVhoemBy9fQwk</Tekst>
+                                </Alineja>
+                            </Podtacka>
+                            <Podtacka propis:id="ID477">
+                                <Tekst>Ef</Tekst>
+                                <Alineja propis:id="ID479">
+                                    <Tekst>RlizW8y</Tekst>
+                                </Alineja>
+                                <Alineja propis:id="ID481">
+                                    <Tekst>yOaH</Tekst>
+                                </Alineja>
+                            </Podtacka>
+                        </Tacka>
+                    </Stav>
+                    <Stav propis:id="ID483">
+                        <Tekst>TezneOAVphIDi4LaP7m5</Tekst>
+                        <Tacka propis:id="ID485">
+                            <Tekst>O8F</Tekst>
+                            <Podtacka propis:id="ID487">
+                                <Tekst>HUZ1c</Tekst>
+                                <Alineja propis:id="ID489">
+                                    <Tekst>FVbg</Tekst>
+                                </Alineja>
+                                <Alineja propis:id="ID491">
+                                    <Tekst>kMh3p96XPcrGE</Tekst>
+                                </Alineja>
+                            </Podtacka>
+                            <Podtacka propis:id="ID493">
+                                <Tekst>l54XFjktDFH6jLacbKZkOQm8</Tekst>
+                                <Alineja propis:id="ID495">
+                                    <Tekst>O-Jsa2-w1WSWj8</Tekst>
+                                </Alineja>
+                                <Alineja propis:id="ID497">
+                                    <Tekst>OFzvTEQjiO-</Tekst>
+                                </Alineja>
+                            </Podtacka>
+                        </Tacka>
+                        <Tacka propis:id="ID499">
+                            <Tekst>J6k3</Tekst>
+                            <Podtacka propis:id="ID501">
+                                <Tekst>EhQL5CsB2cB7nv8w6Aj0_T53l9u8rr</Tekst>
+                                <Alineja propis:id="ID503">
+                                    <Tekst>luwwmmZ.WlN2gAt_-RY5q6Q6nmvxf</Tekst>
+                                </Alineja>
+                                <Alineja propis:id="ID505">
+                                    <Tekst>RDi94Zdq.S0oM5-ABQfy1UYN</Tekst>
+                                </Alineja>
+                            </Podtacka>
+                            <Podtacka propis:id="ID507">
+                                <Tekst>O51pZsSkYqRF</Tekst>
+                                <Alineja propis:id="ID509">
+                                    <Tekst>hMmCd75W6</Tekst>
+                                </Alineja>
+                                <Alineja propis:id="ID511">
+                                    <Tekst>INm7ZhKlJk5J-JY2EVPcRRflK</Tekst>
+                                </Alineja>
+                            </Podtacka>
+                        </Tacka>
+                    </Stav>
+                </Clan>
+                <Clan propis:id="ID513">
+                    <Naziv>K</Naziv>
+                    <Stav propis:id="ID515">
+                        <Tekst>lMAe8qD8M-Jtc</Tekst>
+                        <Tacka propis:id="ID517">
+                            <Tekst>rx9-iLL2b-ytQ81K_lAa</Tekst>
+                            <Podtacka propis:id="ID519">
+                                <Tekst>K_SzGtOCj</Tekst>
+                                <Alineja propis:id="ID521">
+                                    <Tekst>AZOAgwAYdsoYEUR2m4oqJuYzXxnb</Tekst>
+                                </Alineja>
+                                <Alineja propis:id="ID523">
+                                    <Tekst>k_kYdrnZcSQ</Tekst>
+                                </Alineja>
+                            </Podtacka>
+                            <Podtacka propis:id="ID525">
+                                <Tekst>a</Tekst>
+                                <Alineja propis:id="ID527">
+                                    <Tekst>pEYApkPoaId</Tekst>
+                                </Alineja>
+                                <Alineja propis:id="ID529">
+                                    <Tekst>kjp</Tekst>
+                                </Alineja>
+                            </Podtacka>
+                        </Tacka>
+                        <Tacka propis:id="ID531">
+                            <Tekst>uCauGWCqj_hqU</Tekst>
+                            <Podtacka propis:id="ID533">
+                                <Tekst>VyXCgL1rnFvcgNp4En</Tekst>
+                                <Alineja propis:id="ID535">
+                                    <Tekst>omsg</Tekst>
+                                </Alineja>
+                                <Alineja propis:id="ID537">
+                                    <Tekst>Tek</Tekst>
+                                </Alineja>
+                            </Podtacka>
+                            <Podtacka propis:id="ID539">
+                                <Tekst>wPS75FAKFR7I6</Tekst>
+                                <Alineja propis:id="ID541">
+                                    <Tekst>ZPr</Tekst>
+                                </Alineja>
+                                <Alineja propis:id="ID543">
+                                    <Tekst>CNquyTJBChTdwqSd53.0P3HiZA8QS</Tekst>
+                                </Alineja>
+                            </Podtacka>
+                        </Tacka>
+                    </Stav>
+                    <Stav propis:id="ID545">
+                        <Tekst>ImCKu3Wph2C3</Tekst>
+                        <Tacka propis:id="ID547">
+                            <Tekst>je0os47Z2ovjkp1flcOyAvMnYkBCo</Tekst>
+                            <Podtacka propis:id="ID549">
+                                <Tekst>NalltRvy</Tekst>
+                                <Alineja propis:id="ID551">
+                                    <Tekst>pd</Tekst>
+                                </Alineja>
+                                <Alineja propis:id="ID553">
+                                    <Tekst>IzcDA</Tekst>
+                                </Alineja>
+                            </Podtacka>
+                            <Podtacka propis:id="ID555">
+                                <Tekst>WFp.</Tekst>
+                                <Alineja propis:id="ID557">
+                                    <Tekst>Z8XDlnSZPXrWm80L-T</Tekst>
+                                </Alineja>
+                                <Alineja propis:id="ID559">
+                                    <Tekst>eUJbNoGZq69YdG</Tekst>
+                                </Alineja>
+                            </Podtacka>
+                        </Tacka>
+                        <Tacka propis:id="ID561">
+                            <Tekst>ead8AdECyeP-oYAiirtir1_FZ9</Tekst>
+                            <Podtacka propis:id="ID563">
+                                <Tekst>o5MSkioLgnbPyn4-Xq</Tekst>
+                                <Alineja propis:id="ID565">
+                                    <Tekst>DsaVCZM6s</Tekst>
+                                </Alineja>
+                                <Alineja propis:id="ID567">
+                                    <Tekst>FCz6by-dl_oBRdJxqZBEjlm9Tb</Tekst>
+                                </Alineja>
+                            </Podtacka>
+                            <Podtacka propis:id="ID569">
+                                <Tekst>T</Tekst>
+                                <Alineja propis:id="ID571">
+                                    <Tekst>Yg2nXOI6bAboCeRXEp</Tekst>
+                                </Alineja>
+                                <Alineja propis:id="ID573">
+                                    <Tekst>RVPH7RAb6GPNp75XzZA</Tekst>
+                                </Alineja>
+                            </Podtacka>
+                        </Tacka>
+                    </Stav>
+                </Clan>
+            </Odeljak>
+        </Glava>
+    </DeoBezNaziva>
+    <DeoBezNaziva propis:id="ID575">
+        <Glava propis:id="ID577">
+            <Naziv>J</Naziv>
+            <ClanBezNaziva propis:id="ID579">
+                <Stav propis:id="ID581">
+                    <Tekst>SQYVydRfJ4OgS4xAyajg</Tekst>
+                    <Tacka propis:id="ID583">
+                        <Tekst>w3Wz</Tekst>
+                        <Podtacka propis:id="ID585">
+                            <Tekst>YidpYsLq3</Tekst>
+                            <Alineja propis:id="ID587">
+                                <Tekst>tsV_I5CHJtVjZdO</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID589">
+                                <Tekst>wfWH-Bq71.PKCgmp7LDqrVQQA7E</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                        <Podtacka propis:id="ID591">
+                            <Tekst>RiqbTApFYWvlzxhC</Tekst>
+                            <Alineja propis:id="ID593">
+                                <Tekst>CEk5m5</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID595">
+                                <Tekst>DAw</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                    </Tacka>
+                    <Tacka propis:id="ID597">
+                        <Tekst>QI2g6ZlVEH</Tekst>
+                        <Podtacka propis:id="ID599">
+                            <Tekst>R3km4o6UGZkJl4jlmo7Jni1</Tekst>
+                            <Alineja propis:id="ID601">
+                                <Tekst>duHOG6nhH0VDFrJoRHJWlR1GMHmA_r</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID603">
+                                <Tekst>KODcwJqT2Z9V</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                        <Podtacka propis:id="ID605">
+                            <Tekst>SlUQae29r1</Tekst>
+                            <Alineja propis:id="ID607">
+                                <Tekst>Th6Gc1o-Q-g</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID609">
+                                <Tekst>UUQol</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                    </Tacka>
+                </Stav>
+            </ClanBezNaziva>
+        </Glava>
+        <Glava propis:id="ID611">
+            <Naziv>CT</Naziv>
+            <Clan propis:id="ID613">
+                <Naziv>JPU</Naziv>
+                <Stav propis:id="ID615">
+                    <Tekst>uWqw2DJT</Tekst>
+                    <Tacka propis:id="ID617">
+                        <Tekst>Jac0Sg6</Tekst>
+                        <Podtacka propis:id="ID619">
+                            <Tekst>eHQgo42R-izx6cQE</Tekst>
+                            <Alineja propis:id="ID621">
+                                <Tekst>OeCS9_nK1xemBWo</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID623">
+                                <Tekst>rKNB</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                        <Podtacka propis:id="ID625">
+                            <Tekst>KJ0Mjonxi</Tekst>
+                            <Alineja propis:id="ID627">
+                                <Tekst>dFsZxKWgSU47Ck28yssr.l2hQY2U</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID629">
+                                <Tekst>bykaxeNH9Zr5x0C</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                    </Tacka>
+                    <Tacka propis:id="ID631">
+                        <Tekst>b7LJ8jnUlTU73jFPmdBuBV</Tekst>
+                        <Podtacka propis:id="ID633">
+                            <Tekst>i0v3VECAEAePz.fmf7N4bIj</Tekst>
+                            <Alineja propis:id="ID635">
+                                <Tekst>aUX2Oo1nVXpSuWOxvgcN31ltMJePH</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID637">
+                                <Tekst>kEsUGmbsW</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                        <Podtacka propis:id="ID639">
+                            <Tekst>FUnzSoznh4i5ZKzvgTM</Tekst>
+                            <Alineja propis:id="ID641">
+                                <Tekst>CZg-aNLq8Til7_.gmNLo4wxYyUU</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID643">
+                                <Tekst>cR</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                    </Tacka>
+                </Stav>
+                <Stav propis:id="ID645">
+                    <Tekst>u88jcpY3uT2TIe7KSeuZ3V6XV</Tekst>
+                    <Tacka propis:id="ID647">
+                        <Tekst>POiX2_oyrnw</Tekst>
+                        <Podtacka propis:id="ID649">
+                            <Tekst>bw1MY-Kd72i3WeDmnVeM</Tekst>
+                            <Alineja propis:id="ID651">
+                                <Tekst>yiF1x</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID653">
+                                <Tekst>Aurm_CLDwwoPj</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                        <Podtacka propis:id="ID655">
+                            <Tekst>OvWigOoN4VpeT6RH7</Tekst>
+                            <Alineja propis:id="ID657">
+                                <Tekst>ABWj8G1-LWx-XDMofze59</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID659">
+                                <Tekst>PE83YGAhfrFxMBCCZyu</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                    </Tacka>
+                    <Tacka propis:id="ID661">
+                        <Tekst>uFJYowdMqrkRhYw05XxU8ZDejk</Tekst>
+                        <Podtacka propis:id="ID663">
+                            <Tekst>MLm9wKJGqI</Tekst>
+                            <Alineja propis:id="ID665">
+                                <Tekst>C1ZsQoj0VTouRRRIbB5VzJ5BD</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID667">
+                                <Tekst>lc8RQG.ZNzex41D8BUOSVDxWvZthwe</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                        <Podtacka propis:id="ID669">
+                            <Tekst>Nvramh2xC_PJhCOJgOCCo35vjteKIa</Tekst>
+                            <Alineja propis:id="ID671">
+                                <Tekst>H-4oM3iSRL-Q</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID673">
+                                <Tekst>AAqGGCI</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                    </Tacka>
+                </Stav>
+            </Clan>
+            <Clan propis:id="ID675">
+                <Naziv>LGBX</Naziv>
+                <Stav propis:id="ID677">
+                    <Tekst>HO09nA3</Tekst>
+                    <Tacka propis:id="ID679">
+                        <Tekst>KviAoCjKexMiA8T</Tekst>
+                        <Podtacka propis:id="ID681">
+                            <Tekst>t</Tekst>
+                            <Alineja propis:id="ID683">
+                                <Tekst>DWo_v3bjDInb0lwV4gw3Xh</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID685">
+                                <Tekst>x4YemuEa46D6vW16viR5OJrkCQY</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                        <Podtacka propis:id="ID687">
+                            <Tekst>V6P-NcVtkJB3bqopr</Tekst>
+                            <Alineja propis:id="ID689">
+                                <Tekst>Quy3Td3Fa7</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID691">
+                                <Tekst>DM2vu</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                    </Tacka>
+                    <Tacka propis:id="ID693">
+                        <Tekst>ss</Tekst>
+                        <Podtacka propis:id="ID695">
+                            <Tekst>GnQYi9jSkWi66f</Tekst>
+                            <Alineja propis:id="ID697">
+                                <Tekst>CVHlL.IRFMRjJVwmghFzC</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID699">
+                                <Tekst>HvtmGe4R8Yb2jH30</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                        <Podtacka propis:id="ID701">
+                            <Tekst>XwGEUAF2wDIv2g4K</Tekst>
+                            <Alineja propis:id="ID703">
+                                <Tekst>KvDB2UYcw3_1Eo5pUlbdz7</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID705">
+                                <Tekst>T</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                    </Tacka>
+                </Stav>
+                <Stav propis:id="ID707">
+                    <Tekst>Dhq61HvVs2j7y4.QMm7x</Tekst>
+                    <Tacka propis:id="ID709">
+                        <Tekst>GXVb3YBO5ZStQjClnFF053QIPzx</Tekst>
+                        <Podtacka propis:id="ID711">
+                            <Tekst>sWSerYo1DTpDYfoYb_QF9BzUV5c</Tekst>
+                            <Alineja propis:id="ID713">
+                                <Tekst>uuaM7o2QLM1us8JeQGQ47zK</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID715">
+                                <Tekst>zwTVg8dZqNxUTm9VGTKdX1kg_Dv</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                        <Podtacka propis:id="ID717">
+                            <Tekst>vfub.6cLj3k2e0joI</Tekst>
+                            <Alineja propis:id="ID719">
+                                <Tekst>dM</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID721">
+                                <Tekst>wLiIktOf</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                    </Tacka>
+                    <Tacka propis:id="ID723">
+                        <Tekst>rgOStc-DJ77evzQ98FNx0xpl.2oR7v</Tekst>
+                        <Podtacka propis:id="ID725">
+                            <Tekst>AYF9Za8IPEKQUxVyPbXul</Tekst>
+                            <Alineja propis:id="ID727">
+                                <Tekst>uTYBqLnmt3w0vOPb0q9.PAjd6Jr</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID729">
+                                <Tekst>RRGNJr7aznl</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                        <Podtacka propis:id="ID731">
+                            <Tekst>qYb-34xXut1QJLE</Tekst>
+                            <Alineja propis:id="ID733">
+                                <Tekst>nbrNghFBFc0Cyil</Tekst>
+                            </Alineja>
+                            <Alineja propis:id="ID735">
+                                <Tekst>w</Tekst>
+                            </Alineja>
+                        </Podtacka>
+                    </Tacka>
+                </Stav>
+            </Clan>
+        </Glava>
+    </DeoBezNaziva>
+    <DatumDonosenjaPodzakonskogPropisa>2017-06-30</DatumDonosenjaPodzakonskogPropisa>
+    <Prilozi>
+        <Prilog>
+        </Prilog>
+        <Prilog>
+        </Prilog>
+    </Prilozi>
+</Propis>

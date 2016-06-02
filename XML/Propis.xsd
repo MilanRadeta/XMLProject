@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<xsd:schema targetNamespace="http://www.skupstinans.rs/propis"
+    xmlns="http://www.skupstinans.rs/propis" xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+    xmlns:elem="http://www.skupstinans.rs/elementi">
+    <xsd:import namespace="http://www.skupstinans.rs/elementi" schemaLocation="Elementi.xsd"/>
+    <xsd:element name="Propis">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="Preambula"/>
+                <xsd:element ref="NazivPropisa"/>
+                <xsd:choice maxOccurs="1">
+                    <xsd:element maxOccurs="19" ref="elem:Clan"/>
+                    <xsd:element maxOccurs="unbounded" ref="elem:Deo"/>
+                    <xsd:element maxOccurs="unbounded" ref="elem:DeoBezNaziva"/>
+                    <xsd:element maxOccurs="unbounded" ref="elem:Glava"/>
+                </xsd:choice>
+                <xsd:element ref="Prilozi"/>
+            </xsd:sequence>
+            <xsd:attribute ref="danStupanjaNaSnagu" use="optional"/>
+            <xsd:attribute ref="nazivSluzbenogGlasila"/>
+            <xsd:attribute ref="godinaOdKojeSePrimenjuje"/>
+            <xsd:attribute ref="rokVazenja"/>
+            <xsd:attribute ref="brojPropisa" use="required"/>
+            <xsd:attribute ref="datumDonosenjaPropisa" use="required"/>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="Preambula">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="PravniOsnov"/>
+                <xsd:element ref="DonosilacPropisa"/>
+                <xsd:element ref="Saglasnost" minOccurs="0"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="PravniOsnov">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="MaterijalniPravniOsnov"/>
+                <xsd:element ref="FormalniPravniOsnov"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="DonosilacPropisa">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="NazivOrgana"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="Saglasnost">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="NazivOrgana"/>
+                <xsd:element ref="Naznaka"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="Prilozi">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element maxOccurs="unbounded" ref="Prilog" minOccurs="0"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="Prilog" type="xsd:anyType"/>
+    <xsd:element name="NazivPropisa" type="elem:Naziv"/>
+    <xsd:element name="NazivOrgana" type="elem:Naziv"/>
+    <xsd:element name="Naznaka" type="xsd:string"/>
+    <xsd:element name="MaterijalniPravniOsnov" type="xsd:string"/>
+    <xsd:element name="FormalniPravniOsnov" type="xsd:string"/>
+    <xsd:simpleType name="NazivSkupstine">
+        <xsd:restriction base="elem:Naziv">
+            <xsd:minLength value="1"/>
+            <xsd:maxLength value="50"/>
+            <xsd:pattern value="[A-ZŠČĆĐŽ]+[A-ZŠĐČĆŽa-zšđčćž0-9 ]*"/>
+            <xsd:enumeration value="Skupština Grada Novog Sada"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:simpleType name="NazivUvodnogDela">
+        <xsd:restriction base="elem:Naziv">
+            <xsd:enumeration value="Uvodne odredbe"/>
+            <xsd:enumeration value="Osnovne odredbe"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:attribute name="danStupanjaNaSnagu" type="brojDanaOdObjavljivanjaUGlasilu"/>
+    <xsd:attribute name="nazivSluzbenogGlasila" type="xsd:string"/>
+    <xsd:attribute name="rokVazenja" type="xsd:date"/>
+    <xsd:attribute name="godinaOdKojeSePrimenjuje" type="xsd:positiveInteger"/>
+    <xsd:attribute name="datumDonosenjaPropisa" type="xsd:date"/>
+    <xsd:simpleType name="brojDanaOdObjavljivanjaUGlasilu">
+        <xsd:restriction base="xsd:positiveInteger"/>
+    </xsd:simpleType>
+    <xsd:simpleType name="idBroj">
+        <xsd:restriction base="xsd:positiveInteger">
+            <xsd:pattern value="[1-9][0-9]*"/>
+        </xsd:restriction>
+    </xsd:simpleType>
+    <xsd:attribute name="brojPropisa" type="idBroj"/>
+</xsd:schema>

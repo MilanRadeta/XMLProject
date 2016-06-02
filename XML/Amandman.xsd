@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsd:schema elementFormDefault="qualified" targetNamespace="http://www.skupstinans.rs/amandman"
+    xmlns="http://www.skupstinans.rs/amandman" xmlns:elem="http://www.skupstinans.rs/elementi"
+    xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+    <xsd:import namespace="http://www.skupstinans.rs/elementi" schemaLocation="Elementi.xsd"/>
+    <xsd:element name="Amandmani">
+        <xsd:complexType>
+            <xsd:sequence>
+                <xsd:element ref="PravniOsnov"/>
+                <xsd:element ref="Propis"/>
+                <xsd:element maxOccurs="unbounded" ref="Amandman"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="Amandman">
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:element maxOccurs="unbounded" minOccurs="0" ref="elem:Referenca"/>
+                <xsd:element ref="Obrazlozenje"/>
+            </xsd:sequence>
+            <xsd:attribute ref="elem:references"/>
+            <xsd:attribute ref="insert"/>
+            <xsd:attribute ref="update"/>
+            <xsd:attribute name="delete"/>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="Obrazlozenje">
+        <xsd:complexType mixed="true">
+            <xsd:sequence>
+                <xsd:element maxOccurs="unbounded" minOccurs="0" ref="elem:Referenca"/>
+            </xsd:sequence>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="PravniOsnov" type="xsd:string"> </xsd:element>
+    <xsd:element name="Propis">
+        <xsd:complexType>
+            <xsd:simpleContent>
+                <xsd:extension base="xsd:string">
+                    <xsd:attribute ref="elem:references"/>
+                </xsd:extension>
+            </xsd:simpleContent>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:attribute default="last" name="insert">
+        <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+                <xsd:pattern value="[0-9]*"/>
+                <xsd:pattern value="first"/>
+                <xsd:pattern value="last"/>
+            </xsd:restriction>
+        </xsd:simpleType>
+    </xsd:attribute>
+    <xsd:attribute fixed="true" name="update"/>
+    <xsd:attribute fixed="true" name="delete"/>
+</xsd:schema>
