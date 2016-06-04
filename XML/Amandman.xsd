@@ -10,38 +10,39 @@
                 <xsd:element ref="Propis"/>
                 <xsd:element maxOccurs="unbounded" ref="Amandman"/>
             </xsd:sequence>
+            <xsd:attribute ref="elem:references"/>
         </xsd:complexType>
     </xsd:element>
     <xsd:element name="Amandman">
         <xsd:complexType mixed="true">
             <xsd:sequence>
-                <xsd:element maxOccurs="unbounded" minOccurs="0" ref="elem:Referenca"/>
+                <xsd:group ref="TipIzmene"/>
                 <xsd:element ref="Obrazlozenje"/>
             </xsd:sequence>
             <xsd:attribute ref="elem:references"/>
-            <xsd:attribute ref="insert"/>
-            <xsd:attribute ref="update"/>
-            <xsd:attribute name="delete"/>
         </xsd:complexType>
     </xsd:element>
     <xsd:element name="Obrazlozenje">
-        <xsd:complexType mixed="true">
+        <xsd:complexType>
             <xsd:sequence>
-                <xsd:element maxOccurs="unbounded" minOccurs="0" ref="elem:Referenca"/>
+                <xsd:element ref="RazlogPodnosenja"/>
+                <xsd:element ref="ObjasnjenjeResenja"/>
+                <xsd:element ref="Cilj"/>
+                <xsd:element ref="UticajNaBudzet"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
+    <xsd:element name="RazlogPodnosenja" type="xsd:string"/>
+    <xsd:element name="ObjasnjenjeResenja" type="xsd:string"/>
+    <xsd:element name="Cilj" type="xsd:string"/>
+    <xsd:element name="UticajNaBudzet" type="xsd:string"/>
     <xsd:element name="PravniOsnov" type="xsd:string"> </xsd:element>
     <xsd:element name="Propis">
         <xsd:complexType>
-            <xsd:simpleContent>
-                <xsd:extension base="xsd:string">
-                    <xsd:attribute ref="elem:references"/>
-                </xsd:extension>
-            </xsd:simpleContent>
+            <xsd:attribute ref="elem:references"/>
         </xsd:complexType>
     </xsd:element>
-    <xsd:attribute default="last" name="insert">
+    <xsd:attribute default="last" name="position">
         <xsd:simpleType>
             <xsd:restriction base="xsd:string">
                 <xsd:pattern value="[0-9]*"/>
@@ -50,6 +51,35 @@
             </xsd:restriction>
         </xsd:simpleType>
     </xsd:attribute>
-    <xsd:attribute fixed="true" name="update"/>
-    <xsd:attribute fixed="true" name="delete"/>
+    <xsd:element name="Izmena">
+        <xsd:complexType>
+            <xsd:choice>
+                <xsd:element ref="elem:Clan"/>
+                <xsd:element ref="elem:Stav"/>
+                <xsd:element ref="elem:Tacka"/>
+                <xsd:element ref="elem:Podtacka"/>
+                <xsd:element ref="elem:Alineja"/>
+            </xsd:choice>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="Dopuna">
+        <xsd:complexType>
+            <xsd:choice>
+                <xsd:element ref="elem:Deo"/>
+                <xsd:element ref="elem:Glava"/>
+                <xsd:element ref="elem:Odeljak"/>
+                <xsd:element ref="elem:Pododeljak"/>
+                <xsd:element ref="elem:Clan"/>
+                <xsd:element ref="elem:Stav"/>
+            </xsd:choice>
+        </xsd:complexType>
+    </xsd:element>
+    <xsd:element name="Brisanje"/>
+    <xsd:group name="TipIzmene">
+        <xsd:choice>
+            <xsd:element ref="Izmena"/>
+            <xsd:element ref="Dopuna"/>
+            <xsd:element ref="Brisanje"/>
+        </xsd:choice>
+    </xsd:group>
 </xsd:schema>

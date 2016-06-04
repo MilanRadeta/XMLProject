@@ -8,6 +8,7 @@
                 <xsd:element maxOccurs="unbounded" minOccurs="2" ref="Glava"/>
             </xsd:sequence>
             <xsd:attribute ref="id" use="required"/>
+            <xsd:attribute ref="dopuna"/>
         </xsd:complexType>
     </xsd:element>
     <xsd:element name="DeoBezNaziva">
@@ -75,7 +76,7 @@
         <xsd:complexType mixed="true">
             <xsd:choice maxOccurs="unbounded" minOccurs="0">
                 <xsd:element maxOccurs="unbounded" minOccurs="2" ref="Tacka"/>
-                <xsd:element ref="Referenca"/>
+                <xsd:group ref="ElementiTeksta"/>
             </xsd:choice>
             <xsd:attribute ref="id" use="required"/>
         </xsd:complexType>
@@ -83,8 +84,8 @@
     <xsd:element name="Tacka">
         <xsd:complexType mixed="true">
             <xsd:choice maxOccurs="unbounded" minOccurs="0">
+                <xsd:group ref="ElementiTeksta"/>
                 <xsd:element maxOccurs="unbounded" minOccurs="2" ref="Podtacka"/>
-                <xsd:element ref="Referenca"/>
             </xsd:choice>
             <xsd:attribute ref="id" use="required"/>
         </xsd:complexType>
@@ -92,8 +93,8 @@
     <xsd:element name="Podtacka">
         <xsd:complexType mixed="true">
             <xsd:choice maxOccurs="unbounded" minOccurs="0">
+                <xsd:group ref="ElementiTeksta"/>
                 <xsd:element maxOccurs="unbounded" minOccurs="2" ref="Alineja"/>
-                <xsd:element ref="Referenca"/>
             </xsd:choice>
             <xsd:attribute ref="id" use="required"/>
         </xsd:complexType>
@@ -101,7 +102,7 @@
     <xsd:element name="Alineja">
         <xsd:complexType mixed="true">
             <xsd:choice maxOccurs="unbounded" minOccurs="0">
-                <xsd:element ref="Referenca"/>
+                <xsd:group ref="ElementiTeksta"/>
             </xsd:choice>
             <xsd:attribute ref="id" use="required"/>
         </xsd:complexType>
@@ -116,6 +117,7 @@
     </xsd:simpleType>
     <xsd:attribute name="id" type="xsd:ID"/>
     <xsd:attribute name="references" type="xsd:IDREFS"/>
+    <xsd:attribute default="true" name="dopuna" type="xsd:boolean"/>
     <xsd:element name="Referenca">
         <xsd:complexType>
             <xsd:simpleContent>
@@ -125,4 +127,17 @@
             </xsd:simpleContent>
         </xsd:complexType>
     </xsd:element>
+    <xsd:element name="StrucniIzraz" type="xsd:string"/>
+    <xsd:element name="StranaRec" type="xsd:string"/>
+    <xsd:element name="SkraceniNaziv" type="xsd:string"/>
+    <xsd:element name="Datum" type="xsd:date"/>
+    <xsd:group name="ElementiTeksta">
+        <xsd:sequence>
+            <xsd:element ref="Referenca"/>
+            <xsd:element ref="StrucniIzraz"/>
+            <xsd:element ref="StranaRec"/>
+            <xsd:element ref="SkraceniNaziv"/>
+            <xsd:element ref="Datum"/>
+        </xsd:sequence>
+    </xsd:group>
 </xsd:schema>

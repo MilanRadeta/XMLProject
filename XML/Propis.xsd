@@ -22,6 +22,7 @@
             <xsd:attribute ref="rokVazenja"/>
             <xsd:attribute ref="brojPropisa" use="required"/>
             <xsd:attribute ref="datumDonosenjaPropisa" use="required"/>
+            <xsd:attribute ref="preciscen"/>
         </xsd:complexType>
     </xsd:element>
     <xsd:element name="Preambula">
@@ -97,4 +98,5 @@
         </xsd:restriction>
     </xsd:simpleType>
     <xsd:attribute name="brojPropisa" type="idBroj"/>
+    <xsd:attribute default="true" name="preciscen" type="xsd:boolean"/>
 </xsd:schema>
