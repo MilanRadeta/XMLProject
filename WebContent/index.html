@@ -10,14 +10,6 @@
 </head>
 <body>
 	<div data-ng-app="app" data-ng-controller="appController">
-		<div class="container" data-ng-hide="loggedIn">
-			<form>
-				<h2>Forma za prijavu</h2>
-				<input data-ng-model="username" type="email" class="form-control" placeholder="Korisničko ime" required autofocus>
-				<input data-ng-model="password" type="password" class="form-control" placeholder="Lozinka" required>
-				<button class="btn btn-lg btn-primary btn-block" data-ng-click="login()">Prijavi se</button>
-			</form>
-		</div>
 		<div class="container" data-ng-show="!loggedIn">
 			<h2>Meni</h2>
 			<div>
@@ -33,13 +25,21 @@
 					</div>
 				</div>
 			</div>
-			<div data-ng-show="user.type != 0">
+			<div data-ng-show="loggedIn">
 				<h3>Akti i amandmani</h3>
 				<button class="btn btn-primary">Predloži akt</button>
 			</div>
 			<div data-ng-show="document">
 				<h2 data-ng-bind="document.name"></h2>
 			</div>
+		</div>
+		<div class="container" data-ng-hide="loggedIn">
+			<form>
+				<h2>Forma za prijavu</h2>
+				<input data-ng-model="username" type="email" class="form-control" placeholder="Korisničko ime" required autofocus>
+				<input data-ng-model="password" type="password" class="form-control" placeholder="Lozinka" required>
+				<button class="btn btn-lg btn-primary btn-block" data-ng-click="login()">Prijavi se</button>
+			</form>
 		</div>
 	</div>
 </body>
