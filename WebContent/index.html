@@ -1,10 +1,47 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>XML PRoject</title>
+<meta charset="utf-8">
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script src="js/angular.min.js"></script>
+<script src="js/ui-bootstrap-tpls.min.js"></script>
+<script src="js/app.js"></script>
+<title>XML Project</title>
 </head>
 <body>
-
+	<div data-ng-app="app" data-ng-controller="appController">
+		<div class="container" data-ng-hide="loggedIn">
+			<form>
+				<h2>Forma za prijavu</h2>
+				<input data-ng-model="username" type="email" class="form-control" placeholder="Korisničko ime" required autofocus>
+				<input data-ng-model="password" type="password" class="form-control" placeholder="Lozinka" required>
+				<button class="btn btn-lg btn-primary btn-block" data-ng-click="login()">Prijavi se</button>
+			</form>
+		</div>
+		<div class="container" data-ng-show="!loggedIn">
+			<h2>Meni</h2>
+			<div>
+				<form>
+					<h3>Pretraga</h3>
+					<input data-ng-model="searchTerm" type="text" id="inputSearch" class="form-control" placeholder="Tekst za pretragu" required>
+					<button class="btn btn-primary" data-ng-click="search()">Pretraži</button>
+				</form>
+				<div data-ng-show="searchResults.length">
+					<h4>Rezultati pretrage</h4>
+					<div data-ng-repeat="for result in searchResults">
+						{{result.name}} - {{result.url}}
+					</div>
+				</div>
+			</div>
+			<div data-ng-show="user.type != 0">
+				<h3>Akti i amandmani</h3>
+				<button class="btn btn-primary">Predloži akt</button>
+				<button class="btn btn-primary">Povuci predloge akata i amandmana</button>
+			</div>
+			<div data-ng-show="document">
+				<h2 data-ng-bind="document.name"></h2>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
