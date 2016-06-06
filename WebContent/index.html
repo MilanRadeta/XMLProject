@@ -28,15 +28,35 @@
 			<div data-ng-show="loggedIn">
 				<h3>Akti i amandmani</h3>
 				<button class="btn btn-primary">Predloži akt</button>
+				<div data-ng-show="showNewAct">
+					<textarea data-ng-model="preambula" rows="5"></textarea>
+					<input type="text" data-ng-model="naziv" required>
+					<div data-ng-repeat="for element in elements">
+						<h4>{{element.type}}</h4>
+						<input type="text" data-ng-model="element.value">
+						<button class="btn btn-primary">Ukloni</button> 
+					</div>
+					<button class="btn btn-primary">Novi deo</button>
+					<button class="btn btn-primary">Nova glava</button>
+					<button class="btn btn-primary">Novi odeljak</button>
+					<button class="btn btn-primary">Novi pododeljak</button>
+					<button class="btn btn-primary">Novi član</button>
+					<button class="btn btn-primary">Novi stav</button>
+					<button class="btn btn-primary">Nova tačka</button>
+					<button class="btn btn-primary">Nova podtačka</button>
+					<button class="btn btn-primary">Nova alineja</button>
+				></div>
 			</div>
 			<div data-ng-show="document">
+				<button class="btn btn-primary">XHTML</button>
+				<button class="btn btn-primary">PDF</button>
 				<h2 data-ng-bind="document.name"></h2>
 			</div>
 		</div>
 		<div class="container" data-ng-hide="loggedIn">
 			<form>
 				<h2>Forma za prijavu</h2>
-				<input data-ng-model="username" type="email" class="form-control" placeholder="Korisničko ime" required autofocus>
+				<input data-ng-model="username" type="text" class="form-control" placeholder="Korisničko ime" required autofocus>
 				<input data-ng-model="password" type="password" class="form-control" placeholder="Lozinka" required>
 				<button class="btn btn-lg btn-primary btn-block" data-ng-click="login()">Prijavi se</button>
 			</form>
