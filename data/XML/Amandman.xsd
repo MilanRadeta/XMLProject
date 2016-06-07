@@ -16,25 +16,11 @@
         <xsd:complexType mixed="true">
             <xsd:sequence>
                 <xsd:group ref="TipIzmene"/>
-                <xsd:element ref="Obrazlozenje"/>
+                <xsd:element ref="elem:Obrazlozenje"/>
             </xsd:sequence>
             <xsd:attribute ref="elem:references"/>
         </xsd:complexType>
     </xsd:element>
-    <xsd:element name="Obrazlozenje">
-        <xsd:complexType>
-            <xsd:sequence>
-                <xsd:element ref="RazlogPodnosenja"/>
-                <xsd:element ref="ObjasnjenjeResenja"/>
-                <xsd:element ref="Cilj"/>
-                <xsd:element ref="UticajNaBudzet"/>
-            </xsd:sequence>
-        </xsd:complexType>
-    </xsd:element>
-    <xsd:element name="RazlogPodnosenja" type="xsd:string"/>
-    <xsd:element name="ObjasnjenjeResenja" type="xsd:string"/>
-    <xsd:element name="Cilj" type="xsd:string"/>
-    <xsd:element name="UticajNaBudzet" type="xsd:string"/>
     <xsd:element name="PravniOsnov" type="xsd:string"> </xsd:element>
     <xsd:attribute default="last" name="position">
         <xsd:simpleType>

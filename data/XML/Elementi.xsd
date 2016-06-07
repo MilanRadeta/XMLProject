@@ -24,9 +24,12 @@
             <xsd:sequence>
                 <xsd:element minOccurs="1" ref="Naziv"/>
                 <xsd:choice>
-                    <xsd:element maxOccurs="unbounded" minOccurs="1" ref="Odeljak"/>
-                    <xsd:element maxOccurs="unbounded" minOccurs="1" ref="Clan"/>
                     <xsd:element ref="ClanBezNaziva"/>
+                    <xsd:sequence>
+                        <xsd:element maxOccurs="unbounded" minOccurs="1" ref="Clan"/>
+                        <xsd:element maxOccurs="unbounded" minOccurs="0" ref="Odeljak"/>
+                    </xsd:sequence>
+                    <xsd:element maxOccurs="unbounded" minOccurs="2" ref="Odeljak"/>
                 </xsd:choice>
             </xsd:sequence>
             <xsd:attribute ref="id" use="required"/>
@@ -37,9 +40,12 @@
             <xsd:sequence>
                 <xsd:element minOccurs="1" ref="Naziv"/>
                 <xsd:choice>
-                    <xsd:element maxOccurs="unbounded" minOccurs="1" ref="Pododeljak"/>
-                    <xsd:element maxOccurs="unbounded" minOccurs="1" ref="Clan"/>
+                    <xsd:element maxOccurs="unbounded" minOccurs="2" ref="Pododeljak"/>
                     <xsd:element ref="ClanBezNaziva"/>
+                    <xsd:sequence>
+                        <xsd:element maxOccurs="unbounded" minOccurs="1" ref="Clan"/>
+                        <xsd:element maxOccurs="unbounded" minOccurs="0" ref="Pododeljak"/>
+                    </xsd:sequence>
                 </xsd:choice>
             </xsd:sequence>
             <xsd:attribute ref="id" use="required"/>
@@ -67,7 +73,7 @@
     <xsd:element name="ClanBezNaziva">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element ref="Stav"/>
+                <xsd:element ref="Stav" maxOccurs="unbounded"/>
             </xsd:sequence>
             <xsd:attribute ref="id" use="required"/>
         </xsd:complexType>
@@ -140,4 +146,5 @@
             <xsd:element ref="Datum"/>
         </xsd:sequence>
     </xsd:group>
+    <xsd:element name="Obrazlozenje" type="xsd:string"> </xsd:element>
 </xsd:schema>
