@@ -4,7 +4,6 @@ import java.util.List;
 
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
-import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -19,11 +18,11 @@ import rs.skupstinans.propis.Propis;
 /**
  * Session Bean implementation class RestBean
  */
-@ApplicationPath("/api")
 @Stateless
 @LocalBean
+@Path("/act")
 public class RestBean implements RestBeanRemote {
-
+	
 	@POST
 	@Path("/findBy")
 	@Consumes(MediaType.APPLICATION_JSON)

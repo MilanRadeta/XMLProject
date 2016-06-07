@@ -4,48 +4,50 @@
 <meta charset="utf-8">
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <script src="js/angular.min.js"></script>
-<script src="js/ui-bootstrap-tpls.min.js"></script>
+<script src="js/ui-bootstrap-tpls-1.3.3.min.js"></script>
 <script src="js/app.js"></script>
 <title>XML Project</title>
 </head>
 <body>
 	<div data-ng-app="app" data-ng-controller="appController">
-		<div class="container" data-ng-show="!loggedIn">
+		<div class="container">
 			<h2>Meni</h2>
 			<div>
 				<form>
 					<h3>Pretraga</h3>
-					<input data-ng-model="searchTerm" type="text" id="inputSearch" class="form-control" placeholder="Tekst za pretragu" required>
+					<input data-ng-model="searchTerm" type="text" class="form-control" placeholder="Tekst za pretragu" required>
 					<button class="btn btn-primary" data-ng-click="search()">Pretraži</button>
 				</form>
 				<div data-ng-show="searchResults.length">
 					<h4>Rezultati pretrage</h4>
-					<div data-ng-repeat="for result in searchResults">
-						{{result.name}} - {{result.url}}
+					<div data-ng-repeat="result in searchResults">
+						<div>{{result.name}} - {{result.url}}</div>
 					</div>
 				</div>
 			</div>
 			<div data-ng-show="loggedIn">
 				<h3>Akti i amandmani</h3>
-				<button class="btn btn-primary">Predloži akt</button>
-				<div data-ng-show="showNewAct">
-					<textarea data-ng-model="preambula" rows="5"></textarea>
-					<input type="text" data-ng-model="naziv" required>
-					<div data-ng-repeat="for element in elements">
-						<h4>{{element.type}}</h4>
-						<input type="text" data-ng-model="element.value">
-						<button class="btn btn-primary">Ukloni</button> 
-					</div>
-					<button class="btn btn-primary">Novi deo</button>
-					<button class="btn btn-primary">Nova glava</button>
-					<button class="btn btn-primary">Novi odeljak</button>
-					<button class="btn btn-primary">Novi pododeljak</button>
-					<button class="btn btn-primary">Novi član</button>
-					<button class="btn btn-primary">Novi stav</button>
-					<button class="btn btn-primary">Nova tačka</button>
-					<button class="btn btn-primary">Nova podtačka</button>
-					<button class="btn btn-primary">Nova alineja</button>
-				></div>
+				<button class="btn btn-primary" data-ng-hide="showNewAct" data-ng-click="newAct()">Predloži akt</button>
+				<br /><br />
+				<div data-ng-show="!showNewAct">
+					<form class="form-group">
+						<label for="preambula">Preambula:</label>
+						<textarea class="form-control" id="preambula" data-ng-model="preambula" rows="5"></textarea>
+						<label for="naziv">Naziv:</label>
+						<input class="form-control" type="text" id=naziv data-ng-model="naziv" required>
+						<div data-ng-repeat="element in elements">
+							<h4>{{element.type}}</h4>
+							<input class="form-control" type="text" data-ng-model="element.value">
+							<button class="btn btn-primary" data-ng-click="remove(element)">Ukloni</button> 
+						</div>
+						<label for="newPart">Dodaj:</label>
+						<select id="newPart" class="form-control"  data-ng-options="part for part in parts" data-ng-model="selectedPart"></select>
+						<button class="btn btn-primary" data-ng-click="addNewElement()">Dodaj</button>
+						<br /><br />
+						<button class="btn btn-primary" data-ng-click="saveNewAct()">Predloži</button>
+						<button class="btn btn-primary" data-ng-click="closeNewAct()">Otkaži</button>
+					</form>
+				</div>
 			</div>
 			<div data-ng-show="document">
 				<button class="btn btn-primary">XHTML</button>

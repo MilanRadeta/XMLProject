@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.ejb.Remote;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -21,7 +22,7 @@ public interface RestBeanRemote {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Propis> findBy(String query);
-
+	
 	@POST
 	@Path("/predlogPropisa")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -32,6 +33,17 @@ public interface RestBeanRemote {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void predlogAmandmana(Amandmani amandmani);
 
+	@DELETE
+	@Path("/povuciPredlogPropisa")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void povuciPredlogPropisa(String id);
+
+
+	@DELETE
+	@Path("/povuciPredlogAmandmana")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void povuciPredlogAmandmana(String id);
+
 	@GET
 	@Path("/nadjiSvePropise")
 	@Produces(MediaType.APPLICATION_JSON)
@@ -41,4 +53,30 @@ public interface RestBeanRemote {
 	@Path("/nadjiSveAmandmane")
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Propis> nadjiSveAmandmane();
+	
+	@POST
+	@Path("/usvojiPropisUNacelu")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void usvojiPropisUNacelu(String id);
+	
+	@POST
+	@Path("/usvojiAmandman")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void usvojiAmandman(String id);
+
+	
+	@POST
+	@Path("/usvojiPropisUCelosti")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void usvojiPropisUCelosti(String id);
+
+	@DELETE
+	@Path("/odbaciPrelogPropisa")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void odbaciPrelogPropisa(String id);
+	
+	@DELETE
+	@Path("/odbaciPrelogAmandmana")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void odbaciPrelogAmandmana(String id);
 }
