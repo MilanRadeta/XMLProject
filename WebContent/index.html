@@ -29,7 +29,7 @@
 				<h3>Akti i amandmani</h3>
 				<button class="btn btn-primary" data-ng-hide="showNewAct" data-ng-click="newAct()">Predloži akt</button>
 				<br /><br />
-				<div data-ng-show="!showNewAct">
+				<div data-ng-show="showNewAct">
 					<form class="form-group">
 						<label for="preambula">Preambula:</label>
 						<textarea class="form-control" id="preambula" data-ng-model="preambula" rows="5"></textarea>

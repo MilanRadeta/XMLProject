@@ -12,10 +12,6 @@ app.controller("appController", function($scope, $http) {
 	$scope.parts = ["Deo", "Glava", "Odeljak", "Pododeljak", "Član", "Stav", "Tačka", "Podtačka", "Alineja"];
 	$scope.selectedPart = $scope.parts[0];
 	
-	$scope.preambula = null;
-	$scope.naziv = null;
-	$scope.elements = [];
-	
 	$scope.login = function() {
 		$http({
 			method : "POST",
@@ -37,7 +33,8 @@ app.controller("appController", function($scope, $http) {
 	};
 
 	$scope.newAct = function() {
-		
+		$scope.resetAct();
+		$scope.showNewAct = true;
 	};
 
 	$scope.addNewElement = function() {
@@ -49,6 +46,15 @@ app.controller("appController", function($scope, $http) {
 	};
 	
 	$scope.closeNewAct = function() {
-		
+		$scope.showNewAct = false;
+		$scope.resetAct();
 	};
+	
+	$scope.resetAct = function() {
+		$scope.preambula = null;
+		$scope.naziv = null;
+		$scope.elements = [];
+	}
+	
+	$scope.resetAct();
 });
