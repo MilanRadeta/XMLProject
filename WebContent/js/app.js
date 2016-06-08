@@ -78,17 +78,17 @@ app.controller("appController", function($scope, $http) {
 		xw.writeElementString("FormalniPravniOsnov", $scope.materijalniPravniOsnov);
 		xw.writeEndElement();
 		xw.writeStartElement("DonosilacPropisa");
-		xw.writeElementString("NazivOrgana", $scope.nazivDonosiocaPropisa);
+		xw.writeElementString("Naziv", $scope.nazivDonosiocaPropisa, "elem");
 		xw.writeEndElement();
 		if ($scope.saglasnostOrgana || $scope.saglasnostNaznaka) {
 			xw.writeStartElement("Saglasnost");
-			xw.writeElementString("NazivOrgana", $scope.saglasnostOrgana);
+			xw.writeElementString("Naziv", $scope.saglasnostOrgana, "elem");
 			xw.writeElementString("Naznaka", $scope.saglasnostNaznaka);
 			xw.writeEndElement();
 		}
 		xw.writeEndElement();
 
-		xw.writeElementString("NazivPropisa", $scope.nazivPropisa);
+		xw.writeElementString("Naziv", $scope.nazivPropisa, "elem");
 		
 		var elementDict = {};
 		var toAscii = function(str) {

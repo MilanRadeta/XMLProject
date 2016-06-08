@@ -36,12 +36,12 @@ public class Checker {
 				"Nedostaje formalni pravni osnov u preambuli");
 		checkString(messages, preambula.getPravniOsnov().getMaterijalniPravniOsnov(),
 				"Nedostaje materijalni pravni osnov u preambuli");
-		checkString(messages, preambula.getDonosilacPropisa().getNazivOrgana(), "Nedostaje donosilac propisa");
+		checkString(messages, preambula.getDonosilacPropisa().getNaziv(), "Nedostaje donosilac propisa");
 		if (preambula.getSaglasnost() != null) {
-			checkString(messages, preambula.getSaglasnost().getNazivOrgana(), "Nedostaje naziv saglasnog organa");
+			checkString(messages, preambula.getSaglasnost().getNaziv(), "Nedostaje naziv saglasnog organa");
 			checkString(messages, preambula.getSaglasnost().getNaznaka(), "Nedostaje naznaka saglasnosti");
 		}
-		checkString(messages, propis.getNazivPropisa(), "Nedostaje naziv propisa");
+		checkString(messages, propis.getNaziv(), "Nedostaje naziv propisa");
 
 		checkPropisContent(messages, propis);
 

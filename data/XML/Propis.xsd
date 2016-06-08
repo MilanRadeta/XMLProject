@@ -7,7 +7,7 @@
         <xsd:complexType>
             <xsd:sequence>
                 <xsd:element ref="Preambula"/>
-                <xsd:element ref="NazivPropisa"/>
+                <xsd:element ref="elem:Naziv"/>
                 <xsd:choice maxOccurs="1">
                     <xsd:element maxOccurs="19" ref="elem:Clan"/>
                     <xsd:element maxOccurs="unbounded" ref="elem:Deo" minOccurs="2"/>
@@ -16,14 +16,16 @@
                 <xsd:element ref="Prilozi"/>
                 <xsd:element minOccurs="0" ref="elem:Obrazlozenje"/>
             </xsd:sequence>
-            <xsd:attribute ref="danStupanjaNaSnagu" use="optional"/>
             <xsd:attribute ref="nazivSluzbenogGlasila"/>
-            <xsd:attribute ref="godinaOdKojeSePrimenjuje"/>
-            <xsd:attribute ref="rokVazenja"/>
             <xsd:attribute ref="brojPropisa" use="required"/>
-            <xsd:attribute ref="datumDonosenjaPropisa" use="required"/>
             <xsd:attribute ref="preciscen"/>
             <xsd:attribute ref="status"/>
+            <xsd:attribute ref="datumPredlaganjaPropisa"/>
+            <xsd:attribute ref="datumUsvajanjaPropisa"/>
+            <xsd:attribute ref="datumStupanjaNaSnagu"/>
+            <xsd:attribute ref="datumPrimenjivanja"/>
+            <xsd:attribute ref="rokVazenja"/>
+            <xsd:attribute ref="datumIzdavanjaUSluzbenomGlasilu"/>
         </xsd:complexType>
     </xsd:element>
     <xsd:element name="Preambula">
@@ -46,14 +48,14 @@
     <xsd:element name="DonosilacPropisa">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element ref="NazivOrgana"/>
+                <xsd:element ref="elem:Naziv"/>
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
     <xsd:element name="Saglasnost">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element ref="NazivOrgana"/>
+                <xsd:element ref="elem:Naziv"/>
                 <xsd:element ref="Naznaka"/>
             </xsd:sequence>
         </xsd:complexType>
@@ -66,8 +68,6 @@
         </xsd:complexType>
     </xsd:element>
     <xsd:element name="Prilog" type="xsd:anyType"/>
-    <xsd:element name="NazivPropisa" type="elem:Naziv"/>
-    <xsd:element name="NazivOrgana" type="elem:Naziv"/>
     <xsd:element name="Naznaka" type="xsd:string"/>
     <xsd:element name="MaterijalniPravniOsnov" type="xsd:string"/>
     <xsd:element name="FormalniPravniOsnov" type="xsd:string"/>
@@ -85,14 +85,13 @@
             <xsd:enumeration value="Osnovne odredbe"/>
         </xsd:restriction>
     </xsd:simpleType>
-    <xsd:attribute name="danStupanjaNaSnagu" type="brojDanaOdObjavljivanjaUGlasilu"/>
-    <xsd:attribute name="nazivSluzbenogGlasila" type="xsd:string"/>
+    <xsd:attribute name="datumPredlaganjaPropisa" type="xsd:date"/>
+    <xsd:attribute name="datumUsvajanjaPropisa" type="xsd:date"/>
+    <xsd:attribute name="datumStupanjaNaSnagu" type="xsd:date"/>
+    <xsd:attribute name="datumPrimenjivanja" type="xsd:date"/>
     <xsd:attribute name="rokVazenja" type="xsd:date"/>
-    <xsd:attribute name="godinaOdKojeSePrimenjuje" type="xsd:positiveInteger"/>
-    <xsd:attribute name="datumDonosenjaPropisa" type="xsd:date"/>
-    <xsd:simpleType name="brojDanaOdObjavljivanjaUGlasilu">
-        <xsd:restriction base="xsd:positiveInteger"/>
-    </xsd:simpleType>
+    <xsd:attribute name="datumIzdavanjaUSluzbenomGlasilu" type="xsd:date"/>
+    <xsd:attribute name="nazivSluzbenogGlasila" type="xsd:string"/>
     <xsd:simpleType name="idBroj">
         <xsd:restriction base="xsd:positiveInteger">
             <xsd:pattern value="[1-9][0-9]*"/>
