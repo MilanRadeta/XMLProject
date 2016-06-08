@@ -12,11 +12,18 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import rs.skupstinans.amandman.Amandmani;
+import rs.skupstinans.elementi.Stav;
 import rs.skupstinans.propis.Propis;
 
 @Remote
 public interface RestBeanRemote {
 
+	@POST
+	@Path("/test")
+	@Consumes(MediaType.APPLICATION_XML)
+	@Produces(MediaType.APPLICATION_XML)
+	public Stav test(Stav stav);
+	
 	@POST
 	@Path("/findBy")
 	@Consumes(MediaType.APPLICATION_JSON)

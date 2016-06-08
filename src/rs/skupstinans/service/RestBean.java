@@ -13,6 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import rs.skupstinans.amandman.Amandmani;
+import rs.skupstinans.elementi.Stav;
 import rs.skupstinans.propis.Propis;
 
 /**
@@ -22,6 +23,16 @@ import rs.skupstinans.propis.Propis;
 @LocalBean
 @Path("/act")
 public class RestBean implements RestBeanRemote {
+	
+	@POST
+	@Path("/test")
+	@Consumes(MediaType.APPLICATION_XML)
+	@Produces(MediaType.APPLICATION_XML)
+	public Stav test(Stav stav) {
+		System.out.println(stav);
+		System.out.println(stav.getContent());
+		return stav;
+	}
 	
 	@POST
 	@Path("/findBy")
