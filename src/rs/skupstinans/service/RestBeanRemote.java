@@ -32,8 +32,9 @@ public interface RestBeanRemote {
 	
 	@POST
 	@Path("/predlogPropisa")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public void predlogPropisa(Propis propis);
+	@Consumes(MediaType.APPLICATION_XML)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<String> predlogPropisa(Propis propis);
 
 	@POST
 	@Path("/predlogAmandmana")
