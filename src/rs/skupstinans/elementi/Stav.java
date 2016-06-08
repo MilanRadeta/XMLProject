@@ -52,7 +52,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "content"
 })
 @XmlRootElement(name = "Stav")
-public class Stav {
+public class Stav implements ElementInterface {
 
     @XmlElementRefs({
         @XmlElementRef(name = "Tacka", namespace = "http://www.skupstinans.rs/elementi", type = Tacka.class, required = false),

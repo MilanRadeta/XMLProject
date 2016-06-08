@@ -200,12 +200,12 @@ app.controller("appController", function($scope, $http) {
 		}
 		
 		for (var index in $scope.parts) {
-			var part = $scope.parts[index];
+			var part = toAscii($scope.parts[index]);
 			resetElementDict(elementDict, part, xw);
 		}
 		
 
-		xw.writeElementString("Obrazlozenje", $scope.obrazlozenje);
+		xw.writeElementString("Obrazlozenje", $scope.obrazlozenje, "elem");
 		
 		xw.writeEndElement();
 		xw.writeEndDocument();
@@ -231,6 +231,7 @@ app.controller("appController", function($scope, $http) {
 			 }
 		}).then(function(response) {
 			console.log(response);
+			$scope.errorMessages = response.data;
 		});
 	};
 	

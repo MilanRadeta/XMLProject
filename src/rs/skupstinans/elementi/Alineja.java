@@ -51,7 +51,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "content"
 })
 @XmlRootElement(name = "Alineja")
-public class Alineja {
+public class Alineja implements ElementInterface {
 
     @XmlElementRefs({
         @XmlElementRef(name = "SkraceniNaziv", namespace = "http://www.skupstinans.rs/elementi", type = JAXBElement.class, required = false),

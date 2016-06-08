@@ -68,11 +68,11 @@
 						<label>Obrazloženje:</label>
 						<textarea class="form-control" data-ng-model="obrazlozenje" rows="5" placeholder="Obrazloženje za predlaganje propisa"></textarea>
 						<br /><br />
+						<button class="btn btn-primary" data-ng-click="saveNewAct()">Predloži</button>
+						<button class="btn btn-primary" data-ng-click="closeNewAct()">Otkaži</button>
 						<div class="alert alert-danger" role="alert" data-ng-repeat="errorMessage in errorMessages">
 							{{errorMessage}}
 						</div>
-						<button class="btn btn-primary" data-ng-click="saveNewAct()">Predloži</button>
-						<button class="btn btn-primary" data-ng-click="closeNewAct()">Otkaži</button>
 					</form>
 				</div>
 			</div>
