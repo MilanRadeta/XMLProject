@@ -63,6 +63,7 @@ app.controller("appController", function($scope, $http) {
 	
 	$scope.saveNewAct = function() {
 		var xw = new XMLWriter('UTF-8', '1.0');
+		xw.formatting="none";
 		xw.writeStartDocument();
 		xw.writeStartElement("Propis");
 		xw.writeAttributeString("xmlns:elem", "http://www.skupstinans.rs/elementi");
@@ -90,7 +91,6 @@ app.controller("appController", function($scope, $http) {
 		xw.writeElementString("NazivPropisa", $scope.nazivPropisa);
 		
 		var elementDict = {};
-		var elementPartId = {};
 		var toAscii = function(str) {
 			return str.replace("Š", "S")
 			.replace("Đ", "Dj")
@@ -106,7 +106,6 @@ app.controller("appController", function($scope, $http) {
 		for (var index in $scope.parts) {
 			var part = toAscii($scope.parts[index]);
 			elementDict[part] = 0;
-			elementPartId[part] = 0;
 		}
 		var resetElementDict = function(elementDict, key, xw) {
 			if (elementDict[key]) {
@@ -114,73 +113,30 @@ app.controller("appController", function($scope, $http) {
 				xw.writeEndElement();
 			}
 		}
-		// TODO: move to backend?
-		var generateId = function(elementPartId, type) {
-			var generateIdPart = function(type) {
-				if (elementPartId[type]) {
-					return "/" + type + elementPartId[type];
-				}
-				else {
-					return "";
-				}
-			}
-			var retVal = "";
-			switch (type) {
-			case "Alineja":
-				retVal = generateIdPart("Alineja") + retVal;
-			case "Podtacka":
-				retVal = generateIdPart("Podtacka") + retVal;
-			case "Tacka":
-				retVal = generateIdPart("Tacka") + retVal;
-			case "Stav":
-				retVal = generateIdPart("Stav") + retVal;
-			case "Clan":
-				retVal = generateIdPart("Clan") + retVal;
-			case "Pododeljak":
-				retVal = generateIdPart("Pododeljak") + retVal;
-			case "Odeljak":
-				retVal = generateIdPart("Odeljak") + retVal;
-			case "Glava":
-				retVal = generateIdPart("Glava") + retVal;
-			case "Deo":
-				retVal = generateIdPart("Deo") + retVal;
-			}
-			return retVal;
-		}
 		for (var index in $scope.elements) {
 			var element = $scope.elements[index];
 			var type = toAscii(element.type);
 			switch (type) {
 			case "Deo":
 				resetElementDict(elementDict, "Deo", xw);
-				elementPartId["Glava"] = 0;
 			case "Glava":
 				resetElementDict(elementDict, "Glava", xw);
-				elementPartId["Odeljak"] = 0;
 			case "Odeljak":
 				resetElementDict(elementDict, "Odeljak", xw);
-				elementPartId["Pododeljak"] = 0;
 			case "Pododeljak":
 				resetElementDict(elementDict, "Pododeljak", xw);
-				elementPartId["Clan"] = 0;
 			case "Clan":
 				resetElementDict(elementDict, "Clan", xw);
-				elementPartId["Stav"] = 0;
 			case "Stav":
 				resetElementDict(elementDict, "Stav", xw);
-				elementPartId["Tacka"] = 0;
 			case "Tacka":
 				resetElementDict(elementDict, "Tacka", xw);
-				elementPartId["Podtacka"] = 0;
 			case "Podtacka":
 				resetElementDict(elementDict, "Podtacka", xw);
-				elementPartId["Alineja"] = 0;
 			case "Alineja":
 				resetElementDict(elementDict, "Alineja", xw);
 			}
 			xw.writeStartElement(type, "elem");
-			elementPartId[type] += 1;
-			xw.writeAttributeString("elem:id", generateId(elementPartId, type));
 			elementDict[type] += 1;
 			switch (type) {
 			case "Deo":
@@ -210,11 +166,6 @@ app.controller("appController", function($scope, $http) {
 		xw.writeEndElement();
 		xw.writeEndDocument();
 		
-		// TODO: check Naziv elements of Deo, Glava, Odeljak, Pododeljak and Član.
-		// If one Deo has naziv, then all of them must have naziv
-		// Član must have naziv, unless it's the only član of Glava, Odeljak or Pododeljak
-		
-		// TODO: Deo must have at least two Glava parts
 		console.log(xw);
 		console.log(xw.getDocument());
 		console.log(xw.flush());

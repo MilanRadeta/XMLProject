@@ -51,7 +51,8 @@ public class RestBean implements RestBeanRemote {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<String> predlogPropisa(Propis propis) {
 		List<String> retVal = new ArrayList<String>();
-		Checker.checkPropis(retVal, propis);
+		Checker checker = new Checker();
+		checker.checkPropis(retVal, propis);
 		return retVal;
 	}
 
