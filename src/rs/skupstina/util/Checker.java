@@ -5,9 +5,6 @@ import java.util.List;
 
 import rs.skupstinans.elementi.Clan;
 import rs.skupstinans.elementi.ElementInterface;
-import rs.skupstinans.elementi.Podtacka;
-import rs.skupstinans.elementi.Stav;
-import rs.skupstinans.elementi.Tacka;
 import rs.skupstinans.propis.Preambula;
 import rs.skupstinans.propis.Propis;
 
@@ -153,54 +150,4 @@ public class Checker {
 		 * required = false)
 		 */
 	}
-
-	public static void checkTacka(List<String> messages, Stav stav, int i, int tackaCount, String messagePrefix) {
-		Tacka tacka = (Tacka) stav.getContent().get(i);
-		if (tacka.getContent().isEmpty()) {
-			messages.add(String.format("%s tački %s. nedostaje sadržaj", messagePrefix, tackaCount));
-		} else {
-			int podtackaCount = 0;
-			for (int j = 0; j < tacka.getContent().size(); j++) {
-				Object obj = tacka.getContent().get(j);
-				if (obj instanceof Podtacka) {
-					checkPodtacka(messages, tacka, j, ++podtackaCount,
-							String.format("%s u tački %s", messagePrefix, i));
-				} else if (!(obj instanceof String)) {
-					/*
-					 * TODO:
-					 * 
-					 * @XmlElementRef(name = "Tacka", namespace =
-					 * "http://www.skupstinans.rs/elementi", type = Tacka.class,
-					 * required = false),
-					 * 
-					 * @XmlElementRef(name = "SkraceniNaziv", namespace =
-					 * "http://www.skupstinans.rs/elementi", type =
-					 * JAXBElement.class, required = false),
-					 * 
-					 * @XmlElementRef(name = "Referenca", namespace =
-					 * "http://www.skupstinans.rs/elementi", type =
-					 * Referenca.class, required = false),
-					 * 
-					 * @XmlElementRef(name = "Datum", namespace =
-					 * "http://www.skupstinans.rs/elementi", type =
-					 * JAXBElement.class, required = false),
-					 * 
-					 * @XmlElementRef(name = "StrucniIzraz", namespace =
-					 * "http://www.skupstinans.rs/elementi", type =
-					 * JAXBElement.class, required = false),
-					 * 
-					 * @XmlElementRef(name = "StranaRec", namespace =
-					 * "http://www.skupstinans.rs/elementi", type =
-					 * JAXBElement.class, required = false)
-					 */
-				}
-			}
-		}
-	}
-
-	public static void checkPodtacka(List<String> messages, Tacka tacka, int i, int podtackaCount,
-			String messagePrefix) {
-
-	}
-
 }
