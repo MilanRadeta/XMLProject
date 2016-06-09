@@ -1,12 +1,12 @@
 package rs.skupstinans.service;
 
 import java.io.File;
-import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
 
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
@@ -20,7 +20,6 @@ import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
@@ -32,6 +31,7 @@ import org.xml.sax.SAXException;
 import rs.skupstinans.amandman.Amandmani;
 import rs.skupstinans.elementi.Stav;
 import rs.skupstinans.propis.Propis;
+import rs.skupstinans.session.DatabaseBean;
 import rs.skupstinans.util.Checker;
 import rs.skupstinans.util.PropisValidationEventHandler;
 
@@ -43,6 +43,9 @@ import rs.skupstinans.util.PropisValidationEventHandler;
 @Path("/act")
 public class RestBean implements RestBeanRemote {
 
+	@EJB
+	private DatabaseBean database;
+
 	@POST
 	@Path("/test")
 	@Consumes(MediaType.APPLICATION_XML)
@@ -50,6 +53,7 @@ public class RestBean implements RestBeanRemote {
 	public Stav test(Stav stav) {
 		System.out.println(stav);
 		System.out.println(stav.getContent());
+		database.testBrojPropisa();
 		return stav;
 	}
 
@@ -82,14 +86,15 @@ public class RestBean implements RestBeanRemote {
 			e.printStackTrace();
 		}
 		if (retVal.size() == 0) {
-			// TODO: validate
-			marshall(retVal, propis);
-			// TODO: write in MarkLogic
+			validate(retVal, propis);
+			if (retVal.size() == 0) {
+				database.predlogPropisa(propis);
+			}
 		}
 		return retVal;
 	}
-
-	private void marshall(List<String> messages, Propis propis) {
+	
+	private void validate(List<String> messages, Propis propis) {
 		try {
 			// Definiše se JAXB kontekst (putanja do paketa sa JAXB bean-ovima)
 			JAXBContext context = JAXBContext.newInstance("rs.skupstinans.propis");
@@ -104,8 +109,9 @@ public class RestBean implements RestBeanRemote {
 			String path = getClass().getClassLoader().getResource("Propis.xsd").getPath();
 			Schema schema = schemaFactory.newSchema(new File(path));
 			marshaller.setSchema(schema);
-			marshaller.setEventHandler(new PropisValidationEventHandler());
+			marshaller.setEventHandler(new PropisValidationEventHandler(messages));
 			marshaller.marshal(propis, System.out);
+
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		} catch (SAXException e) {
