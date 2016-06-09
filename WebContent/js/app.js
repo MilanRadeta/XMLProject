@@ -8,6 +8,7 @@ app.controller("appController", function($scope, $http) {
 	$scope.searchTerm = null;
 	$scope.searchResults = [];
 	$scope.showNewAct = false;
+	$scope.loggedInUser = null;
 	
 	$scope.parts = ["Deo", "Glava", "Odeljak", "Pododeljak", "Član", "Stav", "Tačka", "Podtačka", "Alineja"];
 	
@@ -18,7 +19,10 @@ app.controller("appController", function($scope, $http) {
 			data: {username: $scope.username, password:  $scope.password}
 		}).then(function(response) {
 			if (response.data) {
+				$scope.loggedInUser = response.data;
 				$scope.loggedIn = true;
+				$scope.username = null;
+				$scope.password = null;
 			}
 		});
 	};
@@ -71,6 +75,7 @@ app.controller("appController", function($scope, $http) {
 		xw.writeAttributeString("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 		xw.writeAttributeString("xmlns:schemaLocation", "http://www.skupstinans.rs/propis Propis.xsd");
 		xw.writeAttributeString("xmlns:propis", "http://www.skupstinans.rs/propis");
+		xw.writeAttributeString("usernameDonosioca", $scope.loggedInUser);
 
 		xw.writeStartElement("Preambula");
 		xw.writeStartElement("PravniOsnov");
@@ -127,6 +132,7 @@ app.controller("appController", function($scope, $http) {
 				resetElementDict(elementDict, "Pododeljak", xw);
 			case "Clan":
 				resetElementDict(elementDict, "Clan", xw);
+				//TODO: text elements, such as Referenca, SkraceniNaziv, StraniIzraz...
 			case "Stav":
 				resetElementDict(elementDict, "Stav", xw);
 			case "Tacka":

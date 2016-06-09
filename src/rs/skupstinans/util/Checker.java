@@ -1,4 +1,4 @@
-package rs.skupstina.util;
+package rs.skupstinans.util;
 
 import java.util.HashMap;
 import java.util.List;
@@ -50,15 +50,15 @@ public class Checker {
 
 	public void checkPropisContent(List<String> messages, Propis propis) {
 		if (propis.getClan().isEmpty() && propis.getDeo().isEmpty() && propis.getGlava().isEmpty()) {
-			messages.add("Nedostaje sadr≈æaj propisa");
+			messages.add("Propis mora da se sastoji od ƒ?lanova, delova ili glava.");
 		} else if (!propis.getClan().isEmpty()) {
-			System.out.println("Propis se sastoji iskljuƒçivo od ƒçlanova");
+			System.out.println("Propis se sastoji iskljuƒ?ivo od ƒ?lanova");
 			if (propis.getDeo().isEmpty() && propis.getGlava().isEmpty()) {
-				if (propis.getClan().size() < 20) {
-					messages.add("Propis mo≈æe da se sastoji iskljuƒçivo od ƒçlanova ako ih ima manje od 20");
+				if (propis.getClan().size() >= 20) {
+					messages.add("Propis mo≈æe da se sastoji iskljuƒ?ivo od ƒ?lanova ako ih ima manje od 20");
 				}
 				for (int i = 0; i < propis.getClan().size(); i++) {
-					checkClan(messages, propis.getClan().get(i), "ƒålan " + clanCounter + ".", false);
+					checkClan(messages, propis.getClan().get(i), "ƒålan " + (clanCounter + 1) + ".", false);
 				}
 			} else {
 				messages.add("Raspored elemenata nije dobar");
@@ -104,7 +104,7 @@ public class Checker {
 
 	public void checkDeo(List<String> messages, Deo deo, boolean withoutNaziv, String messagePrefix) {
 		deoCounter++;
-		glavaCounter = 0; 
+		glavaCounter = 0;
 		deo.setId("d" + deoCounter);
 		if (withoutNaziv) {
 			deo.setNaziv(null);
@@ -129,22 +129,19 @@ public class Checker {
 			glavaCounter++;
 			odeljakCounter = 0;
 			if (deoCounter == 0) {
-				element.setId(String.format("g%s", glavaCounter));	
-			}	
-			else {
-				element.setId(String.format("d%s/%s", deoCounter, glavaCounter));
+				element.setId(String.format("g%s", glavaCounter));
+			} else {
+				element.setId(String.format("d%s-%s", deoCounter, glavaCounter));
 			}
-		}
-		else if (group instanceof Odeljak) {
+		} else if (group instanceof Odeljak) {
 			odeljakCounter++;
 			pododeljakCounter = 0;
 			if (deoCounter == 0) {
-				element.setId(String.format("g%s/%s", glavaCounter, odeljakCounter));	
-			}	
-			else {
-				element.setId(String.format("d%s/%s/%s", deoCounter, glavaCounter, odeljakCounter));
+				element.setId(String.format("g%s-%s", glavaCounter, odeljakCounter));
+			} else {
+				element.setId(String.format("d%s-%s-%s", deoCounter, glavaCounter, odeljakCounter));
 			}
-			
+
 		}
 		if (element.getContent().isEmpty()) {
 			messages.add(String.format("%s - nedostaje sadr≈æaj", messagePrefix));
@@ -178,11 +175,11 @@ public class Checker {
 			}
 			if (!isClanFirst) {
 				if (odeljakCounter == 1) {
-					messages.add(String.format("%s - mora da se sastoji od barem 2 odeljka ili od ƒçlanova i odeljaka",
+					messages.add(String.format("%s - mora da se sastoji od barem 2 odeljka ili od ƒ?lanova i odeljaka",
 							messagePrefix));
 				} else if (pododeljakCounter == 1) {
 					messages.add(
-							String.format("%s - mora da se sastoji od barem 2 pododeljka ili od ƒçlanova i pododeljaka",
+							String.format("%s - mora da se sastoji od barem 2 pododeljka ili od ƒ?lanova i pododeljaka",
 									messagePrefix));
 				}
 			}
@@ -192,14 +189,14 @@ public class Checker {
 	public void checkPododeljak(List<String> messages, Pododeljak pododeljak, String messagePrefix) {
 		pododeljakCounter++;
 		if (deoCounter == 0) {
-			pododeljak.setId(String.format("g%s/%s/%s", glavaCounter, odeljakCounter, pododeljakCounter));	
-		}	
-		else {
-			pododeljak.setId(String.format("d%s/%s/%s/%s", deoCounter, glavaCounter, odeljakCounter, pododeljakCounter));
+			pododeljak.setId(String.format("g%s-%s-%s", glavaCounter, odeljakCounter, pododeljakCounter));
+		} else {
+			pododeljak
+					.setId(String.format("d%s-%s-%s-%s", deoCounter, glavaCounter, odeljakCounter, pododeljakCounter));
 		}
 		checkString(messages, pododeljak.getNaziv(), String.format("%s - nedostaje naziv", messagePrefix));
 		if (pododeljak.getClan().isEmpty()) {
-			messages.add(String.format("%s - nedostaju ƒçlanovi", messagePrefix));
+			messages.add(String.format("%s - nedostaju ƒ?lanovi", messagePrefix));
 		} else {
 			for (Clan clan : pododeljak.getClan()) {
 				checkClan(messages, clan, String.format("%s ƒålan %s.", messagePrefix, clanCounter),
@@ -233,21 +230,22 @@ public class Checker {
 		case "Stav":
 			tackaCounter = 0;
 			stavCounter++;
-			element.setId(String.format("cl%s/%s", clanCounter, stavCounter));
+			element.setId(String.format("cl%s-%s", clanCounter, stavCounter));
 			break;
 		case "Tacka":
 			podtackaCounter = 0;
 			tackaCounter++;
-			element.setId(String.format("cl%s/%s/%s", clanCounter, stavCounter, tackaCounter));
+			element.setId(String.format("cl%s-%s-%s", clanCounter, stavCounter, tackaCounter));
 			break;
 		case "Podtacka":
 			alinejaCounter = 0;
 			podtackaCounter++;
-			element.setId(String.format("cl%s/%s/%s/%s", clanCounter, stavCounter, tackaCounter, podtackaCounter));
+			element.setId(String.format("cl%s-%s-%s-%s", clanCounter, stavCounter, tackaCounter, podtackaCounter));
 			break;
 		case "Alineja":
 			alinejaCounter++;
-			element.setId(String.format("cl%s/%s/%s/%s/%s", clanCounter, stavCounter, tackaCounter, podtackaCounter, alinejaCounter));
+			element.setId(String.format("cl%s-%s-%s-%s-%s", clanCounter, stavCounter, tackaCounter, podtackaCounter,
+					alinejaCounter));
 			break;
 		}
 		if (element.getContent().isEmpty()) {

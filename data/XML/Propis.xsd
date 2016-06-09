@@ -13,12 +13,12 @@
                     <xsd:element maxOccurs="unbounded" ref="elem:Deo" minOccurs="2"/>
                     <xsd:element maxOccurs="unbounded" ref="elem:Glava" minOccurs="2"/>
                 </xsd:choice>
-                <xsd:element ref="Prilozi"/>
+                <xsd:element ref="Prilozi" minOccurs="0"/>
                 <xsd:element minOccurs="0" ref="elem:Obrazlozenje"/>
             </xsd:sequence>
             <xsd:attribute ref="nazivSluzbenogGlasila"/>
             <xsd:attribute ref="brojPropisa" use="required"/>
-            <xsd:attribute ref="preciscen"/>
+            <xsd:attribute ref="preciscen" default="false"/>
             <xsd:attribute ref="status"/>
             <xsd:attribute ref="datumPredlaganjaPropisa"/>
             <xsd:attribute ref="datumUsvajanjaPropisa"/>
@@ -26,6 +26,7 @@
             <xsd:attribute ref="datumPrimenjivanja"/>
             <xsd:attribute ref="rokVazenja"/>
             <xsd:attribute ref="datumIzdavanjaUSluzbenomGlasilu"/>
+            <xsd:attribute ref="usernameDonosioca"/>
         </xsd:complexType>
     </xsd:element>
     <xsd:element name="Preambula">
@@ -108,4 +109,5 @@
             </xsd:restriction>
         </xsd:simpleType>
     </xsd:attribute>
+    <xsd:attribute name="usernameDonosioca"/>
 </xsd:schema>
