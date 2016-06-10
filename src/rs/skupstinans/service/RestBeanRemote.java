@@ -9,6 +9,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import rs.skupstinans.amandman.Amandmani;
@@ -24,11 +25,11 @@ public interface RestBeanRemote {
 	@Produces(MediaType.APPLICATION_XML)
 	public Stav test(Stav stav);
 	
-	@POST
+	@GET
 	@Path("/findBy")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Propis> findBy(String query);
+	public List<Propis> findBy(@QueryParam("username") String username);
 	
 	@POST
 	@Path("/predlogPropisa")

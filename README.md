@@ -3,10 +3,14 @@
 TODO:
 - Amendments (General)
 - Deleting acts
-- Search
+- Search (text - word and advanced - term)
 - in text references
 - RDF
 - User database
-- Insert user into schemas (Propis and Amandmani)
 - Check if user exists and is privileged for desired action based on his/her role
 - logout
+- acceptance and dismisal of acts and amendments
+- XML, XHTML and PDF exports
+- XML uploads
+- XML input
+- Search results in 5s, 10s, etc.

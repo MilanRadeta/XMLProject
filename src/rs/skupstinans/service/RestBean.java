@@ -16,6 +16,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.xml.XMLConstants;
@@ -29,6 +30,11 @@ import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
 
 import org.xml.sax.SAXException;
+
+import com.marklogic.client.io.DocumentMetadataHandle;
+import com.marklogic.client.io.JAXBHandle;
+import com.marklogic.client.io.SearchHandle;
+import com.marklogic.client.query.MatchDocumentSummary;
 
 import rs.skupstinans.amandman.Amandmani;
 import rs.skupstinans.elementi.Stav;
@@ -58,18 +64,37 @@ public class RestBean implements RestBeanRemote {
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML)
 	public Stav test(Stav stav) {
-		System.out.println(stav);
-		System.out.println(stav.getContent());
+		database.test();
 		return stav;
 	}
 
-	@POST
+	@GET
 	@Path("/findBy")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Propis> findBy(String query) {
+	public List<Propis> findBy(@QueryParam("username") String username) {
 		// TODO
-		return null;
+		List<Propis> propisi = new ArrayList<>();
+		try {
+			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
+			JAXBHandle<Propis> handle = new JAXBHandle<>(context);
+			SearchHandle results = database.query(username);
+			MatchDocumentSummary[] summaries = results.getMatchResults();
+			for (MatchDocumentSummary summary : summaries) {
+				System.out.println("Summary " + summary);
+				System.out.println(summary.getPath());
+				System.out.println(summary.getUri());
+
+				DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+				database.read(summary.getUri(), metadata, handle);
+				propisi.add(handle.get());
+			}
+			results.getTotalResults();
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return propisi;
 	}
 
 	@POST
@@ -85,6 +110,7 @@ public class RestBean implements RestBeanRemote {
 			propis.setPreciscen(false);
 			propis.setStatus("predlog");
 			propis.setBrojPropisa(new BigInteger("1"));
+			propis.setUsernameDonosioca(user.getUsername());
 			GregorianCalendar gcal = new GregorianCalendar();
 			XMLGregorianCalendar xgcal;
 			try {

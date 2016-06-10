@@ -17,82 +17,112 @@
 				<button class="btn btn-primary" data-ng-click="test()">Test</button>
 				<form>
 					<h3>Pretraga</h3>
-					<input data-ng-model="searchTerm" type="text" class="form-control" placeholder="Tekst za pretragu" required>
+					<input data-ng-model="searchTerm" type="text" class="form-control"
+						placeholder="Tekst za pretragu" required>
 					<button class="btn btn-primary" data-ng-click="search()">Pretraži</button>
 				</form>
 				<div data-ng-show="searchResults.length">
 					<h4>Rezultati pretrage</h4>
 					<div data-ng-repeat="result in searchResults">
-						<div>{{result.name}} - {{result.url}}</div>
+						<div>{{result.name}}</div>
+						<button class="btn btn-primary"
+							data-ng-click="openDocument(result)">Otvori</button>
 					</div>
 				</div>
 			</div>
+			<div data-ng-show="document">
+				<button class="btn btn-primary" data-ng-click="downloadXML()">XML</button>
+				<button class="btn btn-primary" data-ng-click="downloadXHTML()">XHTML</button>
+				<button class="btn btn-primary" data-ng-click="downloadPDF()">PDF</button>
+				<h2 data-ng-bind="document.name"></h2>
+			</div>
 			<div data-ng-show="loggedIn">
 				<h3>Akti i amandmani</h3>
-				<button class="btn btn-primary" data-ng-hide="showNewAct" data-ng-click="newAct()">Predloži akt</button>
-				<br /><br />
+				<div data-ng-show="myActs.length > 0">
+					<h4>Vaši predlozi akata</h4>
+					<table>
+						<tr data-ng-repeat="myAct in myActs">
+							<th>{{myAct.naziv}}</th>
+							<td><button class="btn btn-primary"
+									data-ng-click="openDocument(myAct)">Otvori</button></td>
+						</tr>
+					</table>
+				</div>
+				<h4>Predložite akt</h4>
+				<button class="btn btn-primary" data-ng-hide="showNewAct"
+					data-ng-click="newAct()">Predložite akt</button>
+				<br /> <br />
 				<div data-ng-show="showNewAct">
 					<form class="form-group">
 						<label>Preambula:</label>
-						<textarea class="form-control" data-ng-model="materijalniPravniOsnov" rows="5" placeholder="Materijalni pravni osnov za donošenje propisa"></textarea>
-						<textarea class="form-control" data-ng-model="formalniPravniOsnov" rows="5" placeholder="Formalni pravni osnov za donošenje propisa"></textarea>
-						<input type="text" class="form-control" data-ng-model="nazivDonosiocaPropisa" placeholder="Naziv organa koji donosi propis za donošenje propisa"></input>
-						<input type="text" class="form-control" data-ng-model="saglasnostOrgana" placeholder="Naziv organa koji je dao saglasnost"></input>
-						<textarea class="form-control" data-ng-model="saglasnostNaznaka" rows="5" placeholder="Naznaka o datoj saglasnosti"></textarea>
-						<label>Naziv:</label>
-						<input class="form-control" type="text" data-ng-model="nazivPropisa" placeholder="Naziv propisa">
+						<textarea class="form-control"
+							data-ng-model="materijalniPravniOsnov" rows="5"
+							placeholder="Materijalni pravni osnov za donošenje propisa"></textarea>
+						<textarea class="form-control" data-ng-model="formalniPravniOsnov"
+							rows="5" placeholder="Formalni pravni osnov za donošenje propisa"></textarea>
+						<input type="text" class="form-control"
+							data-ng-model="nazivDonosiocaPropisa"
+							placeholder="Naziv organa koji donosi propis za donošenje propisa"></input>
+						<input type="text" class="form-control"
+							data-ng-model="saglasnostOrgana"
+							placeholder="Naziv organa koji je dao saglasnost"></input>
+						<textarea class="form-control" data-ng-model="saglasnostNaznaka"
+							rows="5" placeholder="Naznaka o datoj saglasnosti"></textarea>
+						<label>Naziv:</label> <input class="form-control" type="text"
+							data-ng-model="nazivPropisa" placeholder="Naziv propisa">
 						<br />
 						<div class="alert alert-info" role="alert">
-							<strong>Kako se piše predlog propisa:</strong>
-							<br />
-							Delovi mogu imati nazive. Ako jedan deo ima naziv, svi moraju imati.
-							<br />
-							Deo se mora deliti na barem dve glave.
-							<br />
-							Glave, odeljci i pododeljci moraju imati nazive.
-							<br />
-							Glave i odeljci mogu imati članove, pa da se kasnije dele na niže klasifikacione jedinice. Ukoliko se na početku dele, moraju imati barem dve niže klasifikacione jedinice istog nivoa.
-							<br />
-							Član mora imati naziv, osim u slučaju kada je jedini član u glavi, odeljku ili pododeljku.
-							<br />
-							Stavovi, tačke, podtačke i alineje sadrže tekst.
-							<br />
-							Stavovi mogu da se dele na tačke, tačke na podtačke, podtačke na alineje. Jedan element uvek mora na barem dva podelementa da se deli. 
+							<strong>Kako se piše predlog propisa:</strong> <br /> Delovi
+							mogu imati nazive. Ako jedan deo ima naziv, svi moraju imati. <br />
+							Deo se mora deliti na barem dve glave. <br /> Glave, odeljci i
+							pododeljci moraju imati nazive. <br /> Glave i odeljci mogu
+							imati članove, pa da se kasnije dele na niže klasifikacione
+							jedinice. Ukoliko se na početku dele, moraju imati barem dve niže
+							klasifikacione jedinice istog nivoa. <br /> Član mora imati
+							naziv, osim u slučaju kada je jedini član u glavi, odeljku ili
+							pododeljku. <br /> Stavovi, tačke, podtačke i alineje sadrže
+							tekst. <br /> Stavovi mogu da se dele na tačke, tačke na
+							podtačke, podtačke na alineje. Jedan element uvek mora na barem
+							dva podelementa da se deli.
 						</div>
 						<label>Sadržaj:</label>
 						<div data-ng-repeat="element in elements">
-							<select class="form-control" data-ng-options="part for part in parts" data-ng-model="element.type"></select>
-							<textarea data-ng-show="inputType[element.type] == 'textarea'" class="form-control" data-ng-model="element.value" rows="2" placeholder="Sadržaj"></textarea>
-							<input data-ng-show="inputType[element.type] == 'input'" class="form-control" data-ng-model="element.value" placeholder="Naziv"></input>
+							<select class="form-control"
+								data-ng-options="part for part in parts"
+								data-ng-model="element.type"></select>
+							<textarea data-ng-show="inputType[element.type] == 'textarea'"
+								class="form-control" data-ng-model="element.value" rows="2"
+								placeholder="Sadržaj"></textarea>
+							<input data-ng-show="inputType[element.type] == 'input'"
+								class="form-control" data-ng-model="element.value"
+								placeholder="Naziv"></input>
 							<button class="btn btn-primary" data-ng-click="remove(element)">Ukloni</button>
-						<br /> 
+							<br />
 						</div>
 						<br />
 						<button class="btn btn-primary" data-ng-click="addNewElement()">Dodaj</button>
-						<br />
-						<label>Obrazloženje:</label>
-						<textarea class="form-control" data-ng-model="obrazlozenje" rows="5" placeholder="Obrazloženje za predlaganje propisa"></textarea>
-						<br /><br />
+						<br /> <label>Obrazloženje:</label>
+						<textarea class="form-control" data-ng-model="obrazlozenje"
+							rows="5" placeholder="Obrazloženje za predlaganje propisa"></textarea>
+						<br /> <br />
 						<button class="btn btn-primary" data-ng-click="saveNewAct()">Predloži</button>
 						<button class="btn btn-primary" data-ng-click="closeNewAct()">Otkaži</button>
-						<div class="alert alert-danger" role="alert" data-ng-repeat="errorMessage in errorMessages">
-							{{errorMessage}}
-						</div>
+						<div class="alert alert-danger" role="alert"
+							data-ng-repeat="errorMessage in errorMessages">
+							{{errorMessage}}</div>
 					</form>
 				</div>
-			</div>
-			<div data-ng-show="document">
-				<button class="btn btn-primary">XHTML</button>
-				<button class="btn btn-primary">PDF</button>
-				<h2 data-ng-bind="document.name"></h2>
 			</div>
 		</div>
 		<div class="container" data-ng-hide="loggedIn">
 			<form>
 				<h2>Forma za prijavu</h2>
-				<input data-ng-model="username" type="text" class="form-control" placeholder="Korisničko ime" required autofocus>
-				<input data-ng-model="password" type="password" class="form-control" placeholder="Lozinka" required>
-				<button class="btn btn-lg btn-primary btn-block" data-ng-click="login()">Prijavi se</button>
+				<input data-ng-model="username" type="text" class="form-control"
+					placeholder="Korisničko ime" required autofocus> <input
+					data-ng-model="password" type="password" class="form-control"
+					placeholder="Lozinka" required>
+				<button class="btn btn-lg btn-primary btn-block"
+					data-ng-click="login()">Prijavi se</button>
 			</form>
 		</div>
 	</div>
