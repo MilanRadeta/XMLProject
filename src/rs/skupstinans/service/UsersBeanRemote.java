@@ -15,7 +15,7 @@ public interface UsersBeanRemote {
 	@POST
 	@Path("/login")
 	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.TEXT_PLAIN)
-	public String login(User user);
+	@Produces(MediaType.APPLICATION_JSON)
+	public User login(User user);
 	
 }

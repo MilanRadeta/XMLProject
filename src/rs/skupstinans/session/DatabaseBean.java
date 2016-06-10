@@ -11,7 +11,6 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.transform.Transformer;
 
 import com.marklogic.client.DatabaseClient;
 import com.marklogic.client.DatabaseClientFactory;
@@ -27,7 +26,6 @@ import com.marklogic.client.query.QueryManager;
 import com.marklogic.client.query.StringQueryDefinition;
 
 import rs.skupstinans.propis.Propis;
-import rs.skupstinans.util.TransformPrinter;
 import rs.skupstinans.xmldb.util.Util;
 import rs.skupstinans.xmldb.util.Util.ConnectionProperties;
 

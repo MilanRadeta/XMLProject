@@ -9,12 +9,14 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
@@ -32,6 +34,8 @@ import rs.skupstinans.amandman.Amandmani;
 import rs.skupstinans.elementi.Stav;
 import rs.skupstinans.propis.Propis;
 import rs.skupstinans.session.DatabaseBean;
+import rs.skupstinans.users.Odbornik;
+import rs.skupstinans.users.User;
 import rs.skupstinans.util.Checker;
 import rs.skupstinans.util.PropisValidationEventHandler;
 
@@ -42,6 +46,9 @@ import rs.skupstinans.util.PropisValidationEventHandler;
 @LocalBean
 @Path("/act")
 public class RestBean implements RestBeanRemote {
+
+	@Context
+	private HttpServletRequest request;
 
 	@EJB
 	private DatabaseBean database;
@@ -71,28 +78,33 @@ public class RestBean implements RestBeanRemote {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<String> predlogPropisa(Propis propis) {
 		List<String> retVal = new ArrayList<String>();
-		Checker checker = new Checker();
-		checker.checkPropis(retVal, propis);
-		propis.setPreciscen(false);
-		propis.setStatus("predlog");
-		propis.setBrojPropisa(new BigInteger("1"));
-		GregorianCalendar gcal = new GregorianCalendar();
-		XMLGregorianCalendar xgcal;
-		try {
-			xgcal = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);
-			propis.setDatumPredlaganjaPropisa(xgcal);
-		} catch (DatatypeConfigurationException e) {
-			e.printStackTrace();
-		}
-		if (retVal.size() == 0) {
-			validate(retVal, propis);
-			if (retVal.size() == 0) {
-				database.predlogPropisa(propis);
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null && user instanceof Odbornik) {
+			Checker checker = new Checker();
+			checker.checkPropis(retVal, propis);
+			propis.setPreciscen(false);
+			propis.setStatus("predlog");
+			propis.setBrojPropisa(new BigInteger("1"));
+			GregorianCalendar gcal = new GregorianCalendar();
+			XMLGregorianCalendar xgcal;
+			try {
+				xgcal = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);
+				propis.setDatumPredlaganjaPropisa(xgcal);
+			} catch (DatatypeConfigurationException e) {
+				e.printStackTrace();
 			}
+			if (retVal.size() == 0) {
+				validate(retVal, propis);
+				if (retVal.size() == 0) {
+					database.predlogPropisa(propis);
+				}
+			}
+		} else {
+			retVal.add("Zabranjena akcija");
 		}
 		return retVal;
 	}
-	
+
 	private void validate(List<String> messages, Propis propis) {
 		try {
 			// Definiše se JAXB kontekst (putanja do paketa sa JAXB bean-ovima)

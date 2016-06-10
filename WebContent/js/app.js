@@ -32,6 +32,7 @@ app.controller("appController", function($scope, $http) {
 		}).then(function(response) {
 			if (response.data) {
 				$scope.loggedInUser = response.data;
+				console.log($scope.loggedInUser);
 				$scope.loggedIn = true;
 				$scope.username = null;
 				$scope.password = null;
@@ -87,7 +88,7 @@ app.controller("appController", function($scope, $http) {
 		xw.writeAttributeString("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 		xw.writeAttributeString("xmlns:schemaLocation", "http://www.skupstinans.rs/propis Propis.xsd");
 		xw.writeAttributeString("xmlns:propis", "http://www.skupstinans.rs/propis");
-		xw.writeAttributeString("usernameDonosioca", $scope.loggedInUser);
+		xw.writeAttributeString("usernameDonosioca", $scope.loggedInUser.username);
 
 		xw.writeStartElement("Preambula");
 		xw.writeStartElement("PravniOsnov");
