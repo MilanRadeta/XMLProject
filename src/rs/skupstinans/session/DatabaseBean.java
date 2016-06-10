@@ -1,7 +1,7 @@
 package rs.skupstinans.session;
 
 import java.io.IOException;
-import java.io.OutputStream;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,17 +11,7 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerConfigurationException;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.TransformerFactoryConfigurationError;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
-
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
 
 import com.marklogic.client.DatabaseClient;
 import com.marklogic.client.DatabaseClientFactory;
@@ -37,6 +27,7 @@ import com.marklogic.client.query.QueryManager;
 import com.marklogic.client.query.StringQueryDefinition;
 
 import rs.skupstinans.propis.Propis;
+import rs.skupstinans.util.TransformPrinter;
 import rs.skupstinans.xmldb.util.Util;
 import rs.skupstinans.xmldb.util.Util.ConnectionProperties;
 
@@ -52,7 +43,7 @@ public class DatabaseBean implements DatabaseBeanRemote {
 
 	private List<Transaction> transactions = new ArrayList<>();
 
-	private TransformerFactory transformerFactory;
+	private static int transactionCounter = 0;
 
 	@PostConstruct
 	void init() {
@@ -66,7 +57,6 @@ public class DatabaseBean implements DatabaseBeanRemote {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		transformerFactory = TransformerFactory.newInstance();
 	}
 
 	@PreDestroy
@@ -78,13 +68,9 @@ public class DatabaseBean implements DatabaseBeanRemote {
 		client.release();
 	}
 
-	public void write(String URI, Propis propis) {
-		xmlManager.write(URI, getPropisHandle(propis));
-	}
-
 	private Transaction createTransaction() {
 
-		Transaction t = client.openTransaction();
+		Transaction t = client.openTransaction("Trans-" + (transactionCounter++), 10);
 		transactions.add(t);
 		return t;
 	}
@@ -99,60 +85,25 @@ public class DatabaseBean implements DatabaseBeanRemote {
 		transactions.remove(t);
 	}
 
-	public void testBrojPropisa() {
-		Transaction t = createTransaction();
-		System.out.println("testBrojPropisa");
-		DOMHandle content = new DOMHandle();
-		DocumentMetadataHandle metadata = new DocumentMetadataHandle();
-		// xmlManager.read("/brojPropisa", metadata, content, transaction);
-		DocumentDescriptor desc = xmlManager.exists("/brojPropisa", t);
-		System.out.println("BROJ PROPISA DESC: " + desc);
-		if (desc == null) {
-			StringHandle stringHandle = new StringHandle("<brojPropisa>1</brojPropisa>");
-			xmlManager.write("/brojPropisa", stringHandle, t);
-		} else {
-			/*
-			DOMHandle handle = new DOMHandle();
-			xmlManager.read("/brojPropisa", handle, t);
-			handle.get().getElementsByTagName("brojPropisa").item(0)
-			*/
-		}
-		commitTransaction(t);
-		desc = xmlManager.exists("/brojPropisa");
-		System.out.println("BROJ PROPISA DESC: " + desc);
-		// Document doc = content.get();
-		// transform(doc, System.out);
-	}
-
 	public void predlogPropisa(Propis propis) {
+		Transaction t = createTransaction();
 		DOMHandle content = new DOMHandle();
 		DocumentMetadataHandle metadata = new DocumentMetadataHandle();
-		xmlManager.read("/brojPropisa", metadata, content);
-		Document doc = content.get();
-		transform(doc, System.out);
-		// xmlManager.write("/propisi/" + propis.getBrojPropisa(), "/predlozi",
-		// propis);
-	}
-
-	private void transform(Node node, OutputStream out) {
-		try {
-
-			Transformer transformer = transformerFactory.newTransformer();
-			transformer.setOutputProperty("{http://xml.apache.org/xalan}indent-amount", "2");
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			DOMSource source = new DOMSource(node);
-			StreamResult result = new StreamResult(out);
-			transformer.transform(source, result);
-
-		} catch (TransformerConfigurationException e) {
-			e.printStackTrace();
-		} catch (TransformerFactoryConfigurationError e) {
-			e.printStackTrace();
-		} catch (TransformerException e) {
-			e.printStackTrace();
+		DocumentDescriptor desc = xmlManager.exists("/brojPropisa", t);
+		int brojPropisa;
+		if (desc == null) {
+			brojPropisa = 0;
+		} else {
+			xmlManager.read("/brojPropisa", metadata, content);
+			brojPropisa = Integer.parseInt(content.get().getElementsByTagName("brojPropisa").item(0).getTextContent());
 		}
+		brojPropisa++;
+		propis.setBrojPropisa(new BigInteger("" + brojPropisa));
+		StringHandle stringHandle = new StringHandle("<brojPropisa>" + brojPropisa + "</brojPropisa>");
+		xmlManager.write("/brojPropisa", stringHandle, t);
+		write("/propisi/" + brojPropisa, "/predlozi", propis, t);
+		commitTransaction(t);
 	}
-
 	private JAXBHandle<Propis> getPropisHandle(Propis propis) {
 		JAXBContext context;
 		try {
@@ -171,10 +122,26 @@ public class DatabaseBean implements DatabaseBeanRemote {
 		xmlManager.delete(URI);
 	}
 
+
+	public void write(String URI, Propis propis) {
+		xmlManager.write(URI, getPropisHandle(propis));
+	}
+
+
+	public void write(String URI, Propis propis, Transaction t) {
+		xmlManager.write(URI, getPropisHandle(propis), t);
+	}
+	
 	public void write(String URI, String collectionID, Propis propis) {
 		DocumentMetadataHandle metadata = new DocumentMetadataHandle();
 		metadata.getCollections().add(collectionID);
 		xmlManager.write(URI, metadata, getPropisHandle(propis));
+	}
+	
+	public void write(String URI, String collectionID, Propis propis, Transaction t) {
+		DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+		metadata.getCollections().add(collectionID);
+		xmlManager.write(URI, metadata, getPropisHandle(propis), t);
 	}
 
 	public void read(String URI, DocumentMetadataHandle metadata, JAXBHandle<? extends Object> handle) {

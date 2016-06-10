@@ -12,6 +12,18 @@ app.controller("appController", function($scope, $http) {
 	
 	$scope.parts = ["Deo", "Glava", "Odeljak", "Pododeljak", "Član", "Stav", "Tačka", "Podtačka", "Alineja"];
 	
+	$scope.inputType = {
+			"Deo": "input",
+			"Glava": "input",
+			"Odeljak": "input",
+			"Pododeljak": "input",
+			"Član": "input",
+			"Stav": "textarea",	
+			"Tačka": "textarea",	
+			"Podtačka": "textarea",	
+			"Alineja": "textarea"	
+	};
+	
 	$scope.login = function() {
 		$http({
 			method : "POST",

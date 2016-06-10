@@ -53,7 +53,6 @@ public class RestBean implements RestBeanRemote {
 	public Stav test(Stav stav) {
 		System.out.println(stav);
 		System.out.println(stav.getContent());
-		database.testBrojPropisa();
 		return stav;
 	}
 
