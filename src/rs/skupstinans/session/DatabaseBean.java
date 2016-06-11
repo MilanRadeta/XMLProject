@@ -138,7 +138,9 @@ public class DatabaseBean implements DatabaseBeanRemote {
 			read(URI, metadata, handle, t);
 			Propis propis = handle.get();
 			if (propis.getUsernameDonosioca().equals(user.getUsername())) {
-				delete(URI, t);
+				if (propis.getStatus().equals("predlog")) {
+					delete(URI, t);
+				}
 			}
 			commitTransaction(t);
 		} catch (JAXBException e) {

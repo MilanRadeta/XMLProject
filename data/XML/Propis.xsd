@@ -19,7 +19,7 @@
             <xsd:attribute ref="nazivSluzbenogGlasila"/>
             <xsd:attribute ref="brojPropisa" use="required"/>
             <xsd:attribute ref="preciscen" default="false"/>
-            <xsd:attribute ref="status"/>
+            <xsd:attribute ref="status" use="required"/>
             <xsd:attribute ref="datumPredlaganjaPropisa"/>
             <xsd:attribute ref="datumUsvajanjaPropisa"/>
             <xsd:attribute ref="datumStupanjaNaSnagu"/>

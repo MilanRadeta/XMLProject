@@ -30,7 +30,7 @@ public interface RestBeanRemote {
 	@Path("/findBy")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Propis> findBy(@QueryParam("username") String username);
+	public List<Propis> findBy(@QueryParam("username") String username, @QueryParam("predlog") boolean predlog);
 
 	@POST
 	@Path("/predlogPropisa")

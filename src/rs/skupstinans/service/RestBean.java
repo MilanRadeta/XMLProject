@@ -66,7 +66,7 @@ public class RestBean implements RestBeanRemote {
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML)
 	public Stav test(Stav stav) {
-		database.test();
+		database.clearDatabase();
 		return stav;
 	}
 
@@ -74,9 +74,12 @@ public class RestBean implements RestBeanRemote {
 	@Path("/findBy")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Propis> findBy(@QueryParam("username") String username) {
+	public List<Propis> findBy(@QueryParam("username") String username, @QueryParam("predlog") boolean predlog) {
 		List<Propis> propisi = new ArrayList<>();
 		Query query = new Query();
+		if (predlog) {
+			query.setPredlog(true);
+		}
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null && user instanceof Odbornik) {
 			query.setUsername(username);
@@ -114,6 +117,7 @@ public class RestBean implements RestBeanRemote {
 			propis.setPreciscen(false);
 			propis.setStatus("predlog");
 			propis.setBrojPropisa(new BigInteger("1"));
+			propis.setStatus("predlog");
 			propis.setUsernameDonosioca(user.getUsername());
 			GregorianCalendar gcal = new GregorianCalendar();
 			XMLGregorianCalendar xgcal;

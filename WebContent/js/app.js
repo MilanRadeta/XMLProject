@@ -51,7 +51,7 @@
 			$http({
 				method : "GET",
 				url : "api/act/findBy",
-				params: {username: $scope.loggedInUser.username}
+				params: {username: $scope.loggedInUser.username, predlog: true}
 			}).then(function(response) {
 				$scope.myActs = response.data;
 				console.log(response.data);
