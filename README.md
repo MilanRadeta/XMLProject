@@ -2,7 +2,6 @@
 
 TODO:
 - Amendments (General)
-- Deleting acts
 - Search (text - word and advanced - term)
 - in text references
 - RDF
@@ -13,4 +12,5 @@ TODO:
 - XML, XHTML and PDF exports
 - XML uploads
 - XML input
-- Search results in 5s, 10s, etc.
+- Search results in groups of 5, 10, etc.
+- collections for acts in procedure, accepted acts, acts not yet in procedure, amendments, etc.

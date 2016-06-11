@@ -15,6 +15,7 @@ import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
@@ -44,6 +45,7 @@ import rs.skupstinans.users.Odbornik;
 import rs.skupstinans.users.User;
 import rs.skupstinans.util.Checker;
 import rs.skupstinans.util.PropisValidationEventHandler;
+import rs.skupstinans.util.Query;
 
 /**
  * Session Bean implementation class RestBean
@@ -73,25 +75,27 @@ public class RestBean implements RestBeanRemote {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Propis> findBy(@QueryParam("username") String username) {
-		// TODO
 		List<Propis> propisi = new ArrayList<>();
+		Query query = new Query();
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null && user instanceof Odbornik) {
+			query.setUsername(username);
+		}
 		try {
 			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
 			JAXBHandle<Propis> handle = new JAXBHandle<>(context);
-			SearchHandle results = database.query(username);
-			MatchDocumentSummary[] summaries = results.getMatchResults();
-			for (MatchDocumentSummary summary : summaries) {
-				System.out.println("Summary " + summary);
-				System.out.println(summary.getPath());
-				System.out.println(summary.getUri());
+			SearchHandle results = database.query(query);
+			if (results != null) {
+				MatchDocumentSummary[] summaries = results.getMatchResults();
+				for (MatchDocumentSummary summary : summaries) {
+					System.out.println(summary.getUri());
 
-				DocumentMetadataHandle metadata = new DocumentMetadataHandle();
-				database.read(summary.getUri(), metadata, handle);
-				propisi.add(handle.get());
+					DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+					database.read(summary.getUri(), metadata, handle);
+					propisi.add(handle.get());
+				}
 			}
-			results.getTotalResults();
 		} catch (JAXBException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return propisi;
@@ -164,10 +168,21 @@ public class RestBean implements RestBeanRemote {
 	}
 
 	@DELETE
-	@Path("/povuciPredlogPropisa")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public void povuciPredlogPropisa(String id) {
-		// TODO
+	@Path("/povuciPredlogPropisa/{id}")
+	@Consumes(MediaType.TEXT_PLAIN)
+	public void povuciPredlogPropisa(@PathParam("id") String id) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null && user instanceof Odbornik) {
+			Query query = new Query();
+			query.setBrojPropisa(Integer.parseInt(id));
+			SearchHandle results = database.query(query);
+			if (results != null && results.getTotalResults() == 1) {
+				MatchDocumentSummary[] summaries = results.getMatchResults();
+				for (MatchDocumentSummary summary : summaries) {
+					database.deletePropis(summary.getUri(), user);
+				}
+			}
+		}
 	}
 
 	@DELETE

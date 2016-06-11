@@ -40,11 +40,14 @@
 				<h3>Akti i amandmani</h3>
 				<div data-ng-show="myActs.length > 0">
 					<h4>Vaši predlozi akata</h4>
-					<table>
+					<table class="table-condensed">
 						<tr data-ng-repeat="myAct in myActs">
-							<th>{{myAct.naziv}}</th>
+							<th>{{myAct.Naziv}}</th>
+							<td>&nbsp;</td>
 							<td><button class="btn btn-primary"
 									data-ng-click="openDocument(myAct)">Otvori</button></td>
+							<td><button class="btn btn-primary"
+									data-ng-click="removeAct(myAct)">Povuci</button></td>
 						</tr>
 					</table>
 				</div>
@@ -124,6 +127,7 @@
 				<button class="btn btn-lg btn-primary btn-block"
 					data-ng-click="login()">Prijavi se</button>
 			</form>
+			<div class="alert alert-danger" role="alert" data-ng-show="loginFail">Neuspešna prijava</div>
 		</div>
 	</div>
 </body>

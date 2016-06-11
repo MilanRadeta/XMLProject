@@ -10,6 +10,7 @@
 		$scope.searchResults = [];
 		$scope.showNewAct = false;
 		$scope.loggedInUser = null;
+		$scope.loginFail = false;
 		
 		$scope.parts = ["Deo", "Glava", "Odeljak", "Pododeljak", "Član", "Stav", "Tačka", "Podtačka", "Alineja"];
 		
@@ -33,10 +34,14 @@
 			}).then(function(response) {
 				if (response.data) {
 					$scope.loggedInUser = response.data;
+					$scope.loginFail = false;
 					$scope.loggedIn = true;
 					$scope.username = null;
 					$scope.password = null;
 					$scope.getMyActs();
+				}
+				else {
+					$scope.loginFail = true;
 				}
 			});
 		};
@@ -48,6 +53,7 @@
 				url : "api/act/findBy",
 				params: {username: $scope.loggedInUser.username}
 			}).then(function(response) {
+				$scope.myActs = response.data;
 				console.log(response.data);
 			});
 		};
@@ -210,8 +216,11 @@
 				   'Content-Type': "application/xml"
 				 }
 			}).then(function(response) {
-				console.log(response);
 				$scope.errorMessages = response.data;
+				if (response.data.length == 0) {
+					$scope.closeNewAct();
+					$scope.getMyActs();
+				}
 			});
 		};
 		
@@ -241,6 +250,16 @@
 			$scope.saglasnostNaznaka = "";
 			$scope.errorMessages = [];
 			$scope.elements = [{type: "Deo", value: ""}];
+		}
+		
+		$scope.removeAct = function(act) {
+
+			$http({
+				method : "DELETE",
+				url : "api/act/povuciPredlogPropisa/" + act.brojPropisa
+			}).then(function(response) {
+				$scope.getMyActs();
+			});
 		}
 		
 		$scope.resetAct();

@@ -24,13 +24,14 @@ import com.marklogic.client.io.DocumentMetadataHandle;
 import com.marklogic.client.io.JAXBHandle;
 import com.marklogic.client.io.SearchHandle;
 import com.marklogic.client.io.StringHandle;
-import com.marklogic.client.query.MatchDocumentSummary;
 import com.marklogic.client.query.QueryManager;
 import com.marklogic.client.query.StringQueryDefinition;
 import com.marklogic.client.query.StructuredQueryBuilder;
 import com.marklogic.client.query.StructuredQueryDefinition;
 
 import rs.skupstinans.propis.Propis;
+import rs.skupstinans.users.User;
+import rs.skupstinans.util.Query;
 import rs.skupstinans.xmldb.util.Util;
 import rs.skupstinans.xmldb.util.Util.ConnectionProperties;
 
@@ -57,7 +58,6 @@ public class DatabaseBean implements DatabaseBeanRemote {
 					props.authType);
 			xmlManager = client.newXMLDocumentManager();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -116,14 +116,35 @@ public class DatabaseBean implements DatabaseBeanRemote {
 			handle.set(propis);
 			return handle;
 		} catch (JAXBException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
 	}
 
-	public void delete(String URI, JAXBHandle<? extends Object> handle) {
+	public void delete(String URI) {
 		xmlManager.delete(URI);
+	}
+
+	public void delete(String URI, Transaction t) {
+		xmlManager.delete(URI, t);
+	}
+
+	public void deletePropis(String URI, User user) {
+		try {
+			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
+			JAXBHandle<Propis> handle = new JAXBHandle<>(context);
+			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+			Transaction t = createTransaction();
+			read(URI, metadata, handle, t);
+			Propis propis = handle.get();
+			if (propis.getUsernameDonosioca().equals(user.getUsername())) {
+				delete(URI, t);
+			}
+			commitTransaction(t);
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 
 	public void write(String URI, Propis propis) {
@@ -150,6 +171,10 @@ public class DatabaseBean implements DatabaseBeanRemote {
 		xmlManager.read(URI, metadata, handle);
 	}
 
+	public void read(String URI, DocumentMetadataHandle metadata, JAXBHandle<? extends Object> handle, Transaction t) {
+		xmlManager.read(URI, metadata, handle, t);
+	}
+
 	public void read(String URI, DocumentMetadataHandle metadata, DOMHandle handle) {
 		xmlManager.read(URI, metadata, handle);
 	}
@@ -169,80 +194,60 @@ public class DatabaseBean implements DatabaseBeanRemote {
 		return queryManager.search(queryDefinition, new SearchHandle());
 	}
 
-	public void test() {
-		if (false) {
-			// TODO: cleanup all acts and reset act counter
-			Transaction t = createTransaction();
-			DOMHandle content = new DOMHandle();
-			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
-			DocumentDescriptor desc = xmlManager.exists("/brojPropisa", t);
-			int brojPropisa;
-			if (desc == null) {
-				brojPropisa = 0;
-			} else {
-				xmlManager.read("/brojPropisa", metadata, content);
-				brojPropisa = Integer
-						.parseInt(content.get().getElementsByTagName("brojPropisa").item(0).getTextContent());
-			}
-			brojPropisa++;
-			// propis.setBrojPropisa(new BigInteger("" + brojPropisa));
-			StringHandle stringHandle = new StringHandle("<brojPropisa>" + brojPropisa + "</brojPropisa>");
-			xmlManager.write("/brojPropisa", stringHandle, t);
-			// write("/propisi/" + brojPropisa, "/predlozi", propis, t);
-			commitTransaction(t);
-		} else {
-			System.out.println("TEST");
-			try {
-
-				List<Propis> propisi = new ArrayList<>();
-				JAXBHandle<Propis> handle;
-				JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
-				handle = new JAXBHandle<>(context);
-
-				QueryManager queryManager = client.newQueryManager();
-				StructuredQueryBuilder qb = queryManager.newStructuredQueryBuilder();
-
-				String namespace = Propis.class.getPackage().getAnnotation(XmlSchema.class).namespace();
-				StructuredQueryDefinition queryDef = qb.value(
-						qb.elementAttribute(qb.element(new QName(namespace, "Propis")),
-								qb.attribute(new QName(namespace, "usernameDonosioca"))),
-						"odbornik");
-				System.out.println(queryDef.serialize());
-				SearchHandle results = queryManager.search(queryDef, new SearchHandle());
-				MatchDocumentSummary[] summaries = results.getMatchResults();
-				for (MatchDocumentSummary summary : summaries) {
-					System.out.println(summary.getUri());
-
-					DocumentMetadataHandle metadata = new DocumentMetadataHandle();
-					read(summary.getUri(), metadata, handle);
-				}
-			} catch (JAXBException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+	public void clearDatabase() {
+		// TODO: cleanup all documents
+		Transaction t = createTransaction();
+		DocumentDescriptor desc = xmlManager.exists("/brojPropisa", t);
+		if (desc != null) {
+			xmlManager.delete(desc, t);
+		}
+		for (int i = 1; i <= 6; i++) {
+			desc = xmlManager.exists("/propisi/" + i, t);
+			if (desc != null) {
+				xmlManager.delete(desc, t);
 			}
 		}
+		commitTransaction(t);
 	}
 
-	public SearchHandle query(String query) {
+	public void test() {
+		System.out.println("TEST");
+	}
 
-		/*
-		 * QueryManager queryManager = client.newQueryManager();
-		 * 
-		 * // Query definition is used to specify Google-style query string
-		 * StringQueryDefinition queryDefinition =
-		 * queryManager.newStringDefinition();
-		 * queryDefinition.setCriteria(query);
-		 * 
-		 * return queryManager.search(queryDefinition, new DOMHandle());
-		 */
+	private StructuredQueryDefinition boostQuery(StructuredQueryDefinition orgDef, StructuredQueryDefinition boost,
+			StructuredQueryBuilder builder) {
+		if (boost != null) {
+			if (orgDef != null) {
+				orgDef = builder.and(orgDef, boost);
+			} else {
+				orgDef = boost;
+			}
+		}
+		return orgDef;
+	}
+
+	public SearchHandle query(Query query) {
 
 		QueryManager queryManager = client.newQueryManager();
 		StructuredQueryBuilder qb = queryManager.newStructuredQueryBuilder();
 
-		StructuredQueryDefinition queryDef = qb
-				.word(qb.elementAttribute(qb.element("Propis"), qb.attribute("username")), query);
-
-		return queryManager.search(queryDef, new SearchHandle());
+		StructuredQueryDefinition queryDef = null;
+		StructuredQueryDefinition boostQuery = null;
+		String propisNamespace = Propis.class.getPackage().getAnnotation(XmlSchema.class).namespace();
+		if (query.getUsername() != null) {
+			boostQuery = qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
+					qb.attribute(new QName(propisNamespace, "usernameDonosioca"))), query.getUsername());
+			queryDef = boostQuery(queryDef, boostQuery, qb);
+		}
+		if (query.getBrojPropisa() != -1) {
+			boostQuery = qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
+					qb.attribute(new QName(propisNamespace, "brojPropisa"))), query.getBrojPropisa());
+			queryDef = boostQuery(queryDef, boostQuery, qb);
+		}
+		if (queryDef != null) {
+			return queryManager.search(queryDef, new SearchHandle());
+		}
+		return null;
 	}
 
 }
