@@ -74,12 +74,15 @@ public class RestBean implements RestBeanRemote {
 	@Path("/findBy")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Propis> findBy(@QueryParam("username") String username, @QueryParam("predlog") boolean predlog) {
+	public List<Propis> findBy(
+			@QueryParam("username") String username,
+			@QueryParam("predlog") boolean predlog,
+			@QueryParam("inProcedure") boolean inProcedure) {
 		List<Propis> propisi = new ArrayList<>();
 		Query query = new Query();
-		if (predlog) {
-			query.setPredlog(true);
-		}
+		query.setPredlog(predlog);
+		query.setInProcedure(inProcedure);
+		
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null && user instanceof Odbornik) {
 			query.setUsername(username);
@@ -115,7 +118,6 @@ public class RestBean implements RestBeanRemote {
 			Checker checker = new Checker();
 			checker.checkPropis(retVal, propis);
 			propis.setPreciscen(false);
-			propis.setStatus("predlog");
 			propis.setBrojPropisa(new BigInteger("1"));
 			propis.setStatus("predlog");
 			propis.setUsernameDonosioca(user.getUsername());

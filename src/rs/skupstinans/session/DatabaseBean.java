@@ -130,21 +130,21 @@ public class DatabaseBean implements DatabaseBeanRemote {
 	}
 
 	public void deletePropis(String URI, User user) {
+		Transaction t = createTransaction();
 		try {
 			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
 			JAXBHandle<Propis> handle = new JAXBHandle<>(context);
 			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
-			Transaction t = createTransaction();
 			read(URI, metadata, handle, t);
 			Propis propis = handle.get();
 			if (propis.getUsernameDonosioca().equals(user.getUsername())) {
-				if (propis.getStatus().equals("predlog")) {
+				if (!propis.getStatus().equals("usvojen u celosti")) {
 					delete(URI, t);
 				}
 			}
 			commitTransaction(t);
 		} catch (JAXBException e) {
-			// TODO Auto-generated catch block
+			rollbackTransaction(t);
 			e.printStackTrace();
 		}
 	}
@@ -236,6 +236,7 @@ public class DatabaseBean implements DatabaseBeanRemote {
 		StructuredQueryDefinition queryDef = null;
 		StructuredQueryDefinition boostQuery = null;
 		String propisNamespace = Propis.class.getPackage().getAnnotation(XmlSchema.class).namespace();
+		// TODO: move this to Query method createQueryDefinition
 		if (query.getUsername() != null) {
 			boostQuery = qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
 					qb.attribute(new QName(propisNamespace, "usernameDonosioca"))), query.getUsername());
@@ -246,6 +247,25 @@ public class DatabaseBean implements DatabaseBeanRemote {
 					qb.attribute(new QName(propisNamespace, "brojPropisa"))), query.getBrojPropisa());
 			queryDef = boostQuery(queryDef, boostQuery, qb);
 		}
+		if (query.isPredlog() && query.isInProcedure()) {
+			boostQuery = qb.or(
+					qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
+					qb.attribute(new QName(propisNamespace, "status"))), "predlog"),
+					qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
+							qb.attribute(new QName(propisNamespace, "status"))), "usvojen u nacelu"));
+			queryDef = boostQuery(queryDef, boostQuery, qb);
+		}
+		else if (query.isPredlog()) {
+			boostQuery = qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
+					qb.attribute(new QName(propisNamespace, "status"))), "predlog");
+			queryDef = boostQuery(queryDef, boostQuery, qb);
+		}
+		else if (query.isInProcedure()) {
+			boostQuery = qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
+					qb.attribute(new QName(propisNamespace, "status"))), "usvojen u nacelu");
+			queryDef = boostQuery(queryDef, boostQuery, qb);
+		}
+		
 		if (queryDef != null) {
 			return queryManager.search(queryDef, new SearchHandle());
 		}

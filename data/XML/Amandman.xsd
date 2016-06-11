@@ -9,7 +9,7 @@
                 <xsd:element ref="PravniOsnov"/>
                 <xsd:element maxOccurs="unbounded" ref="Amandman"/>
             </xsd:sequence>
-            <xsd:attribute ref="elem:references"/>
+            <xsd:attribute ref="elem:references" use="required"/>
         </xsd:complexType>
     </xsd:element>
     <xsd:element name="Amandman">
@@ -18,19 +18,10 @@
                 <xsd:group ref="TipIzmene"/>
                 <xsd:element ref="elem:Obrazlozenje"/>
             </xsd:sequence>
-            <xsd:attribute ref="elem:references"/>
+            <xsd:attribute ref="elem:references" use="required"/>
         </xsd:complexType>
     </xsd:element>
     <xsd:element name="PravniOsnov" type="xsd:string"> </xsd:element>
-    <xsd:attribute default="last" name="position">
-        <xsd:simpleType>
-            <xsd:restriction base="xsd:string">
-                <xsd:pattern value="[0-9]*"/>
-                <xsd:pattern value="first"/>
-                <xsd:pattern value="last"/>
-            </xsd:restriction>
-        </xsd:simpleType>
-    </xsd:attribute>
     <xsd:element name="Izmena">
         <xsd:complexType>
             <xsd:choice>

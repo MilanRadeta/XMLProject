@@ -11,6 +11,19 @@
 		$scope.showNewAct = false;
 		$scope.loggedInUser = null;
 		$scope.loginFail = false;
+
+		var toAscii = function(str) {
+			return str.replace("Š", "S")
+			.replace("Đ", "Dj")
+			.replace("Č", "C")
+			.replace("Ć", "C")
+			.replace("Ž", "Z")
+			.replace("š", "s")
+			.replace("đ", "dj")
+			.replace("č", "c")
+			.replace("ć", "c")
+			.replace("ž", "z");
+		}
 		
 		$scope.parts = ["Deo", "Glava", "Odeljak", "Pododeljak", "Član", "Stav", "Tačka", "Podtačka", "Alineja"];
 		
@@ -26,6 +39,9 @@
 				"Alineja": "textarea"	
 		};
 		
+		$scope.amendmentTypes = ["Dopuna", "Izmena", "Brisanje"];
+		$scope.amendmentType = $scope.amendmentTypes[0];
+		
 		$scope.login = function() {
 			$http({
 				method : "POST",
@@ -39,6 +55,7 @@
 					$scope.username = null;
 					$scope.password = null;
 					$scope.getMyActs();
+					$scope.getSuggestedActs();
 				}
 				else {
 					$scope.loginFail = true;
@@ -46,15 +63,33 @@
 			});
 		};
 		
-		$scope.getMyActs = function() {
-			console.log("Getting my acts");
+		$scope.getSuggestedActs = function() {
 			$http({
 				method : "GET",
 				url : "api/act/findBy",
-				params: {username: $scope.loggedInUser.username, predlog: true}
+				params: {predlog: true, inProcedure: true}
+			}).then(function(response) {
+				$scope.suggestedActs = response.data;
+			});
+		};
+		
+		$scope.getActsInProcedure = function() {
+			$http({
+				method : "GET",
+				url : "api/act/findBy",
+				params: {inProcedure: true}
+			}).then(function(response) {
+				$scope.actsInProcedure = response.data;
+			});
+		};
+		
+		$scope.getMyActs = function() {
+			$http({
+				method : "GET",
+				url : "api/act/findBy",
+				params: {username: $scope.loggedInUser.username, predlog: true, inProcedure: true}
 			}).then(function(response) {
 				$scope.myActs = response.data;
-				console.log(response.data);
 			});
 		};
 		
@@ -96,6 +131,8 @@
 		}
 		
 		$scope.saveNewAct = function() {
+			
+			// TODO: try to form JSON data and send it
 			var xw = new XMLWriter('UTF-8', '1.0');
 			xw.formatting="none";
 			xw.writeStartDocument();
@@ -125,18 +162,7 @@
 			xw.writeElementString("Naziv", $scope.nazivPropisa, "elem");
 			
 			var elementDict = {};
-			var toAscii = function(str) {
-				return str.replace("Š", "S")
-				.replace("Đ", "Dj")
-				.replace("Č", "C")
-				.replace("Ć", "C")
-				.replace("Ž", "Z")
-				.replace("š", "s")
-				.replace("đ", "dj")
-				.replace("č", "c")
-				.replace("ć", "c")
-				.replace("ž", "z");
-			}
+			
 			for (var index in $scope.parts) {
 				var part = toAscii($scope.parts[index]);
 				elementDict[part] = 0;
@@ -207,7 +233,7 @@
 			var xml = xw.flush();
 			xw.close();
 			
-	
+			$scope.uploadingNewAct = true;
 			$http({
 				method : "POST",
 				url : "api/act/predlogPropisa",
@@ -216,10 +242,12 @@
 				   'Content-Type': "application/xml"
 				 }
 			}).then(function(response) {
+				$scope.uploadingNewAct = false;
 				$scope.errorMessages = response.data;
 				if (response.data.length == 0) {
 					$scope.closeNewAct();
 					$scope.getMyActs();
+					$scope.getSuggestedActs();
 				}
 			});
 		};
@@ -237,6 +265,7 @@
 		
 		$scope.closeNewAct = function() {
 			$scope.showNewAct = false;
+			$scope.amendmentAct = null;
 			$scope.resetAct();
 		};
 		
@@ -250,6 +279,8 @@
 			$scope.saglasnostNaznaka = "";
 			$scope.errorMessages = [];
 			$scope.elements = [{type: "Deo", value: ""}];
+			$scope.amendmentAct = null;
+			$scope.amendmentActParts = [];
 		}
 		
 		$scope.removeAct = function(act) {
@@ -261,6 +292,67 @@
 				$scope.getMyActs();
 			});
 		}
+		
+		$scope.createAmendment = function(act) {
+			$scope.closeNewAct();
+			$scope.amendmentAct = act;
+			var process = function(parent, partIndex) {
+				if ($scope.parts[partIndex]) {
+					var part = toAscii($scope.parts[partIndex]);
+					if (parent[part] != null && parent[part].length > 0) {
+						for (var index in parent[part]) {
+							var elem = parent[part][index];
+							$scope.amendmentActParts.push(elem.id);
+							process(elem, partIndex + 1);
+						}
+					}
+					else {
+						process(parent, partIndex + 1);
+					}
+				}
+			}
+			process(act, 0);
+			var formatParts = function() {
+				for (var actPartIndex in $scope.amendmentActParts) {
+					var part = $scope.amendmentActParts[actPartIndex];
+					var splits = part.split('-');
+					var formatString = "";
+					var partIndex = -1;
+					for (var index in splits) {
+						if (index == 0) {
+							switch (splits[index][0]) {
+							case "d":
+								formatString += "Deo " + splits[index].substring(1);
+								partIndex = 0;
+								break;
+							case "g":
+								formatString += "Glava " + splits[index].substring(1);
+								partIndex = 1;
+								break;
+							case "c":
+								formatString += "Član " + splits[index].substring(2);
+								partIndex = 4;
+								break;
+							}
+						}
+						else {
+							formatString += " " + $scope.parts[parseInt(partIndex) + parseInt(index)] + " " + splits[index];
+						}
+					}
+					$scope.amendmentActParts[actPartIndex] = formatString;
+				}
+			}
+			formatParts();
+			$scope.openDocument(act);
+		}
+		
+		$scope.saveAmenmdent = function() {
+			//TODO
+		};
+		
+		$scope.openDocument = function() {
+			//TODO
+		};	
 		
 		$scope.resetAct();
 	});

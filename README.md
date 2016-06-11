@@ -15,3 +15,4 @@ TODO:
 - Search results in groups of 5, 10, etc.
 - collections for acts in procedure, accepted acts, acts not yet in procedure, amendments, etc.
 - deleting amendments, but only those that are not yet accepted
+- prevent creating new amendments when the session considering the act in question has started

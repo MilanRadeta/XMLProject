@@ -4,6 +4,7 @@ public class Query {
 	private String username;
 	private int brojPropisa = -1;
 	private boolean predlog;
+	private boolean inProcedure;
 	
 	public String getUsername() {
 		return username;
@@ -28,6 +29,14 @@ public class Query {
 
 	public void setPredlog(boolean predlog) {
 		this.predlog = predlog;
+	}
+
+	public boolean isInProcedure() {
+		return inProcedure;
+	}
+
+	public void setInProcedure(boolean inProcedure) {
+		this.inProcedure = inProcedure;
 	}
 	
 	
