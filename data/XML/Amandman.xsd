@@ -19,6 +19,7 @@
                 <xsd:element ref="elem:Obrazlozenje"/>
             </xsd:sequence>
             <xsd:attribute ref="elem:references" use="required"/>
+            <xsd:attribute ref="elem:id" use="required"/>
         </xsd:complexType>
     </xsd:element>
     <xsd:element name="PravniOsnov" type="xsd:string"> </xsd:element>
@@ -45,7 +46,9 @@
             </xsd:choice>
         </xsd:complexType>
     </xsd:element>
-    <xsd:element name="Brisanje"/>
+    <xsd:element name="Brisanje">
+        <xsd:complexType/>
+    </xsd:element>
     <xsd:group name="TipIzmene">
         <xsd:choice>
             <xsd:element ref="Izmena"/>

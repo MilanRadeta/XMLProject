@@ -3,6 +3,7 @@ package rs.skupstinans.util;
 import java.util.HashMap;
 import java.util.List;
 
+import rs.skupstinans.amandman.Amandman;
 import rs.skupstinans.elementi.Clan;
 import rs.skupstinans.elementi.Deo;
 import rs.skupstinans.elementi.ElementInterface;
@@ -50,12 +51,12 @@ public class Checker {
 
 	public void checkPropisContent(List<String> messages, Propis propis) {
 		if (propis.getClan().isEmpty() && propis.getDeo().isEmpty() && propis.getGlava().isEmpty()) {
-			messages.add("Propis mora da se sastoji od Ä?lanova, delova ili glava.");
+			messages.add("Propis mora da se sastoji od ï¿½?lanova, delova ili glava.");
 		} else if (!propis.getClan().isEmpty()) {
-			System.out.println("Propis se sastoji iskljuÄ?ivo od Ä?lanova");
+			System.out.println("Propis se sastoji iskljuï¿½?ivo od ï¿½?lanova");
 			if (propis.getDeo().isEmpty() && propis.getGlava().isEmpty()) {
 				if (propis.getClan().size() >= 20) {
-					messages.add("Propis moÅ¾e da se sastoji iskljuÄ?ivo od Ä?lanova ako ih ima manje od 20");
+					messages.add("Propis moÅ¾e da se sastoji iskljuï¿½?ivo od ï¿½?lanova ako ih ima manje od 20");
 				}
 				for (int i = 0; i < propis.getClan().size(); i++) {
 					checkClan(messages, propis.getClan().get(i), "ÄŒlan " + (clanCounter + 1) + ".", false);
@@ -175,11 +176,11 @@ public class Checker {
 			}
 			if (!isClanFirst) {
 				if (odeljakCounter == 1) {
-					messages.add(String.format("%s - mora da se sastoji od barem 2 odeljka ili od Ä?lanova i odeljaka",
+					messages.add(String.format("%s - mora da se sastoji od barem 2 odeljka ili od ï¿½?lanova i odeljaka",
 							messagePrefix));
 				} else if (pododeljakCounter == 1) {
 					messages.add(
-							String.format("%s - mora da se sastoji od barem 2 pododeljka ili od Ä?lanova i pododeljaka",
+							String.format("%s - mora da se sastoji od barem 2 pododeljka ili od ï¿½?lanova i pododeljaka",
 									messagePrefix));
 				}
 			}
@@ -196,7 +197,7 @@ public class Checker {
 		}
 		checkString(messages, pododeljak.getNaziv(), String.format("%s - nedostaje naziv", messagePrefix));
 		if (pododeljak.getClan().isEmpty()) {
-			messages.add(String.format("%s - nedostaju Ä?lanovi", messagePrefix));
+			messages.add(String.format("%s - nedostaju ï¿½?lanovi", messagePrefix));
 		} else {
 			for (Clan clan : pododeljak.getClan()) {
 				checkClan(messages, clan, String.format("%s ÄŒlan %s.", messagePrefix, clanCounter),
@@ -323,5 +324,9 @@ public class Checker {
 		 * "http://www.skupstinans.rs/elementi", type = JAXBElement.class,
 		 * required = false)
 		 */
+	}
+	
+	public void checkAmendment(List<String> messages, Amandman amandman) {
+		// TODO
 	}
 }

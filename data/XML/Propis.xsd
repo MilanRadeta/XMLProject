@@ -26,7 +26,7 @@
             <xsd:attribute ref="datumPrimenjivanja"/>
             <xsd:attribute ref="rokVazenja"/>
             <xsd:attribute ref="datumIzdavanjaUSluzbenomGlasilu"/>
-            <xsd:attribute ref="usernameDonosioca"/>
+            <xsd:attribute ref="elem:usernameDonosioca"/>
         </xsd:complexType>
     </xsd:element>
     <xsd:element name="Preambula">
@@ -109,5 +109,4 @@
             </xsd:restriction>
         </xsd:simpleType>
     </xsd:attribute>
-    <xsd:attribute name="usernameDonosioca"/>
 </xsd:schema>

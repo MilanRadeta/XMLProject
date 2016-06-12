@@ -102,8 +102,8 @@
             <xsd:pattern value="[A-ZŠČĆĐŽ]+[A-ZŠĐČĆŽa-zšđčćž0-9 ]*"/>
         </xsd:restriction>
     </xsd:simpleType>
-    <xsd:attribute name="id" type="xsd:ID"/>
-    <xsd:attribute name="references" type="xsd:IDREFS"/>
+    <xsd:attribute name="id" type="idType"/>
+    <xsd:attribute name="references" type="idType"/>
     <xsd:attribute default="true" name="dopuna" type="xsd:boolean"/>
     <xsd:element name="Referenca">
         <xsd:complexType>
@@ -128,4 +128,11 @@
         </xsd:sequence>
     </xsd:group>
     <xsd:element name="Obrazlozenje" type="xsd:string"> </xsd:element>
+    <xsd:attribute name="usernameDonosioca"/>
+    <xsd:simpleType name="idType">
+        <xsd:restriction base="xsd:string">
+            <xsd:pattern value="[A-Za-z]+\d+(\/\d+)*( [A-Za-z]+\d+(\/\d+)*)*"/>
+            <xsd:minLength value="1"/>
+        </xsd:restriction>
+    </xsd:simpleType>
 </xsd:schema>
