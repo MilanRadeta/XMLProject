@@ -12,6 +12,74 @@
 		$scope.loggedInUser = null;
 		$scope.loginFail = false;
 
+		var writeElements = function(xw) {
+			var elementDict = {};
+			
+			for (var index in $scope.parts) {
+				var part = toAscii($scope.parts[index]);
+				elementDict[part] = 0;
+			}
+			var resetElementDict = function(elementDict, key, xw) {
+				if (elementDict[key]) {
+					elementDict[key] = 0;
+					xw.writeEndElement();
+				}
+			}
+			for (var index in $scope.elements) {
+				var element = $scope.elements[index];
+				var type = toAscii(element.type);
+				switch (type) {
+				case "Deo":
+					resetElementDict(elementDict, "Deo", xw);
+				case "Glava":
+					resetElementDict(elementDict, "Glava", xw);
+				case "Odeljak":
+					resetElementDict(elementDict, "Odeljak", xw);
+				case "Pododeljak":
+					resetElementDict(elementDict, "Pododeljak", xw);
+					if ($scope.amendmentAct) {
+						if ($scope.amendmentType == 'Izmena') {
+							// TODO: error
+						}
+					}
+				case "Clan":
+					resetElementDict(elementDict, "Clan", xw);
+					//TODO: text elements, such as Referenca, SkraceniNaziv, StraniIzraz...
+				case "Stav":
+					resetElementDict(elementDict, "Stav", xw);
+				case "Tacka":
+					resetElementDict(elementDict, "Tacka", xw);
+				case "Podtacka":
+					resetElementDict(elementDict, "Podtacka", xw);
+				case "Alineja":
+					resetElementDict(elementDict, "Alineja", xw);
+				}
+				xw.writeStartElement(type, "elem");
+				elementDict[type] += 1;
+				switch (type) {
+				case "Deo":
+				case "Glava":
+				case "Odeljak":
+				case "Pododeljak":
+				case "Clan":
+					xw.writeElementString("Naziv", element.value, "elem");
+					break;
+				case "Stav":
+				case "Tacka":
+				case "Podtacka":
+				case "Alineja":
+					xw.writeString(element.value);
+					break;
+				}
+			}
+			
+			for (var index in $scope.parts) {
+				var part = toAscii($scope.parts[index]);
+				resetElementDict(elementDict, part, xw);
+			}
+			
+		};
+		
 		var toAscii = function(str) {
 			return str.replace("Š", "S")
 			.replace("Đ", "Dj")
@@ -24,8 +92,9 @@
 			.replace("ć", "c")
 			.replace("ž", "z");
 		}
-		
+
 		$scope.parts = ["Deo", "Glava", "Odeljak", "Pododeljak", "Član", "Stav", "Tačka", "Podtačka", "Alineja"];
+		$scope.subparts = ["Član", "Stav", "Tačka", "Podtačka", "Alineja"];
 		
 		$scope.inputType = {
 				"Deo": "input",
@@ -131,8 +200,6 @@
 		}
 		
 		$scope.saveNewAct = function() {
-			
-			// TODO: try to form JSON data and send it
 			var xw = new XMLWriter('UTF-8', '1.0');
 			xw.formatting="none";
 			xw.writeStartDocument();
@@ -160,67 +227,8 @@
 			xw.writeEndElement();
 	
 			xw.writeElementString("Naziv", $scope.nazivPropisa, "elem");
-			
-			var elementDict = {};
-			
-			for (var index in $scope.parts) {
-				var part = toAscii($scope.parts[index]);
-				elementDict[part] = 0;
-			}
-			var resetElementDict = function(elementDict, key, xw) {
-				if (elementDict[key]) {
-					elementDict[key] = 0;
-					xw.writeEndElement();
-				}
-			}
-			for (var index in $scope.elements) {
-				var element = $scope.elements[index];
-				var type = toAscii(element.type);
-				switch (type) {
-				case "Deo":
-					resetElementDict(elementDict, "Deo", xw);
-				case "Glava":
-					resetElementDict(elementDict, "Glava", xw);
-				case "Odeljak":
-					resetElementDict(elementDict, "Odeljak", xw);
-				case "Pododeljak":
-					resetElementDict(elementDict, "Pododeljak", xw);
-				case "Clan":
-					resetElementDict(elementDict, "Clan", xw);
-					//TODO: text elements, such as Referenca, SkraceniNaziv, StraniIzraz...
-				case "Stav":
-					resetElementDict(elementDict, "Stav", xw);
-				case "Tacka":
-					resetElementDict(elementDict, "Tacka", xw);
-				case "Podtacka":
-					resetElementDict(elementDict, "Podtacka", xw);
-				case "Alineja":
-					resetElementDict(elementDict, "Alineja", xw);
-				}
-				xw.writeStartElement(type, "elem");
-				elementDict[type] += 1;
-				switch (type) {
-				case "Deo":
-				case "Glava":
-				case "Odeljak":
-				case "Pododeljak":
-				case "Clan":
-					xw.writeElementString("Naziv", element.value, "elem");
-					break;
-				case "Stav":
-				case "Tacka":
-				case "Podtacka":
-				case "Alineja":
-					xw.writeString(element.value);
-					break;
-				}
-			}
-			
-			for (var index in $scope.parts) {
-				var part = toAscii($scope.parts[index]);
-				resetElementDict(elementDict, part, xw);
-			}
-			
+
+			writeElements(xw);
 	
 			xw.writeElementString("Obrazlozenje", $scope.obrazlozenje, "elem");
 			
@@ -281,6 +289,7 @@
 			$scope.elements = [{type: "Deo", value: ""}];
 			$scope.amendmentAct = null;
 			$scope.amendmentActParts = [];
+			$scope.amendmentActPartsIds = [];
 		}
 		
 		$scope.removeAct = function(act) {
@@ -302,7 +311,7 @@
 					if (parent[part] != null && parent[part].length > 0) {
 						for (var index in parent[part]) {
 							var elem = parent[part][index];
-							$scope.amendmentActParts.push(elem.id);
+							$scope.amendmentActPartsIds.push(elem.id);
 							process(elem, partIndex + 1);
 						}
 					}
@@ -313,8 +322,8 @@
 			}
 			process(act, 0);
 			var formatParts = function() {
-				for (var actPartIndex in $scope.amendmentActParts) {
-					var part = $scope.amendmentActParts[actPartIndex];
+				for (var actPartIndex in $scope.amendmentActPartsIds) {
+					var part = $scope.amendmentActPartsIds[actPartIndex];
 					var splits = part.split('-');
 					var formatString = "";
 					var partIndex = -1;
@@ -339,7 +348,7 @@
 							formatString += " " + $scope.parts[parseInt(partIndex) + parseInt(index)] + " " + splits[index];
 						}
 					}
-					$scope.amendmentActParts[actPartIndex] = formatString;
+					$scope.amendmentActParts.push(formatString);
 				}
 			}
 			formatParts();
@@ -347,8 +356,67 @@
 		}
 		
 		$scope.saveAmenmdent = function() {
-			//TODO
+			if ($scope.referenceParts.length != 1) {
+				 return;
+			}
+			
+	    	var refPart = $scope.referenceParts[0];
+	    	var refPartId = $scope.amendmentActPartsIds[$scope.amendmentActParts.indexOf(refPart)];
+	    	
+			var xw = new XMLWriter('UTF-8', '1.0');
+			xw.formatting="none";
+			xw.writeStartDocument();
+			xw.writeStartElement("Amandman");
+			xw.writeAttributeString("xmlns:elem", "http://www.skupstinans.rs/elementi");
+			xw.writeAttributeString("xmlns:am", "http://www.skupstinans.rs/amandman");
+			xw.writeAttributeString("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
+			xw.writeAttributeString("xmlns:schemaLocation", "http://www.skupstinans.rs/amandman Amandman.xsd");
+			xw.writeAttributeString("elem:references", refPartId);
+
+			xw.writeStartElement($scope.amendmentType, "am");
+			
+			if ($scope.amendmentType != 'Brisanje') {
+				writeElements(xw);
+			}
+
+			xw.writeEndElement();
+
+			xw.writeElementString("Obrazlozenje", $scope.obrazlozenje, "elem");
+			
+			xw.writeEndElement();
+			xw.writeEndElement();
+			xw.writeEndDocument();
+
+			console.log(xw);
+			console.log(xw.getDocument());
+			console.log(xw.flush());
+			
+			var xml = xw.flush();
+			
+			xw.close();
+				
+			$scope.uploadingNewAct = true;
+			$http({
+				method : "POST",
+				url : "api/act/predlogPropisa/" + $scope.amendmentAct.brojPropisa,
+				data: xml,
+				headers: {
+				   'Content-Type': "application/xml"
+				 }
+			}).then(function(response) {
+				$scope.errorMessages = response.data;
+				if (response.data.length == 0) {
+					$scope.closeNewAct();
+					$scope.getMyAmendments();
+					$scope.getSuggestedActs();
+				}
+				$scope.uploadingNewAct = false;
+			});
 		};
+		
+		$scope.getMyAmendments = function() {
+			// TODO
+		}
 		
 		$scope.openDocument = function() {
 			//TODO

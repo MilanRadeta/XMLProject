@@ -37,7 +37,7 @@ import com.marklogic.client.io.JAXBHandle;
 import com.marklogic.client.io.SearchHandle;
 import com.marklogic.client.query.MatchDocumentSummary;
 
-import rs.skupstinans.amandman.Amandmani;
+import rs.skupstinans.amandman.Amandman;
 import rs.skupstinans.elementi.Stav;
 import rs.skupstinans.propis.Propis;
 import rs.skupstinans.session.DatabaseBean;
@@ -142,6 +142,7 @@ public class RestBean implements RestBeanRemote {
 	}
 
 	private void validate(List<String> messages, Propis propis) {
+		// TODO: move to checker
 		try {
 			// Definiše se JAXB kontekst (putanja do paketa sa JAXB bean-ovima)
 			JAXBContext context = JAXBContext.newInstance("rs.skupstinans.propis");
@@ -167,10 +168,27 @@ public class RestBean implements RestBeanRemote {
 	}
 
 	@POST
-	@Path("/predlogAmandmana")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public void predlogAmandmana(Amandmani amandmani) {
-		// TODO
+	@Path("/predlogAmandmana/{id}")
+	@Consumes(MediaType.APPLICATION_XML)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<String> predlogAmandmana(@PathParam("id") int propisId, Amandman amandman) {
+		// TODO: MAJOR, change references attributes in schema from IDREFS to string or something like that
+		List<String> retVal = new ArrayList<String>();
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null && user instanceof Odbornik) {
+			Checker checker = new Checker();
+			// TODO: check amendment
+			// TODO: create Amandmani object if it does not exist for propis with propisId
+			// TODO: set amendment ID
+			// TODO: set username
+			if (retVal.size() == 0) {
+				// TODO: validate
+				// TODO: send to database
+			}
+		} else {
+			retVal.add("Zabranjena akcija");
+		}
+		return retVal;
 	}
 
 	@DELETE
@@ -192,10 +210,13 @@ public class RestBean implements RestBeanRemote {
 	}
 
 	@DELETE
-	@Path("/povuciPredlogAmandmana")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public void povuciPredlogAmandmana(String id) {
-		// TODO
+	@Path("/povuciPredlogAmandmana/{id}/{amendmentId}")
+	@Consumes(MediaType.TEXT_PLAIN)
+	public void povuciPredlogAmandmana(@PathParam("id") String id, @PathParam("amendmentId") String amendmentId) {
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null && user instanceof Odbornik) {
+			// TODO
+		}
 	}
 
 	@GET

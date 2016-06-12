@@ -13,7 +13,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
-import rs.skupstinans.amandman.Amandmani;
+import rs.skupstinans.amandman.Amandman;
 import rs.skupstinans.elementi.Stav;
 import rs.skupstinans.propis.Propis;
 
@@ -40,9 +40,10 @@ public interface RestBeanRemote {
 	public List<String> predlogPropisa(Propis propis);
 
 	@POST
-	@Path("/predlogAmandmana")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public void predlogAmandmana(Amandmani amandmani);
+	@Path("/predlogAmandmana/{id}")
+	@Consumes(MediaType.APPLICATION_XML)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<String> predlogAmandmana(@PathParam("id") int propisId, Amandman amandman);
 
 	@DELETE
 	@Path("/povuciPredlogPropisa/{id}")
@@ -50,9 +51,9 @@ public interface RestBeanRemote {
 	public void povuciPredlogPropisa(@PathParam("id") String id);
 
 	@DELETE
-	@Path("/povuciPredlogAmandmana")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public void povuciPredlogAmandmana(String id);
+	@Path("/povuciPredlogAmandmana/{id}/{amendmentId}")
+	@Consumes(MediaType.TEXT_PLAIN)
+	public void povuciPredlogAmandmana(@PathParam("id") String id, @PathParam("amendmentId") String amendmentId);
 
 	@GET
 	@Path("/nadjiSvePropise")

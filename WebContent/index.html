@@ -157,25 +157,50 @@
 						></select>
 						<br />
 						<br />
-						<label>Novi sadržaj:</label>
-						<div data-ng-repeat="element in elements">
-							<select class="form-control"
-								data-ng-options="part for part in parts"
-								data-ng-model="element.type"></select>
-							<textarea data-ng-show="inputType[element.type] == 'textarea'"
-								class="form-control" data-ng-model="element.value" rows="2"
-								placeholder="Sadržaj"></textarea>
-							<input data-ng-show="inputType[element.type] == 'input'"
-								class="form-control" data-ng-model="element.value"
-								placeholder="Naziv"></input>
+						<div data-ng-hide="amendmentType == 'Brisanje'">
+							<div class="alert alert-info" role="alert" data-ng-show="amendmentType == 'Dopuna'">
+								<strong>Dopuna:</strong>
+								<br />
+								Izaberite deo, glavu, odeljak, pododeljak, član, stav, tačku, podtačku ili alineju
+								predloga propisa nakon kog želite ubaciti novi element <strong>istog tipa</strong>. 
+								<br />
+								Za strukturu važe ista pravila kao i za predlog propisa.
+								<br />
+								Napišite samo nov sadržaj.
+							</div>
+							<div class="alert alert-info" role="alert" data-ng-show="amendmentType == 'Izmena'">
+								<strong>Izmena:</strong>
+								<br />
+								Izaberite član, stav, tačku, podtačku ili alineju
+								predloga propisa koji želite da menjate elementom <strong>istog tipa</strong>. 
+								<br />
+								Za strukturu važe ista pravila kao i za predlog propisa.
+								<br />
+								Napišite ceo nov sadržaj.
+							</div>
+							<label>Novi sadržaj:</label>
+							<div data-ng-repeat="element in elements">
+								<select data-ng-show="amendmentType == 'Dopuna'" class="form-control"
+									data-ng-options="part for part in parts"
+									data-ng-model="element.type"></select>
+								<select data-ng-show="amendmentType == 'Izmena'" class="form-control"
+									data-ng-options="part for part in subparts"
+									data-ng-model="element.type"></select>
+								<textarea data-ng-show="inputType[element.type] == 'textarea'"
+									class="form-control" data-ng-model="element.value" rows="2"
+									placeholder="Sadržaj"></textarea>
+								<input data-ng-show="inputType[element.type] == 'input'"
+									class="form-control" data-ng-model="element.value"
+									placeholder="Naziv"></input>
+								<br />
+								<button class="btn btn-primary" data-ng-click="remove(element)">Ukloni</button>
+								<br />
+								<br />
+							</div>
 							<br />
-							<button class="btn btn-primary" data-ng-click="remove(element)">Ukloni</button>
 							<br />
-							<br />
+							<button class="btn btn-primary" data-ng-click="addNewElement()">Dodaj</button>
 						</div>
-						<br />
-						<br />
-						<button class="btn btn-primary" data-ng-click="addNewElement()">Dodaj</button>
 						<br />
 						<label>Obrazloženje:</label>
 						<textarea class="form-control" data-ng-model="obrazlozenje"
