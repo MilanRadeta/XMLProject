@@ -1,4 +1,5 @@
 (function(angular) {
+	// TODO: pravni osnov treba da sadrži reference, promeniti šemu
 	app = angular.module('app', []);
 	
 	app.controller("appController", function($scope, $http) {
