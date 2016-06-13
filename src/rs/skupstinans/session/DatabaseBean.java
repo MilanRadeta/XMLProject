@@ -29,6 +29,7 @@ import com.marklogic.client.query.StringQueryDefinition;
 import com.marklogic.client.query.StructuredQueryBuilder;
 import com.marklogic.client.query.StructuredQueryDefinition;
 
+import rs.skupstinans.amandman.Amandmani;
 import rs.skupstinans.propis.Propis;
 import rs.skupstinans.users.User;
 import rs.skupstinans.util.Query;
@@ -40,7 +41,7 @@ import rs.skupstinans.xmldb.util.Util.ConnectionProperties;
  */
 @Stateless
 @LocalBean
-public class DatabaseBean implements DatabaseBeanRemote {
+public class DatabaseBean {
 
 	private DatabaseClient client;
 	private XMLDocumentManager xmlManager;
@@ -108,12 +109,31 @@ public class DatabaseBean implements DatabaseBeanRemote {
 		commitTransaction(t);
 	}
 
+	public void predlogAmandmana(Amandmani amandmani) {
+		Transaction t = createTransaction();
+		write("/amandmani/" + amandmani.getReferences(), amandmani, t);
+		commitTransaction(t);
+	}
+
 	private JAXBHandle<Propis> getPropisHandle(Propis propis) {
 		JAXBContext context;
 		try {
 			context = JAXBContext.newInstance(propis.getClass().getPackage().getName());
 			JAXBHandle<Propis> handle = new JAXBHandle<>(context);
 			handle.set(propis);
+			return handle;
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	private JAXBHandle<Amandmani> getAmandmaniHandle(Amandmani amandmani) {
+		JAXBContext context;
+		try {
+			context = JAXBContext.newInstance(amandmani.getClass().getPackage().getName());
+			JAXBHandle<Amandmani> handle = new JAXBHandle<>(context);
+			handle.set(amandmani);
 			return handle;
 		} catch (JAXBException e) {
 			e.printStackTrace();
@@ -130,6 +150,7 @@ public class DatabaseBean implements DatabaseBeanRemote {
 	}
 
 	public void deletePropis(String URI, User user) {
+		// TODO: delete amendments for this act
 		Transaction t = createTransaction();
 		try {
 			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
@@ -155,6 +176,10 @@ public class DatabaseBean implements DatabaseBeanRemote {
 
 	public void write(String URI, Propis propis, Transaction t) {
 		xmlManager.write(URI, getPropisHandle(propis), t);
+	}
+
+	public void write(String URI, Amandmani amandmani, Transaction t) {
+		xmlManager.write(URI, getAmandmaniHandle(amandmani), t);
 	}
 
 	public void write(String URI, String collectionID, Propis propis) {
@@ -229,6 +254,10 @@ public class DatabaseBean implements DatabaseBeanRemote {
 	}
 
 	public SearchHandle query(Query query) {
+		return query(query, null);
+	}
+
+	public SearchHandle query(Query query, String collection) {
 
 		QueryManager queryManager = client.newQueryManager();
 		StructuredQueryBuilder qb = queryManager.newStructuredQueryBuilder();
@@ -236,6 +265,7 @@ public class DatabaseBean implements DatabaseBeanRemote {
 		StructuredQueryDefinition queryDef = null;
 		StructuredQueryDefinition boostQuery = null;
 		String propisNamespace = Propis.class.getPackage().getAnnotation(XmlSchema.class).namespace();
+		//String clanNamespace = Clan.class.getPackage().getAnnotation(XmlSchema.class).namespace();
 		// TODO: move this to Query method createQueryDefinition
 		if (query.getUsername() != null) {
 			boostQuery = qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
@@ -250,26 +280,51 @@ public class DatabaseBean implements DatabaseBeanRemote {
 		if (query.isPredlog() && query.isInProcedure()) {
 			boostQuery = qb.or(
 					qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
-					qb.attribute(new QName(propisNamespace, "status"))), "predlog"),
+							qb.attribute(new QName(propisNamespace, "status"))), "predlog"),
 					qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
 							qb.attribute(new QName(propisNamespace, "status"))), "usvojen u nacelu"));
 			queryDef = boostQuery(queryDef, boostQuery, qb);
-		}
-		else if (query.isPredlog()) {
+		} else if (query.isPredlog()) {
 			boostQuery = qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
 					qb.attribute(new QName(propisNamespace, "status"))), "predlog");
 			queryDef = boostQuery(queryDef, boostQuery, qb);
-		}
-		else if (query.isInProcedure()) {
+		} else if (query.isInProcedure()) {
 			boostQuery = qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
 					qb.attribute(new QName(propisNamespace, "status"))), "usvojen u nacelu");
 			queryDef = boostQuery(queryDef, boostQuery, qb);
 		}
-		
+
+		if (collection != null) {
+			queryDef.setCollections(collection);
+		}
+
 		if (queryDef != null) {
 			return queryManager.search(queryDef, new SearchHandle());
 		}
 		return null;
+	}
+
+	public Amandmani findAmendmentsForPropis(Propis propis) {
+		Amandmani retVal = null;
+		JAXBContext context;
+		try {
+			context = JAXBContext.newInstance(Amandmani.class.getPackage().getName());
+			JAXBHandle<Amandmani> handle = new JAXBHandle<>(context);
+			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+			DocumentDescriptor desc = xmlManager.exists("/amandmani/" + propis.getBrojPropisa());
+			if (desc == null) {
+				retVal = new Amandmani();
+				retVal.setReferences("" + propis.getBrojPropisa());
+			} else {
+				read("/amandmani/" + propis.getBrojPropisa(), metadata, handle);
+				retVal = handle.get();
+			}
+		} catch (JAXBException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return retVal;
 	}
 
 }

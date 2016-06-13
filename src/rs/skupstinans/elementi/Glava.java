@@ -52,7 +52,7 @@ import javax.xml.bind.annotation.XmlType;
     "content"
 })
 @XmlRootElement(name = "Glava")
-public class Glava {
+public class Glava implements ElementInterface {
 
     @XmlElementRefs({
         @XmlElementRef(name = "Odeljak", namespace = "http://www.skupstinans.rs/elementi", type = Odeljak.class, required = false),

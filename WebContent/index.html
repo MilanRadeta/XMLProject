@@ -151,6 +151,9 @@
 						<label data-ng-show="amendmentType == 'Brisanje'">Briše se:</label>
 						<label data-ng-show="amendmentType == 'Izmena'">Menja se:</label>
 						<label data-ng-show="amendmentType == 'Dopuna'">Nakon:</label>
+						<div class="alert alert-info" role="alert">
+							Moguće je odabrati samo jedan element.
+						</div>
 						<select multiple class="form-control"
 							data-ng-options="part for part in amendmentActParts"
 							data-ng-model="referenceParts"
@@ -208,7 +211,9 @@
 						<br /> <br />
 						<button class="btn btn-primary" data-ng-click="saveAmendment()">Predloži</button>
 						<button class="btn btn-primary" data-ng-click="closeNewAct()">Otkaži</button>
-						
+						<div class="alert alert-danger" role="alert"
+								data-ng-repeat="errorMessage in errorMessages">
+								{{errorMessage}}</div>
 					</form>
 				</div>
 			</div>

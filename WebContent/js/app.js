@@ -290,6 +290,7 @@
 			$scope.amendmentAct = null;
 			$scope.amendmentActParts = [];
 			$scope.amendmentActPartsIds = [];
+			$scope.errorMessages = [];
 		}
 		
 		$scope.removeAct = function(act) {
@@ -324,7 +325,7 @@
 			var formatParts = function() {
 				for (var actPartIndex in $scope.amendmentActPartsIds) {
 					var part = $scope.amendmentActPartsIds[actPartIndex];
-					var splits = part.split('-');
+					var splits = part.split('/');
 					var formatString = "";
 					var partIndex = -1;
 					for (var index in splits) {
@@ -339,13 +340,18 @@
 								partIndex = 1;
 								break;
 							case "c":
-								formatString += "Član " + splits[index].substring(2);
+								formatString += "Član " + splits[index].substring(1);
 								partIndex = 4;
 								break;
 							}
 						}
 						else {
-							formatString += " " + $scope.parts[parseInt(partIndex) + parseInt(index)] + " " + splits[index];
+							if (splits[index].startswith == "c") {
+								formatString = "Član " + splits[index].substring(1);
+							}
+							else {
+								formatString += " " + $scope.parts[parseInt(partIndex) + parseInt(index)] + " " + splits[index].substring(1);
+							}
 						}
 					}
 					$scope.amendmentActParts.push(formatString);
@@ -355,8 +361,9 @@
 			$scope.openDocument(act);
 		}
 		
-		$scope.saveAmenmdent = function() {
+		$scope.saveAmendment = function() {
 			if ($scope.referenceParts.length != 1) {
+				$scope.errorMessages = ["Moguće je izabrati samo jednu referencu"];
 				 return;
 			}
 			
@@ -366,7 +373,7 @@
 			var xw = new XMLWriter('UTF-8', '1.0');
 			xw.formatting="none";
 			xw.writeStartDocument();
-			xw.writeStartElement("Amandman");
+			xw.writeStartElement("Amandman", "am");
 			xw.writeAttributeString("xmlns:elem", "http://www.skupstinans.rs/elementi");
 			xw.writeAttributeString("xmlns:am", "http://www.skupstinans.rs/amandman");
 			xw.writeAttributeString("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
@@ -398,7 +405,7 @@
 			$scope.uploadingNewAct = true;
 			$http({
 				method : "POST",
-				url : "api/act/predlogPropisa/" + $scope.amendmentAct.brojPropisa,
+				url : "api/act/predlogAmandmana/" + $scope.amendmentAct.brojPropisa,
 				data: xml,
 				headers: {
 				   'Content-Type': "application/xml"

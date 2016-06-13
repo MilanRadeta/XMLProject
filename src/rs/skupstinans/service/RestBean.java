@@ -1,6 +1,5 @@
 package rs.skupstinans.service;
 
-import java.io.File;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -20,17 +19,11 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
-import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
 import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-
-import org.xml.sax.SAXException;
 
 import com.marklogic.client.io.DocumentMetadataHandle;
 import com.marklogic.client.io.JAXBHandle;
@@ -38,13 +31,13 @@ import com.marklogic.client.io.SearchHandle;
 import com.marklogic.client.query.MatchDocumentSummary;
 
 import rs.skupstinans.amandman.Amandman;
+import rs.skupstinans.amandman.Amandmani;
 import rs.skupstinans.elementi.Stav;
 import rs.skupstinans.propis.Propis;
 import rs.skupstinans.session.DatabaseBean;
 import rs.skupstinans.users.Odbornik;
 import rs.skupstinans.users.User;
 import rs.skupstinans.util.Checker;
-import rs.skupstinans.util.PropisValidationEventHandler;
 import rs.skupstinans.util.Query;
 
 /**
@@ -60,6 +53,9 @@ public class RestBean implements RestBeanRemote {
 
 	@EJB
 	private DatabaseBean database;
+	
+	@EJB
+	private Checker checker;
 
 	@POST
 	@Path("/test")
@@ -115,7 +111,6 @@ public class RestBean implements RestBeanRemote {
 		List<String> retVal = new ArrayList<String>();
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null && user instanceof Odbornik) {
-			Checker checker = new Checker();
 			checker.checkPropis(retVal, propis);
 			propis.setPreciscen(false);
 			propis.setBrojPropisa(new BigInteger("1"));
@@ -130,7 +125,7 @@ public class RestBean implements RestBeanRemote {
 				e.printStackTrace();
 			}
 			if (retVal.size() == 0) {
-				validate(retVal, propis);
+				checker.validate(retVal, propis);
 				if (retVal.size() == 0) {
 					database.predlogPropisa(propis);
 				}
@@ -141,50 +136,35 @@ public class RestBean implements RestBeanRemote {
 		return retVal;
 	}
 
-	private void validate(List<String> messages, Propis propis) {
-		// TODO: move to checker
-		try {
-			// Definiše se JAXB kontekst (putanja do paketa sa JAXB bean-ovima)
-			JAXBContext context = JAXBContext.newInstance("rs.skupstinans.propis");
-
-			// Marshaller je objekat zadužen za konverziju iz objektnog u XML
-			// model
-			Marshaller marshaller = context.createMarshaller();
-
-			// Podešavanje marshaller-a
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-			SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-			String path = getClass().getClassLoader().getResource("Propis.xsd").getPath();
-			Schema schema = schemaFactory.newSchema(new File(path));
-			marshaller.setSchema(schema);
-			marshaller.setEventHandler(new PropisValidationEventHandler(messages));
-			marshaller.marshal(propis, System.out);
-
-		} catch (JAXBException e) {
-			e.printStackTrace();
-		} catch (SAXException e) {
-			e.printStackTrace();
-		}
-	}
-
 	@POST
 	@Path("/predlogAmandmana/{id}")
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<String> predlogAmandmana(@PathParam("id") int propisId, Amandman amandman) {
-		// TODO: MAJOR, change references attributes in schema from IDREFS to string or something like that
 		List<String> retVal = new ArrayList<String>();
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null && user instanceof Odbornik) {
-			Checker checker = new Checker();
-			// TODO: check amendment
-			// TODO: create Amandmani object if it does not exist for propis with propisId
-			// TODO: set amendment ID
-			// TODO: set username
-			if (retVal.size() == 0) {
-				// TODO: validate
-				// TODO: send to database
+			amandman.setId("1");
+
+			try {
+				JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
+				JAXBHandle<Propis> handle = new JAXBHandle<>(context);
+				DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+				database.read("/propisi/" + propisId, metadata, handle);
+				Propis propis = handle.get();
+				checker.checkAmendment(retVal, amandman, propis);
+				if (retVal.size() == 0) {
+					checker.validate(retVal, amandman);
+					Amandmani amandmani = database.findAmendmentsForPropis(propis);
+					amandman.setId("" + (amandmani.getAmandman().size() + 1));
+					amandman.setUsernameDonosioca(user.getUsername());
+					amandmani.getAmandman().add(amandman);
+					database.predlogAmandmana(amandmani);
+				}
+			} catch (JAXBException e) {
+				e.printStackTrace();
 			}
+			
 		} else {
 			retVal.add("Zabranjena akcija");
 		}

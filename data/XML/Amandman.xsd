@@ -6,7 +6,6 @@
     <xsd:element name="Amandmani">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element ref="PravniOsnov"/>
                 <xsd:element maxOccurs="unbounded" ref="Amandman"/>
             </xsd:sequence>
             <xsd:attribute ref="elem:references" use="required"/>
@@ -20,9 +19,9 @@
             </xsd:sequence>
             <xsd:attribute ref="elem:references" use="required"/>
             <xsd:attribute ref="elem:id" use="required"/>
+            <xsd:attribute ref="elem:usernameDonosioca"/>
         </xsd:complexType>
     </xsd:element>
-    <xsd:element name="PravniOsnov" type="xsd:string"> </xsd:element>
     <xsd:element name="Izmena">
         <xsd:complexType>
             <xsd:choice>

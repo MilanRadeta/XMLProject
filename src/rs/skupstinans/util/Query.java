@@ -38,6 +38,4 @@ public class Query {
 	public void setInProcedure(boolean inProcedure) {
 		this.inProcedure = inProcedure;
 	}
-	
-	
 }

@@ -131,7 +131,7 @@
     <xsd:attribute name="usernameDonosioca"/>
     <xsd:simpleType name="idType">
         <xsd:restriction base="xsd:string">
-            <xsd:pattern value="[A-Za-z]+\d+(\/\d+)*( [A-Za-z]+\d+(\/\d+)*)*"/>
+            <xsd:pattern value="[A-Za-z0-9]+(\/[A-Za-z0-9]+)*"/>
             <xsd:minLength value="1"/>
         </xsd:restriction>
     </xsd:simpleType>
