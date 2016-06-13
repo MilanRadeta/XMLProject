@@ -2,7 +2,6 @@
 	app = angular.module('app', []);
 	
 	app.controller("appController", function($scope, $http) {
-		$scope.loggedIn = false;
 		$scope.document = null;
 		$scope.username = null;
 		$scope.password = null;
@@ -111,7 +110,7 @@
 		$scope.amendmentTypes = ["Dopuna", "Izmena", "Brisanje"];
 		$scope.amendmentType = $scope.amendmentTypes[0];
 		
-		$scope.login = function() {
+		$scope.login = function(init) {
 			$http({
 				method : "POST",
 				url : "api/user/login",
@@ -120,7 +119,6 @@
 				if (response.data) {
 					$scope.loggedInUser = response.data;
 					$scope.loginFail = false;
-					$scope.loggedIn = true;
 					$scope.username = null;
 					$scope.password = null;
 					$scope.getMyActs();
@@ -128,8 +126,23 @@
 					$scope.getSuggestedActs();
 				}
 				else {
-					$scope.loginFail = true;
+					if (!init) {
+						$scope.loginFail = true;
+					}
 				}
+			});
+		};
+		
+		$scope.logout = function() {
+			$scope.document = null;
+			$scope.username = null;
+			$scope.password = null;
+			$scope.showNewAct = false;
+			$scope.loggedInUser = null;
+			$scope.loginFail = false;
+			$http({
+				method : "POST",
+				url : "api/user/logout"
 			});
 		};
 		
@@ -473,6 +486,7 @@
 			//TODO
 		};	
 		
+		$scope.login(true);
 		$scope.resetAct();
 	});
 }(angular));

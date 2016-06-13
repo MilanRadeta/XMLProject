@@ -28,6 +28,13 @@ public class UsersBean implements UsersBeanRemote {
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
 	public User login(User user) {
+		User loggedInUser = (User) request.getSession().getAttribute("user");
+		if (loggedInUser != null) {
+			User retval = new User();
+			retval.setUsername(loggedInUser.getUsername());
+			retval.setUserType(loggedInUser.getUserType());
+			return retval;
+		}
 		if (User.getUsers().contains(user)) {
 			user = User.getUsers().get(User.getUsers().indexOf(user));
 			request.getSession().setAttribute("user", user);
@@ -37,5 +44,11 @@ public class UsersBean implements UsersBeanRemote {
 			return retval;
 		}
 		return null;
+	}
+
+	@POST
+	@Path("/logout")
+	public void logout() {
+		request.getSession().setAttribute("user", null);
 	}
 }

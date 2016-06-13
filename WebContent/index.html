@@ -15,6 +15,7 @@
 			<h2>Meni</h2>
 			<div>
 				<button class="btn btn-primary" data-ng-click="test()">Test</button>
+				<button data-ng-show="loggedInUser" class="btn btn-primary" data-ng-click="logout()">Logout</button>
 				<form>
 					<h3>Pretraga</h3>
 					<input data-ng-model="searchTerm" type="text" class="form-control"
@@ -36,7 +37,7 @@
 				<button class="btn btn-primary" data-ng-click="downloadPDF()">PDF</button>
 				<h2 data-ng-bind="document.name"></h2>
 			</div>
-			<div data-ng-show="loggedIn">
+			<div data-ng-show="loggedInUser">
 				<h3>Akti i amandmani</h3>
 				<div data-ng-show="myActs.length > 0 && !amendmentAct">
 					<h4>Vaši predlozi akata</h4>
@@ -245,7 +246,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="container" data-ng-hide="loggedIn">
+		<div class="container" data-ng-hide="loggedInUser">
 			<form>
 				<h2>Forma za prijavu</h2>
 				<input data-ng-model="username" type="text" class="form-control"
