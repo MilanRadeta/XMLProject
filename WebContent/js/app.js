@@ -255,12 +255,9 @@
 			xw.writeAttributeString("xmlns:xsi", "http://www.w3.org/2001/XMLSchema-instance");
 			xw.writeAttributeString("xmlns:schemaLocation", "http://www.skupstinans.rs/propis Propis.xsd");
 			xw.writeAttributeString("xmlns:propis", "http://www.skupstinans.rs/propis");
-	
+			/* TODO: omogućiti samo pri usvajanju akta u celosti
 			xw.writeStartElement("Preambula");
-			xw.writeStartElement("PravniOsnov");
-			xw.writeElementString("MaterijalniPravniOsnov", $scope.materijalniPravniOsnov);
-			xw.writeElementString("FormalniPravniOsnov", $scope.materijalniPravniOsnov);
-			xw.writeEndElement();
+			xw.writeElementString("PravniOsnov", $scope.pravniOsnov);
 			xw.writeStartElement("DonosilacPropisa");
 			xw.writeElementString("Naziv", $scope.nazivDonosiocaPropisa, "elem");
 			xw.writeEndElement();
@@ -271,7 +268,7 @@
 				xw.writeEndElement();
 			}
 			xw.writeEndElement();
-	
+			 */
 			xw.writeElementString("Naziv", $scope.nazivPropisa, "elem");
 
 			writeElements(xw);

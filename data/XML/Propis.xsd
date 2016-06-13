@@ -6,7 +6,7 @@
     <xsd:element name="Propis">
         <xsd:complexType>
             <xsd:sequence>
-                <xsd:element ref="Preambula"/>
+                <xsd:element ref="Preambula" minOccurs="0"/>
                 <xsd:element ref="elem:Naziv"/>
                 <xsd:choice maxOccurs="1">
                     <xsd:element maxOccurs="19" ref="elem:Clan"/>
@@ -38,14 +38,7 @@
             </xsd:sequence>
         </xsd:complexType>
     </xsd:element>
-    <xsd:element name="PravniOsnov">
-        <xsd:complexType>
-            <xsd:sequence>
-                <xsd:element ref="MaterijalniPravniOsnov"/>
-                <xsd:element ref="FormalniPravniOsnov"/>
-            </xsd:sequence>
-        </xsd:complexType>
-    </xsd:element>
+    <xsd:element name="PravniOsnov" type="xsd:string"> </xsd:element>
     <xsd:element name="DonosilacPropisa">
         <xsd:complexType>
             <xsd:sequence>
@@ -72,20 +65,6 @@
     <xsd:element name="Naznaka" type="xsd:string"/>
     <xsd:element name="MaterijalniPravniOsnov" type="xsd:string"/>
     <xsd:element name="FormalniPravniOsnov" type="xsd:string"/>
-    <xsd:simpleType name="NazivSkupstine">
-        <xsd:restriction base="elem:Naziv">
-            <xsd:minLength value="1"/>
-            <xsd:maxLength value="50"/>
-            <xsd:pattern value="[A-ZŠČĆĐŽ]+[A-ZŠĐČĆŽa-zšđčćž0-9 ]*"/>
-            <xsd:enumeration value="Skupština Grada Novog Sada"/>
-        </xsd:restriction>
-    </xsd:simpleType>
-    <xsd:simpleType name="NazivUvodnogDela">
-        <xsd:restriction base="elem:Naziv">
-            <xsd:enumeration value="Uvodne odredbe"/>
-            <xsd:enumeration value="Osnovne odredbe"/>
-        </xsd:restriction>
-    </xsd:simpleType>
     <xsd:attribute name="datumPredlaganjaPropisa" type="xsd:date"/>
     <xsd:attribute name="datumUsvajanjaPropisa" type="xsd:date"/>
     <xsd:attribute name="datumStupanjaNaSnagu" type="xsd:date"/>

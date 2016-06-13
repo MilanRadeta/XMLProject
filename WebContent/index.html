@@ -86,20 +86,6 @@
 					<br /> <br />
 					<div data-ng-show="showNewAct">
 						<form class="form-group">
-							<label>Preambula:</label>
-							<textarea class="form-control"
-								data-ng-model="materijalniPravniOsnov" rows="5"
-								placeholder="Materijalni pravni osnov za donošenje propisa"></textarea>
-							<textarea class="form-control" data-ng-model="formalniPravniOsnov"
-								rows="5" placeholder="Formalni pravni osnov za donošenje propisa"></textarea>
-							<input type="text" class="form-control"
-								data-ng-model="nazivDonosiocaPropisa"
-								placeholder="Naziv organa koji donosi propis za donošenje propisa"></input>
-							<input type="text" class="form-control"
-								data-ng-model="saglasnostOrgana"
-								placeholder="Naziv organa koji je dao saglasnost"></input>
-							<textarea class="form-control" data-ng-model="saglasnostNaznaka"
-								rows="5" placeholder="Naznaka o datoj saglasnosti"></textarea>
 							<label>Naziv:</label> <input class="form-control" type="text"
 								data-ng-model="nazivPropisa" placeholder="Naziv propisa">
 							<br />
@@ -257,6 +243,21 @@
 					data-ng-click="login()">Prijavi se</button>
 			</form>
 			<div class="alert alert-danger" role="alert" data-ng-show="loginFail">Neuspešna prijava</div>
+		</div>
+		<div data-ng-hide="true">
+			<!-- TODO: omogućiti samo predsedniku da napiše preambulu pri usvajanju -->
+			<label>Preambula:</label>
+			<textarea class="form-control"
+				data-ng-model="pravniOsnov" rows="5"
+				placeholder="Pravni osnov za donošenje propisa (navesti prvo materijalni, pa formalni)"></textarea>
+			<input type="text" class="form-control"
+				data-ng-model="nazivDonosiocaPropisa"
+				placeholder="Naziv organa koji donosi propis"></input>
+			<input type="text" class="form-control"
+				data-ng-model="saglasnostOrgana"
+				placeholder="Naziv organa koji je dao saglasnost"></input>
+			<textarea class="form-control" data-ng-model="saglasnostNaznaka"
+				rows="5" placeholder="Naznaka o datoj saglasnosti"></textarea>
 		</div>
 	</div>
 </body>

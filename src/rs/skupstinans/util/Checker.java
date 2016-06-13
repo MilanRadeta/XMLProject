@@ -31,7 +31,6 @@ import rs.skupstinans.elementi.Pododeljak;
 import rs.skupstinans.elementi.Podtacka;
 import rs.skupstinans.elementi.Stav;
 import rs.skupstinans.elementi.Tacka;
-import rs.skupstinans.propis.Preambula;
 import rs.skupstinans.propis.Propis;
 import rs.skupstinans.session.DatabaseBean;
 
@@ -72,16 +71,14 @@ public class Checker {
 
 	public void checkPropis(List<String> messages, Propis propis) {
 		resetCounters();
+		/* TODO: ovo treba da se vrši samo kada se propis usvaja u celini
 		Preambula preambula = propis.getPreambula();
-		checkString(messages, preambula.getPravniOsnov().getFormalniPravniOsnov(),
-				"Nedostaje formalni pravni osnov u preambuli");
-		checkString(messages, preambula.getPravniOsnov().getMaterijalniPravniOsnov(),
-				"Nedostaje materijalni pravni osnov u preambuli");
+		checkString(messages, preambula.getPravniOsnov(), "Nedostaje pravni osnov u preambuli");
 		checkString(messages, preambula.getDonosilacPropisa().getNaziv(), "Nedostaje donosilac propisa");
 		if (preambula.getSaglasnost() != null) {
 			checkString(messages, preambula.getSaglasnost().getNaziv(), "Nedostaje naziv saglasnog organa");
 			checkString(messages, preambula.getSaglasnost().getNaznaka(), "Nedostaje naznaka saglasnosti");
-		}
+		}*/
 		checkString(messages, propis.getNaziv(), "Nedostaje naziv propisa");
 
 		checkPropisContent(messages, propis);
