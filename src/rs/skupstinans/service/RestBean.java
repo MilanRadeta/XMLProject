@@ -25,6 +25,8 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
+import org.w3c.dom.Document;
+
 import com.marklogic.client.io.DocumentMetadataHandle;
 import com.marklogic.client.io.JAXBHandle;
 import com.marklogic.client.io.SearchHandle;
@@ -39,6 +41,7 @@ import rs.skupstinans.users.Odbornik;
 import rs.skupstinans.users.User;
 import rs.skupstinans.util.Checker;
 import rs.skupstinans.util.Query;
+import rs.skupstinans.util.TransformPrinter;
 
 /**
  * Session Bean implementation class RestBean
@@ -53,7 +56,7 @@ public class RestBean implements RestBeanRemote {
 
 	@EJB
 	private DatabaseBean database;
-	
+
 	@EJB
 	private Checker checker;
 
@@ -70,17 +73,15 @@ public class RestBean implements RestBeanRemote {
 	@Path("/findBy")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Propis> findBy(
-			@QueryParam("username") String username,
-			@QueryParam("predlog") boolean predlog,
+	public List<Propis> findBy(@QueryParam("username") String username, @QueryParam("predlog") boolean predlog,
 			@QueryParam("inProcedure") boolean inProcedure) {
 		List<Propis> propisi = new ArrayList<>();
 		Query query = new Query();
 		query.setPredlog(predlog);
 		query.setInProcedure(inProcedure);
-		
+
 		User user = (User) request.getSession().getAttribute("user");
-		if (user != null && user instanceof Odbornik) {
+		if (user != null && user instanceof Odbornik && user.getUsername().equals(username)) {
 			query.setUsername(username);
 		}
 		try {
@@ -90,8 +91,6 @@ public class RestBean implements RestBeanRemote {
 			if (results != null) {
 				MatchDocumentSummary[] summaries = results.getMatchResults();
 				for (MatchDocumentSummary summary : summaries) {
-					System.out.println(summary.getUri());
-
 					DocumentMetadataHandle metadata = new DocumentMetadataHandle();
 					database.read(summary.getUri(), metadata, handle);
 					propisi.add(handle.get());
@@ -101,6 +100,39 @@ public class RestBean implements RestBeanRemote {
 			e.printStackTrace();
 		}
 		return propisi;
+	}
+
+	@GET
+	@Path("/findAmendmentsBy")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Amandman> findBy(@QueryParam("username") String username,
+			@QueryParam("notUsvojen") boolean notUsvojen) {
+		List<Amandman> retVal = new ArrayList<>();
+
+		Query query = new Query();
+		query.setType(Query.AMANDMAN);
+		query.setNotUsvojen(notUsvojen);
+		User user = (User) request.getSession().getAttribute("user");
+		if (user != null && user instanceof Odbornik && user.getUsername().equals(username)) {
+			query.setUsername(username);
+		}
+		try {
+			JAXBContext context = JAXBContext.newInstance(Amandmani.class.getPackage().getName());
+			JAXBHandle<Amandmani> handle = new JAXBHandle<>(context);
+			SearchHandle results = database.query(query);
+			if (results != null) {
+				MatchDocumentSummary[] summaries = results.getMatchResults();
+				for (MatchDocumentSummary summary : summaries) {
+					DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+					database.read(summary.getUri(), metadata, handle);
+					retVal.addAll(checker.findAmendmentByUsername(username, handle.get()));
+				}
+			}
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
+		return retVal;
 	}
 
 	@POST
@@ -144,7 +176,7 @@ public class RestBean implements RestBeanRemote {
 		List<String> retVal = new ArrayList<String>();
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null && user instanceof Odbornik) {
-			amandman.setId("1");
+			amandman.setId(propisId + "/1");
 
 			try {
 				JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
@@ -156,7 +188,10 @@ public class RestBean implements RestBeanRemote {
 				if (retVal.size() == 0) {
 					checker.validate(retVal, amandman);
 					Amandmani amandmani = database.findAmendmentsForPropis(propis);
-					amandman.setId("" + (amandmani.getAmandman().size() + 1));
+					if (!amandmani.getAmandman().isEmpty()) {
+						amandman.setId(amandmani.getReferences() + "/"
+								+ (Integer.parseInt(amandmani.getAmandman().get(0).getId()) + 1));
+					}
 					amandman.setUsernameDonosioca(user.getUsername());
 					amandmani.getAmandman().add(amandman);
 					database.predlogAmandmana(amandmani);
@@ -164,7 +199,7 @@ public class RestBean implements RestBeanRemote {
 			} catch (JAXBException e) {
 				e.printStackTrace();
 			}
-			
+
 		} else {
 			retVal.add("Zabranjena akcija");
 		}
@@ -177,15 +212,7 @@ public class RestBean implements RestBeanRemote {
 	public void povuciPredlogPropisa(@PathParam("id") String id) {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null && user instanceof Odbornik) {
-			Query query = new Query();
-			query.setBrojPropisa(Integer.parseInt(id));
-			SearchHandle results = database.query(query);
-			if (results != null && results.getTotalResults() == 1) {
-				MatchDocumentSummary[] summaries = results.getMatchResults();
-				for (MatchDocumentSummary summary : summaries) {
-					database.deletePropis(summary.getUri(), user);
-				}
-			}
+			database.deletePropis("/propisi/" + id, user);
 		}
 	}
 
@@ -195,7 +222,7 @@ public class RestBean implements RestBeanRemote {
 	public void povuciPredlogAmandmana(@PathParam("id") String id, @PathParam("amendmentId") String amendmentId) {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null && user instanceof Odbornik) {
-			// TODO
+			database.deleteAmendment(id, amendmentId, user);
 		}
 	}
 

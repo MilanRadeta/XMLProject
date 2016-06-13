@@ -1,6 +1,7 @@
 package rs.skupstinans.util;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -25,9 +26,11 @@ import javax.xml.xpath.XPathFactory;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import rs.skupstinans.amandman.Amandman;
+import rs.skupstinans.amandman.Amandmani;
 import rs.skupstinans.amandman.Brisanje;
 import rs.skupstinans.amandman.Dopuna;
 import rs.skupstinans.amandman.Izmena;
@@ -368,6 +371,7 @@ public class Checker {
 	}
 
 	public Object findPropisElementById(String id, Propis propis) {
+		// TODO: move to separate class
 		Object retVal = null;
 
 		JAXBContext context;
@@ -408,6 +412,52 @@ public class Checker {
 		return retVal;
 	}
 
+	public List<Amandman> findAmendmentByUsername(String username, Amandmani amandmani) {
+		// TODO: move to separate class
+		List<Amandman> retVal = new ArrayList<>();
+
+		JAXBContext context;
+		try {
+			context = JAXBContext.newInstance(Amandmani.class.getPackage().getName());
+			Marshaller marshaller = context.createMarshaller();
+			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+
+			DOMResult res = new DOMResult();
+
+			marshaller.marshal(amandmani, res);
+			Document doc = (Document) res.getNode();
+			// TransformPrinter.transform(doc, System.out);
+
+			XPathFactory xPathFactory = XPathFactory.newInstance();
+			XPath xPath = xPathFactory.newXPath();
+
+			Map<String, String> namespaceMappings = new HashMap<String, String>();
+			namespaceMappings.put("elem", "http://www.skupstinans.rs/elementi");
+			namespaceMappings.put("am", "http://www.skupstinans.rs/amandmani");
+			xPath.setNamespaceContext(new NamespaceContext(namespaceMappings));
+
+			XPathExpression xPathExpression;
+			xPathExpression = xPath.compile("//*[@elem:usernameDonosioca='" + username + "']");
+
+			NodeList nodeList = (NodeList) xPathExpression.evaluate(doc, XPathConstants.NODESET);
+			Unmarshaller unmarshaller = context.createUnmarshaller();
+			Node node;
+			
+			for (int i = 0; i < nodeList.getLength(); i++) {
+				node = nodeList.item(i);
+				retVal.add((Amandman) unmarshaller.unmarshal(node));	
+			}
+
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		} catch (XPathExpressionException e) {
+			e.printStackTrace();
+		}
+
+		return retVal;
+	}
+
+	@SuppressWarnings("unchecked")
 	public void checkAmendment(List<String> messages, Amandman amandman, Propis propis) {
 		resetCounters();
 		checkString(messages, amandman.getReferences(), "Nedostaje referenca");
@@ -601,14 +651,8 @@ public class Checker {
 
 	public void validate(List<String> messages, Propis propis) {
 		try {
-			// Definiše se JAXB kontekst (putanja do paketa sa JAXB bean-ovima)
 			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
-
-			// Marshaller je objekat zadužen za konverziju iz objektnog u XML
-			// model
 			Marshaller marshaller = context.createMarshaller();
-
-			// Podešavanje marshaller-a
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 			SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 			String path = getClass().getClassLoader().getResource("Propis.xsd").getPath();
@@ -626,14 +670,8 @@ public class Checker {
 
 	public void validate(List<String> messages, Amandman amandman) {
 		try {
-			// Definiše se JAXB kontekst (putanja do paketa sa JAXB bean-ovima)
 			JAXBContext context = JAXBContext.newInstance(Amandman.class.getPackage().getName());
-
-			// Marshaller je objekat zadužen za konverziju iz objektnog u XML
-			// model
 			Marshaller marshaller = context.createMarshaller();
-
-			// Podešavanje marshaller-a
 			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
 			SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
 			String path = getClass().getClassLoader().getResource("Amandman.xsd").getPath();

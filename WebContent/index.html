@@ -41,13 +41,40 @@
 				<div data-ng-show="myActs.length > 0 && !amendmentAct">
 					<h4>Vaši predlozi akata</h4>
 					<table class="table-condensed">
+						<tr>
+							<th>Broj propisa</th>
+							<th>Naziv propisa</th>
+						</tr>
 						<tr data-ng-repeat="myAct in myActs">
+							<th>{{myAct.brojPropisa}}</th>
 							<th>{{myAct.Naziv}}</th>
 							<td>&nbsp;</td>
 							<td><button class="btn btn-primary"
 									data-ng-click="openDocument(myAct)">Otvori</button></td>
 							<td><button class="btn btn-primary"
 									data-ng-click="removeAct(myAct)">Povuci</button></td>
+						</tr>
+					</table>
+				</div>
+				<div data-ng-show="myAmendments.length > 0 && !amendmentAct">
+					<h4>Vaši predlozi amandmana</h4>
+					<table class="table-condensed">
+						<tr>
+							<th>Amandman za propis sa brojem </th>
+							<th>Naziv propisa</th>
+							<th>Tip amandmana</th>
+							<th>Element propisa na koji utiče</th>
+						</tr>
+						<tr data-ng-repeat="myAmendment in myAmendments">
+							<td>{{myAmendment.brojPropisa}}</td>
+							<td>{{myAmendment.Naziv}}</td>
+							<td>{{myAmendment.type}}</td>
+							<td>{{myAmendment.referenceString}}</td>
+							<td>&nbsp;</td>
+							<td><button class="btn btn-primary"
+									data-ng-click="readAmendment(myAmendment)">Procitaj</button></td>
+							<td><button class="btn btn-primary"
+									data-ng-click="removeAmendment(myAmendment)">Povuci</button></td>
 						</tr>
 					</table>
 				</div>

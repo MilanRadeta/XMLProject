@@ -124,6 +124,7 @@
 					$scope.username = null;
 					$scope.password = null;
 					$scope.getMyActs();
+					$scope.getMyAmendments();
 					$scope.getSuggestedActs();
 				}
 				else {
@@ -151,7 +152,7 @@
 				$scope.actsInProcedure = response.data;
 			});
 		};
-		
+
 		$scope.getMyActs = function() {
 			$http({
 				method : "GET",
@@ -159,6 +160,37 @@
 				params: {username: $scope.loggedInUser.username, predlog: true, inProcedure: true}
 			}).then(function(response) {
 				$scope.myActs = response.data;
+			});
+		};
+
+		$scope.getMyAmendments = function() {
+			$http({
+				method : "GET",
+				url : "api/act/findAmendmentsBy",
+				params: {username: $scope.loggedInUser.username, notUsvojen: true}
+			}).then(function(response) {
+				console.log(response.data);
+				var myAmendments = response.data;
+				$scope.myAmendments = [];
+				for (var index in myAmendments) {
+					var amendment = {};
+					var data = myAmendments[index];
+					amendment.brojPropisa = data.id.split("/")[0];
+					for (var actIndex in $scope.suggestedActs) {
+						var act = $scope.suggestedActs[actIndex];
+						if (act.brojPropisa == amendment.brojPropisa) {
+							amendment.Naziv = act.Naziv;
+							break;
+						}
+					}
+					for (var key in data.content[1]) {
+						amendment.type = key;
+					}
+					amendment.references = data.references;
+					amendment.referenceString = formatId(data.references);
+					amendment.id = data.id;
+					$scope.myAmendments.push(amendment);
+				}
 			});
 		};
 		
@@ -300,6 +332,17 @@
 				url : "api/act/povuciPredlogPropisa/" + act.brojPropisa
 			}).then(function(response) {
 				$scope.getMyActs();
+				$scope.getMyAmendments();
+			});
+		}
+		
+		$scope.removeAmendment = function(amendment) {
+			console.log(amendment.id);
+			$http({
+				method : "DELETE",
+				url : "api/act/povuciPredlogAmandmana/" + amendment.id
+			}).then(function(response) {
+				$scope.getMyAmendments();
 			});
 		}
 		
@@ -325,40 +368,45 @@
 			var formatParts = function() {
 				for (var actPartIndex in $scope.amendmentActPartsIds) {
 					var part = $scope.amendmentActPartsIds[actPartIndex];
-					var splits = part.split('/');
-					var formatString = "";
-					var partIndex = -1;
-					for (var index in splits) {
-						if (index == 0) {
-							switch (splits[index][0]) {
-							case "d":
-								formatString += "Deo " + splits[index].substring(1);
-								partIndex = 0;
-								break;
-							case "g":
-								formatString += "Glava " + splits[index].substring(1);
-								partIndex = 1;
-								break;
-							case "c":
-								formatString += "Član " + splits[index].substring(1);
-								partIndex = 4;
-								break;
-							}
-						}
-						else {
-							if (splits[index].startswith == "c") {
-								formatString = "Član " + splits[index].substring(1);
-							}
-							else {
-								formatString += " " + $scope.parts[parseInt(partIndex) + parseInt(index)] + " " + splits[index].substring(1);
-							}
-						}
-					}
+					formatString = formatId(part);
 					$scope.amendmentActParts.push(formatString);
 				}
 			}
 			formatParts();
 			$scope.openDocument(act);
+		}
+		
+		var formatId = function(id) {
+			var partIndex = -1;
+			var splits = id.split('/');
+			var formatString = "";
+			for (var index in splits) {
+				if (index == 0) {
+					switch (splits[index][0]) {
+					case "d":
+						formatString += "Deo " + splits[index].substring(1);
+						partIndex = 0;
+						break;
+					case "g":
+						formatString += "Glava " + splits[index].substring(1);
+						partIndex = 1;
+						break;
+					case "c":
+						formatString += "Član " + splits[index].substring(1);
+						partIndex = 4;
+						break;
+					}
+				}
+				else {
+					if (splits[index].startswith == "c") {
+						formatString = "Član " + splits[index].substring(1);
+					}
+					else {
+						formatString += " " + $scope.parts[parseInt(partIndex) + parseInt(index)] + " " + splits[index].substring(1);
+					}
+				}
+			}
+			return formatString;
 		}
 		
 		$scope.saveAmendment = function() {
@@ -415,15 +463,10 @@
 				if (response.data.length == 0) {
 					$scope.closeNewAct();
 					$scope.getMyAmendments();
-					$scope.getSuggestedActs();
 				}
 				$scope.uploadingNewAct = false;
 			});
 		};
-		
-		$scope.getMyAmendments = function() {
-			// TODO
-		}
 		
 		$scope.openDocument = function() {
 			//TODO

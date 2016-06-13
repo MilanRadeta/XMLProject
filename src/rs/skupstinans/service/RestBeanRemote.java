@@ -33,6 +33,13 @@ public interface RestBeanRemote {
 	public List<Propis> findBy(@QueryParam("username") String username, @QueryParam("predlog") boolean predlog,
 			@QueryParam("inProcedure") boolean inProcedure);
 
+	@GET
+	@Path("/findAmendmentsBy")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Amandman> findBy(@QueryParam("username") String username,
+			@QueryParam("notUsvojen") boolean notUsvojen);
+
 	@POST
 	@Path("/predlogPropisa")
 	@Consumes(MediaType.APPLICATION_XML)

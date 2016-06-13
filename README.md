@@ -1,12 +1,10 @@
 # XMLProject
 
 TODO:
-- Amendments (General)
 - Search (text - word and advanced - term)
 - in text references
 - RDF
 - User database
-- Check if user exists and is privileged for desired action based on his/her role
 - logout
 - acceptance and dismisal of acts and amendments
 - XML, XHTML and PDF exports
