@@ -11,8 +11,6 @@ import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.annotation.XmlSchema;
-import javax.xml.namespace.QName;
 
 import com.marklogic.client.DatabaseClient;
 import com.marklogic.client.DatabaseClientFactory;
@@ -31,7 +29,6 @@ import com.marklogic.client.query.StructuredQueryDefinition;
 
 import rs.skupstinans.amandman.Amandman;
 import rs.skupstinans.amandman.Amandmani;
-import rs.skupstinans.elementi.Clan;
 import rs.skupstinans.propis.Propis;
 import rs.skupstinans.users.User;
 import rs.skupstinans.util.Query;
@@ -156,7 +153,6 @@ public class DatabaseBean {
 	}
 
 	public void deletePropis(String URI, User user) {
-		// TODO: delete amendments for this act
 		Transaction t = createTransaction();
 		try {
 			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
@@ -167,6 +163,7 @@ public class DatabaseBean {
 			if (propis.getUsernameDonosioca().equals(user.getUsername())) {
 				if (!propis.getStatus().equals("usvojen u celosti")) {
 					delete(URI, t);
+					delete("/amandmani/" + propis.getBrojPropisa(), t);
 				}
 			}
 			commitTransaction(t);
@@ -275,18 +272,6 @@ public class DatabaseBean {
 		commitTransaction(t);
 	}
 
-	private StructuredQueryDefinition boostQuery(StructuredQueryDefinition orgDef, StructuredQueryDefinition boost,
-			StructuredQueryBuilder builder) {
-		if (boost != null) {
-			if (orgDef != null) {
-				orgDef = builder.and(orgDef, boost);
-			} else {
-				orgDef = boost;
-			}
-		}
-		return orgDef;
-	}
-
 	public SearchHandle query(Query query) {
 		return query(query, null);
 	}
@@ -294,57 +279,7 @@ public class DatabaseBean {
 	public SearchHandle query(Query query, String collection) {
 		QueryManager queryManager = client.newQueryManager();
 		StructuredQueryBuilder qb = queryManager.newStructuredQueryBuilder();
-
-		StructuredQueryDefinition queryDef = null;
-		StructuredQueryDefinition boostQuery = null;
-		String propisNamespace = Propis.class.getPackage().getAnnotation(XmlSchema.class).namespace();
-		String clanNamespace = Clan.class.getPackage().getAnnotation(XmlSchema.class).namespace();
-		String amandmaniNamespace = Amandmani.class.getPackage().getAnnotation(XmlSchema.class).namespace();
-		// TODO: move this to Query method createQueryDefinition
-		if (query.getType() == Query.PROPIS) {
-			if (query.getUsername() != null) {
-				boostQuery = qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
-						qb.attribute(new QName(clanNamespace, "usernameDonosioca"))), query.getUsername());
-				queryDef = boostQuery(queryDef, boostQuery, qb);
-			}
-			if (query.getBrojPropisa() != -1) {
-				boostQuery = qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
-						qb.attribute(new QName(propisNamespace, "brojPropisa"))), query.getBrojPropisa());
-				queryDef = boostQuery(queryDef, boostQuery, qb);
-			}
-			if (query.isPredlog() && query.isInProcedure()) {
-				boostQuery = qb.or(
-						qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
-								qb.attribute(new QName(propisNamespace, "status"))), "predlog"),
-						qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
-								qb.attribute(new QName(propisNamespace, "status"))), "usvojen u nacelu"));
-				queryDef = boostQuery(queryDef, boostQuery, qb);
-			} else if (query.isPredlog()) {
-				boostQuery = qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
-						qb.attribute(new QName(propisNamespace, "status"))), "predlog");
-				queryDef = boostQuery(queryDef, boostQuery, qb);
-			} else if (query.isInProcedure()) {
-				boostQuery = qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
-						qb.attribute(new QName(propisNamespace, "status"))), "usvojen u nacelu");
-				queryDef = boostQuery(queryDef, boostQuery, qb);
-			}
-		} else {
-			if (query.getUsername() != null) {
-				boostQuery = qb.value(qb.elementAttribute(qb.element(new QName(amandmaniNamespace, "Amandman")),
-						qb.attribute(new QName(clanNamespace, "usernameDonosioca"))), query.getUsername());
-				queryDef = boostQuery(queryDef, boostQuery, qb);
-			}
-			if (query.isNotUsvojen()) {
-				boostQuery = qb.not(qb.value(qb.elementAttribute(qb.element(new QName(amandmaniNamespace, "Amandman")),
-						qb.attribute(new QName(amandmaniNamespace, "usvojen"))), true));
-				queryDef = boostQuery(queryDef, boostQuery, qb);
-			}
-			if (query.getBrojPropisa() != -1) {
-				boostQuery = qb.value(qb.elementAttribute(qb.element(new QName(amandmaniNamespace, "Amandman")),
-						qb.attribute(new QName(clanNamespace, "references"))), query.getBrojPropisa());
-				queryDef = boostQuery(queryDef, boostQuery, qb);
-			}
-		}
+		StructuredQueryDefinition queryDef = query.createQueryDefinition(qb);
 
 		if (collection != null) {
 			queryDef.setCollections(collection);
@@ -372,7 +307,6 @@ public class DatabaseBean {
 				retVal = handle.get();
 			}
 		} catch (JAXBException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
