@@ -188,7 +188,7 @@ public class RestBean implements RestBeanRemote {
 					Amandmani amandmani = database.findAmendmentsForPropis(propis);
 					if (!amandmani.getAmandman().isEmpty()) {
 						amandman.setId(amandmani.getReferences() + "/"
-								+ (Integer.parseInt(amandmani.getAmandman().get(0).getId()) + 1));
+								+ (Integer.parseInt(amandmani.getAmandman().get(amandmani.getAmandman().size() - 1).getId().split("/")[1]) + 1));
 					}
 					amandman.setUsernameDonosioca(user.getUsername());
 					amandmani.getAmandman().add(amandman);

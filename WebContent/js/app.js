@@ -140,6 +140,7 @@
 				params: {predlog: true, inProcedure: true}
 			}).then(function(response) {
 				$scope.suggestedActs = response.data;
+				$scope.getMyAmendments();
 			});
 		};
 		
