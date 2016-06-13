@@ -25,8 +25,6 @@ import javax.xml.datatype.DatatypeConfigurationException;
 import javax.xml.datatype.DatatypeFactory;
 import javax.xml.datatype.XMLGregorianCalendar;
 
-import org.w3c.dom.Document;
-
 import com.marklogic.client.io.DocumentMetadataHandle;
 import com.marklogic.client.io.JAXBHandle;
 import com.marklogic.client.io.SearchHandle;
@@ -40,8 +38,8 @@ import rs.skupstinans.session.DatabaseBean;
 import rs.skupstinans.users.Odbornik;
 import rs.skupstinans.users.User;
 import rs.skupstinans.util.Checker;
+import rs.skupstinans.util.ElementFinder;
 import rs.skupstinans.util.Query;
-import rs.skupstinans.util.TransformPrinter;
 
 /**
  * Session Bean implementation class RestBean
@@ -126,7 +124,7 @@ public class RestBean implements RestBeanRemote {
 				for (MatchDocumentSummary summary : summaries) {
 					DocumentMetadataHandle metadata = new DocumentMetadataHandle();
 					database.read(summary.getUri(), metadata, handle);
-					retVal.addAll(checker.findAmendmentByUsername(username, handle.get()));
+					retVal.addAll(ElementFinder.findAmendmentByUsername(username, handle.get()));
 				}
 			}
 		} catch (JAXBException e) {

@@ -185,7 +185,6 @@ public class DatabaseBean {
 			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
 			read("/amandmani/" + propisId, metadata, handle, t);
 			Amandmani amandmani = handle.get();
-			System.out.println(amandmani);
 			for (Amandman amandman : amandmani.getAmandman()) {
 				if (amandman.getId().equals(propisId + "/" + amendmentId)) {
 					if (amandman.getUsernameDonosioca().equals(user.getUsername())) {
@@ -274,10 +273,6 @@ public class DatabaseBean {
 			}
 		}
 		commitTransaction(t);
-	}
-
-	public void test() {
-		System.out.println("TEST");
 	}
 
 	private StructuredQueryDefinition boostQuery(StructuredQueryDefinition orgDef, StructuredQueryDefinition boost,

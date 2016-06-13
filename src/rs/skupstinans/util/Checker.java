@@ -370,93 +370,6 @@ public class Checker {
 		 */
 	}
 
-	public Object findPropisElementById(String id, Propis propis) {
-		// TODO: move to separate class
-		Object retVal = null;
-
-		JAXBContext context;
-		try {
-			context = JAXBContext.newInstance(Propis.class.getPackage().getName());
-			Marshaller marshaller = context.createMarshaller();
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-
-			DOMResult res = new DOMResult();
-
-			marshaller.marshal(propis, res);
-			Document doc = (Document) res.getNode();
-			// TransformPrinter.transform(doc, System.out);
-
-			XPathFactory xPathFactory = XPathFactory.newInstance();
-			XPath xPath = xPathFactory.newXPath();
-
-			Map<String, String> namespaceMappings = new HashMap<String, String>();
-			namespaceMappings.put("elem", "http://www.skupstinans.rs/elementi");
-			namespaceMappings.put("p", "http://www.skupstinans.rs/propisi");
-			xPath.setNamespaceContext(new NamespaceContext(namespaceMappings));
-
-			XPathExpression xPathExpression;
-			xPathExpression = xPath.compile("//*[@elem:id='" + id + "']");
-
-			Node singleNode = (Node) xPathExpression.evaluate(doc, XPathConstants.NODE);
-			Unmarshaller unmarshaller = context.createUnmarshaller();
-
-			// Unmarshalling generiše objektni model na osnovu XML fajla
-			retVal = unmarshaller.unmarshal(singleNode);
-
-		} catch (JAXBException e) {
-			e.printStackTrace();
-		} catch (XPathExpressionException e) {
-			e.printStackTrace();
-		}
-
-		return retVal;
-	}
-
-	public List<Amandman> findAmendmentByUsername(String username, Amandmani amandmani) {
-		// TODO: move to separate class
-		List<Amandman> retVal = new ArrayList<>();
-
-		JAXBContext context;
-		try {
-			context = JAXBContext.newInstance(Amandmani.class.getPackage().getName());
-			Marshaller marshaller = context.createMarshaller();
-			marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
-
-			DOMResult res = new DOMResult();
-
-			marshaller.marshal(amandmani, res);
-			Document doc = (Document) res.getNode();
-			// TransformPrinter.transform(doc, System.out);
-
-			XPathFactory xPathFactory = XPathFactory.newInstance();
-			XPath xPath = xPathFactory.newXPath();
-
-			Map<String, String> namespaceMappings = new HashMap<String, String>();
-			namespaceMappings.put("elem", "http://www.skupstinans.rs/elementi");
-			namespaceMappings.put("am", "http://www.skupstinans.rs/amandmani");
-			xPath.setNamespaceContext(new NamespaceContext(namespaceMappings));
-
-			XPathExpression xPathExpression;
-			xPathExpression = xPath.compile("//*[@elem:usernameDonosioca='" + username + "']");
-
-			NodeList nodeList = (NodeList) xPathExpression.evaluate(doc, XPathConstants.NODESET);
-			Unmarshaller unmarshaller = context.createUnmarshaller();
-			Node node;
-			
-			for (int i = 0; i < nodeList.getLength(); i++) {
-				node = nodeList.item(i);
-				retVal.add((Amandman) unmarshaller.unmarshal(node));	
-			}
-
-		} catch (JAXBException e) {
-			e.printStackTrace();
-		} catch (XPathExpressionException e) {
-			e.printStackTrace();
-		}
-
-		return retVal;
-	}
-
 	@SuppressWarnings("unchecked")
 	public void checkAmendment(List<String> messages, Amandman amandman, Propis propis) {
 		resetCounters();
@@ -477,7 +390,7 @@ public class Checker {
 					case "Dopuna":
 					case "Izmena":
 					case "Brisanje":
-						checkAmandmanContent(messages, obj, propis, findPropisElementById(references, propis));
+						checkAmandmanContent(messages, obj, propis, ElementFinder.findPropisElementById(references, propis));
 						break;
 					case "JAXBElement":
 						checkString(messages, ((JAXBElement<String>) obj).getValue(), "Nedostaje obrazloženje");
