@@ -158,7 +158,7 @@
     <!-- default rule: ignore any unspecific text node -->
     <xsl:template match="text()" />
     
-    <xsl:template match="ns1:Amandmani">
+    <xsl:template match="ns3:Amandmani">
         <html>
             <head>
                 <meta charset="utf-8" />
@@ -168,7 +168,7 @@
                 <h1>
                     <xsl:value-of select="translate(translate(ns2:Naziv, $smallcase, $uppercase), $latin, $cyrilic)"></xsl:value-of>
                 </h1>
-                <xsl:apply-templates select="ns2:Amandman" />
+                <xsl:apply-templates select="ns3:Amandman" />
             </body>
         </html>
     </xsl:template>
@@ -185,12 +185,25 @@
         </xsl:copy>
     </xsl:template>
     <xsl:template match="ns3:Amandman//text()">
-        <xsl:copy-of select="translate(., $latin, $cyrilic)" />
+        <p> 
+           <xsl:if test="normalize-space(.)">
+               <xsl:value-of select="translate(., $latin, $cyrilic)" />
+           </xsl:if>
+        </p>
     </xsl:template>
-    <xsl:template match="ns3:Izmena">
+    <xsl:template match="ns3:Amandman//ns3:Izmena">
         <xsl:apply-templates />
     </xsl:template>
-    <xsl:template match="ns3:Dopuna">
+    <xsl:template match="ns3:Amandman//ns3:Dopuna">
         <xsl:apply-templates />
+    </xsl:template>
+    <xsl:template match="ns3:Amandman//ns3:Brisanje">
+        <xsl:apply-templates />
+    </xsl:template>
+    <xsl:template match="ns3:Amandman//ns2:Obrazlozenje">
+        <h4>Образложење</h4>
+        <p>
+            <xsl:value-of select="translate(., $latin, $cyrilic)" />
+        </p>
     </xsl:template>
 </xsl:stylesheet>
