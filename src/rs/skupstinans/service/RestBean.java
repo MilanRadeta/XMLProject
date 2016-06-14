@@ -15,16 +15,10 @@ import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.servlet.http.HttpServletRequest;
-import javax.ws.rs.Consumes;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
-import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.datatype.DatatypeConfigurationException;
@@ -46,7 +40,7 @@ import rs.skupstinans.users.User;
 import rs.skupstinans.util.Checker;
 import rs.skupstinans.util.ElementFinder;
 import rs.skupstinans.util.Query;
-import rs.skupstinans.util.TransformPrinter;
+import rs.skupstinans.util.TransformHelper;
 
 /**
  * Session Bean implementation class RestBean
@@ -65,10 +59,6 @@ public class RestBean implements RestBeanRemote {
 	@EJB
 	private Checker checker;
 
-	@POST
-	@Path("/test")
-	@Consumes(MediaType.APPLICATION_XML)
-	@Produces(MediaType.APPLICATION_XML)
 	public Stav test(Stav stav) {
 		DocumentMetadataHandle metadata = new DocumentMetadataHandle();
 		JAXBContext context;
@@ -79,7 +69,7 @@ public class RestBean implements RestBeanRemote {
 			Propis propis = handle.get();
 			File file = new File("C:/Test.html");
 			OutputStream out = new BufferedOutputStream(new FileOutputStream(file));
-			TransformPrinter.transformToXHTML(propis, out);
+			TransformHelper.transformToXHTML(propis, out);
 			out.close();
 		} catch (JAXBException e) {
 			e.printStackTrace();
@@ -91,10 +81,6 @@ public class RestBean implements RestBeanRemote {
 		return stav;
 	}
 
-	@GET
-	@Path("/findBy")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	public List<Propis> findBy(@QueryParam("username") String username, @QueryParam("predlog") boolean predlog,
 			@QueryParam("inProcedure") boolean inProcedure) {
 		List<Propis> propisi = new ArrayList<>();
@@ -124,10 +110,6 @@ public class RestBean implements RestBeanRemote {
 		return propisi;
 	}
 
-	@GET
-	@Path("/findAmendmentsBy")
-	@Consumes(MediaType.APPLICATION_JSON)
-	@Produces(MediaType.APPLICATION_JSON)
 	public List<Amandman> findBy(@QueryParam("username") String username,
 			@QueryParam("notUsvojen") boolean notUsvojen) {
 		List<Amandman> retVal = new ArrayList<>();
@@ -157,10 +139,6 @@ public class RestBean implements RestBeanRemote {
 		return retVal;
 	}
 
-	@POST
-	@Path("/predlogPropisa")
-	@Consumes(MediaType.APPLICATION_XML)
-	@Produces(MediaType.APPLICATION_JSON)
 	public List<String> predlogPropisa(Propis propis) {
 		List<String> retVal = new ArrayList<String>();
 		User user = (User) request.getSession().getAttribute("user");
@@ -190,10 +168,6 @@ public class RestBean implements RestBeanRemote {
 		return retVal;
 	}
 
-	@POST
-	@Path("/predlogAmandmana/{id}")
-	@Consumes(MediaType.APPLICATION_XML)
-	@Produces(MediaType.APPLICATION_JSON)
 	public List<String> predlogAmandmana(@PathParam("id") int propisId, Amandman amandman) {
 		List<String> retVal = new ArrayList<String>();
 		User user = (User) request.getSession().getAttribute("user");
@@ -228,9 +202,6 @@ public class RestBean implements RestBeanRemote {
 		return retVal;
 	}
 
-	@DELETE
-	@Path("/povuciPredlogPropisa/{id}")
-	@Consumes(MediaType.TEXT_PLAIN)
 	public void povuciPredlogPropisa(@PathParam("id") String id) {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null && user instanceof Odbornik) {
@@ -238,9 +209,6 @@ public class RestBean implements RestBeanRemote {
 		}
 	}
 
-	@DELETE
-	@Path("/povuciPredlogAmandmana/{id}/{amendmentId}")
-	@Consumes(MediaType.TEXT_PLAIN)
 	public void povuciPredlogAmandmana(@PathParam("id") String id, @PathParam("amendmentId") String amendmentId) {
 		User user = (User) request.getSession().getAttribute("user");
 		if (user != null && user instanceof Odbornik) {
@@ -248,55 +216,90 @@ public class RestBean implements RestBeanRemote {
 		}
 	}
 
-	@GET
-	@Path("/nadjiSvePropise")
-	@Produces(MediaType.APPLICATION_JSON)
 	public List<Propis> nadjiSvePropise() {
 		// TODO
 		return null;
 	}
 
-	@GET
-	@Path("/nadjiSveAmandmane")
-	@Produces(MediaType.APPLICATION_JSON)
 	public List<Propis> nadjiSveAmandmane() {
 		// TODO
 		return null;
 	}
 
-	@POST
-	@Path("/usvojiPropisUNacelu")
-	@Consumes(MediaType.APPLICATION_JSON)
 	public void usvojiPropisUNacelu(String id) {
 		// TODO
 	}
 
-	@POST
-	@Path("/usvojiAmandman")
-	@Consumes(MediaType.APPLICATION_JSON)
 	public void usvojiAmandman(String id) {
 		// TODO
 	}
 
-	@POST
-	@Path("/usvojiPropisUCelosti")
-	@Consumes(MediaType.APPLICATION_JSON)
 	public void usvojiPropisUCelosti(String id) {
 		// TODO
 	}
 
-	@DELETE
-	@Path("/odbaciPrelogPropisa")
-	@Consumes(MediaType.APPLICATION_JSON)
 	public void odbaciPrelogPropisa(String id) {
 		// TODO
 	}
 
-	@DELETE
-	@Path("/odbaciPrelogAmandmana")
-	@Consumes(MediaType.APPLICATION_JSON)
 	public void odbaciPrelogAmandmana(String id) {
 		// TODO
 	}
 
+	@Override
+	public void getPropisAsXML(String id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void getPropisAsHTML(String id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void getPropisAsPDF(String id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void getAmendmentsAsXML(String id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void getAmendmentsAsHTML(String id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void getAmendmentsAsPDF(String id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void getAmendmentAsXML(String id, String aid) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void getAmendmentAsHTML(String id, String aid) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void getAmendmentAsPDF(String id, String aid) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	
+	
 }

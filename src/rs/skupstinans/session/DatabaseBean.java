@@ -252,7 +252,6 @@ public class DatabaseBean {
 	}
 
 	public void clearDatabase() {
-		// TODO: cleanup all documents
 		Transaction t = createTransaction();
 		DocumentDescriptor desc = xmlManager.exists("/brojPropisa", t);
 		if (desc != null) {

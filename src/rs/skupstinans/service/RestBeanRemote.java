@@ -37,8 +37,7 @@ public interface RestBeanRemote {
 	@Path("/findAmendmentsBy")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Amandman> findBy(@QueryParam("username") String username,
-			@QueryParam("notUsvojen") boolean notUsvojen);
+	public List<Amandman> findBy(@QueryParam("username") String username, @QueryParam("notUsvojen") boolean notUsvojen);
 
 	@POST
 	@Path("/predlogPropisa")
@@ -96,4 +95,49 @@ public interface RestBeanRemote {
 	@Path("/odbaciPrelogAmandmana")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void odbaciPrelogAmandmana(String id);
+
+	@GET
+	@Path("/getPropisAsXML/{id}")
+	@Produces(MediaType.APPLICATION_XML)
+	public void getPropisAsXML(@QueryParam("id") String id);
+
+	@GET
+	@Path("/getPropisAsHTML/{id}")
+	@Produces(MediaType.TEXT_HTML)
+	public void getPropisAsHTML(@QueryParam("id") String id);
+
+	@GET
+	@Path("/getPropisAsPDF/{id}")
+	@Produces("application/pdf")
+	public void getPropisAsPDF(@QueryParam("id") String id);
+
+	@GET
+	@Path("/getAmendmentsAsXML/{id}")
+	@Produces(MediaType.APPLICATION_XML)
+	public void getAmendmentsAsXML(@QueryParam("id") String id);
+
+	@GET
+	@Path("/getAmendmentsAsHTML/{id}")
+	@Produces(MediaType.TEXT_HTML)
+	public void getAmendmentsAsHTML(@QueryParam("id") String id);
+
+	@GET
+	@Path("/getAmendmentsAsPDF/{id}")
+	@Produces("application/pdf")
+	public void getAmendmentsAsPDF(@QueryParam("id") String id);
+
+	@GET
+	@Path("/getAmendmentAsXML/{id}/{aid}")
+	@Produces(MediaType.APPLICATION_XML)
+	public void getAmendmentAsXML(@QueryParam("id") String id, @QueryParam("aid") String aid);
+
+	@GET
+	@Path("/getAmendmentAsHTML/{id}/{aid}")
+	@Produces(MediaType.TEXT_HTML)
+	public void getAmendmentAsHTML(@QueryParam("id") String id, @QueryParam("aid") String aid);
+
+	@GET
+	@Path("/getAmendmentAsPDF/{id}/{aid}")
+	@Produces("application/pdf")
+	public void getAmendmentAsPDF(@QueryParam("id") String id, @QueryParam("aid") String aid);
 }

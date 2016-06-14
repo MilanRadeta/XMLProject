@@ -29,27 +29,26 @@ import org.apache.fop.apps.Fop;
 import org.apache.fop.apps.FopFactory;
 import org.apache.fop.apps.MimeConstants;
 import org.w3c.dom.Node;
+import org.xml.sax.SAXException;
 
 import rs.skupstinans.amandman.Amandman;
+import rs.skupstinans.amandman.Amandmani;
 import rs.skupstinans.propis.Propis;
 
-public abstract class TransformPrinter {
-	// TODO: rename
-
+public abstract class TransformHelper {
 	private static TransformerFactory transformerFactory;
 	private static FopFactory fopFactory;
 
 	static {
 		transformerFactory = TransformerFactory.newInstance();
-		/*
 		try {
-			// TODO: get resource
-			fopFactory = FopFactory.newInstance(new File("src/fop.xconf"));
+			String FOPConfigFilepath = TransformHelper.class.getClassLoader().getResource("fop.xconf").getPath();
+			fopFactory = FopFactory.newInstance(new File(FOPConfigFilepath));
 		} catch (SAXException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
-		}*/
+		}
 	}
 
 	public static void transform(Node node, OutputStream out) {
@@ -71,24 +70,30 @@ public abstract class TransformPrinter {
 		}
 	}
 
-	public static void transformToPDF(OutputStream out) {
-		// TODO: parametrize
-		// TODO: change filepaths
+	public static void transformToPDF(Object obj, File file) {
 		try {
-			// TODO: get resource
-			File xsltFile = new File("data/xsl-fo/bookstore_fo.xsl");
+			String xslFilepath = ""; 
+			if (obj instanceof Propis) {
+				xslFilepath = TransformHelper.class.getClassLoader().getResource("PropisPDF.xsl").getPath();
+			}
+			else if (obj instanceof Amandman || obj instanceof Amandmani) {	
+				xslFilepath = TransformHelper.class.getClassLoader().getResource("AmandmanPDF.xsl").getPath();
+			} 
+			
+			JAXBContext context = JAXBContext.newInstance(obj.getClass().getPackage().getName());
+			JAXBSource source = new JAXBSource(context, obj);
+
+			File xsltFile = new File(xslFilepath);
 			StreamSource transformSource = new StreamSource(xsltFile);
-			// TODO: get resource
-			StreamSource source = new StreamSource(new File("data/xsl-fo/bookstore.xml"));
+			
 			FOUserAgent userAgent = fopFactory.newFOUserAgent();
 			ByteArrayOutputStream outStream = new ByteArrayOutputStream();
 			Transformer xslFoTransformer = transformerFactory.newTransformer(transformSource);
 			Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, userAgent, outStream);
 			Result res = new SAXResult(fop.getDefaultHandler());
 			xslFoTransformer.transform(source, res);
-			// TODO: get resource
-			File pdfFile = new File("gen/bookstore_result.pdf");
-			out = new BufferedOutputStream(new FileOutputStream(pdfFile));
+			
+			OutputStream out = new BufferedOutputStream(new FileOutputStream(file));
 			out.write(outStream.toByteArray());
 			out.close();
 		} catch (TransformerConfigurationException e) {
@@ -101,6 +106,8 @@ public abstract class TransformPrinter {
 			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
+		} catch (JAXBException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -108,10 +115,10 @@ public abstract class TransformPrinter {
 		try {
 			String xslFilepath = ""; 
 			if (obj instanceof Propis) {
-				xslFilepath = TransformPrinter.class.getClassLoader().getResource("PropisXHTML.xsl").getPath();
+				xslFilepath = TransformHelper.class.getClassLoader().getResource("PropisXHTML.xsl").getPath();
 			}
-			else if (obj instanceof Amandman) {	
-				xslFilepath = TransformPrinter.class.getClassLoader().getResource("AmandmanXHTML.xsl").getPath();
+			else if (obj instanceof Amandman || obj instanceof Amandmani) {	
+				xslFilepath = TransformHelper.class.getClassLoader().getResource("AmandmanXHTML.xsl").getPath();
 			} 
 
 			JAXBContext context = JAXBContext.newInstance(obj.getClass().getPackage().getName());
