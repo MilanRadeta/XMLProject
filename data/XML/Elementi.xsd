@@ -108,7 +108,7 @@
         <xsd:restriction base="xsd:string">
             <xsd:minLength value="1"/>
             <xsd:maxLength value="50"/>
-            <xsd:pattern value="[A-ZŠČĆĐŽ]+[A-ZŠĐČĆŽa-zšđčćž0-9 ]*"/>
+            <xsd:pattern value="\p{L}+[\p{L}0-9 ]*"/>
         </xsd:restriction>
     </xsd:simpleType>
     <xsd:attribute name="id" type="idType"/>

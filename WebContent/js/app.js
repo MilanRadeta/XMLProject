@@ -1,5 +1,5 @@
 (function(angular) {
-	// TODO: pravni osnov treba da sadrži reference, promeniti šemu
+	// TODO: pravni osnov može da sadrži reference, promeniti šemu
 	app = angular.module('app', []);
 	
 	app.controller("appController", function($scope, $http) {
@@ -410,7 +410,7 @@
 					}
 				}
 				else {
-					if (splits[index].startswith == "c") {
+					if (splits[index].startswith("c")) {
 						formatString = "Član " + splits[index].substring(1);
 					}
 					else {

@@ -32,6 +32,7 @@ import rs.skupstinans.amandman.Amandmani;
 import rs.skupstinans.propis.Propis;
 import rs.skupstinans.users.User;
 import rs.skupstinans.util.ConnectionProperties;
+import rs.skupstinans.util.ElementConstants;
 import rs.skupstinans.util.Query;
 
 /**
@@ -186,6 +187,10 @@ public class DatabaseBean {
 					if (amandman.getUsernameDonosioca().equals(user.getUsername())) {
 						if (!amandman.isUsvojen()) {
 							amandmani.getAmandman().remove(amandman);
+							context = JAXBContext.newInstance(Propis.class.getPackage().getName());
+							JAXBHandle<Propis> propisHandle = new JAXBHandle<>(context);
+							read("/propisi/" + propisId, metadata, propisHandle, t);
+							ElementConstants.setAmandmaniNaziv(amandmani, propisHandle.get());
 							predlogAmandmana(amandmani, t);
 						}
 					}
@@ -300,6 +305,7 @@ public class DatabaseBean {
 			if (desc == null) {
 				retVal = new Amandmani();
 				retVal.setReferences("" + propis.getBrojPropisa());
+				retVal.setNaziv("Predlozi amandmana na " + propis.getNaziv());
 			} else {
 				read("/amandmani/" + propis.getBrojPropisa(), metadata, handle);
 				retVal = handle.get();

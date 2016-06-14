@@ -31,10 +31,6 @@ import org.apache.fop.apps.MimeConstants;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
-import rs.skupstinans.amandman.Amandman;
-import rs.skupstinans.amandman.Amandmani;
-import rs.skupstinans.propis.Propis;
-
 public abstract class TransformHelper {
 	private static TransformerFactory transformerFactory;
 	private static FopFactory fopFactory;
@@ -71,14 +67,9 @@ public abstract class TransformHelper {
 	}
 
 	public static void transformToPDF(Object obj, File file) {
+		// TODO: make xsl for pdf
 		try {
-			String xslFilepath = ""; 
-			if (obj instanceof Propis) {
-				xslFilepath = TransformHelper.class.getClassLoader().getResource("PropisPDF.xsl").getPath();
-			}
-			else if (obj instanceof Amandman || obj instanceof Amandmani) {	
-				xslFilepath = TransformHelper.class.getClassLoader().getResource("AmandmanPDF.xsl").getPath();
-			} 
+			String xslFilepath = TransformHelper.class.getClassLoader().getResource("PropisPDF.xsl").getPath();
 			
 			JAXBContext context = JAXBContext.newInstance(obj.getClass().getPackage().getName());
 			JAXBSource source = new JAXBSource(context, obj);
@@ -112,14 +103,9 @@ public abstract class TransformHelper {
 	}
 
 	public static <T> void transformToXHTML(Object obj, OutputStream out) {
+		// TODO: make xsl
 		try {
-			String xslFilepath = ""; 
-			if (obj instanceof Propis) {
-				xslFilepath = TransformHelper.class.getClassLoader().getResource("PropisXHTML.xsl").getPath();
-			}
-			else if (obj instanceof Amandman || obj instanceof Amandmani) {	
-				xslFilepath = TransformHelper.class.getClassLoader().getResource("AmandmanXHTML.xsl").getPath();
-			} 
+			String xslFilepath = TransformHelper.class.getClassLoader().getResource("PropisXHTML.xsl").getPath();
 
 			JAXBContext context = JAXBContext.newInstance(obj.getClass().getPackage().getName());
 			JAXBSource source = new JAXBSource(context, obj);

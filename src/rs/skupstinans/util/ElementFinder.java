@@ -22,10 +22,13 @@ import org.w3c.dom.NodeList;
 
 import rs.skupstinans.amandman.Amandman;
 import rs.skupstinans.amandman.Amandmani;
+import rs.skupstinans.amandman.Brisanje;
+import rs.skupstinans.amandman.Dopuna;
+import rs.skupstinans.amandman.Izmena;
 import rs.skupstinans.propis.Propis;
 
 public class ElementFinder {
-	
+
 	public static Object findPropisElementById(String id, Propis propis) {
 		Map<String, String> namespaceMappings = new HashMap<String, String>();
 		namespaceMappings.put("elem", "http://www.skupstinans.rs/elementi");
@@ -39,7 +42,7 @@ public class ElementFinder {
 		namespaceMappings.put("am", "http://www.skupstinans.rs/amandmani");
 		return findElement("//*[@elem:usernameDonosioca='" + username + "']", amandmani, namespaceMappings);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public static <T> List<T> findElement(String expression, Object object, Map<String, String> namespaceMappings) {
 		List<T> retVal = new ArrayList<>();
@@ -64,10 +67,10 @@ public class ElementFinder {
 			NodeList nodeList = (NodeList) xPathExpression.evaluate(doc, XPathConstants.NODESET);
 			Unmarshaller unmarshaller = context.createUnmarshaller();
 			Node node;
-			
+
 			for (int i = 0; i < nodeList.getLength(); i++) {
 				node = nodeList.item(i);
-				retVal.add((T) unmarshaller.unmarshal(node));	
+				retVal.add((T) unmarshaller.unmarshal(node));
 			}
 
 		} catch (JAXBException e) {
@@ -76,6 +79,33 @@ public class ElementFinder {
 			e.printStackTrace();
 		}
 
+		return retVal;
+	}
+
+	public static HashMap<String, Integer> getTypesCount(Amandmani amandmani) {
+		HashMap<String, Integer> retVal = new HashMap<>();
+		int izmenaCount = 0;
+		int dopunaCount = 0;
+		int brisanjeCount = 0;
+		for (Amandman a : amandmani.getAmandman()) {
+			for (Object obj : a.getContent()) {
+				if (obj instanceof Izmena) {
+					izmenaCount++;
+					break;
+				}
+				if (obj instanceof Dopuna) {
+					dopunaCount++;
+					break;
+				}
+				if (obj instanceof Brisanje) {
+					brisanjeCount++;
+					break;
+				}
+			}
+		}
+		retVal.put("Izmena", izmenaCount);
+		retVal.put("Dopuna", dopunaCount);
+		retVal.put("Brisanje", brisanjeCount);
 		return retVal;
 	}
 }

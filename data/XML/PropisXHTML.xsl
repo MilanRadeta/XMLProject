@@ -3,6 +3,7 @@
     xmlns:xs="http://www.w3.org/2001/XMLSchema"
     xmlns:ns1="http://www.skupstinans.rs/propis"
     xmlns:ns2="http://www.skupstinans.rs/elementi"
+    xmlns:ns3="http://www.skupstinans.rs/amandman"
     exclude-result-prefixes="xs"
     version="2.0">
     <xsl:output method="html" />
@@ -12,7 +13,7 @@
     <xsl:variable name="cyrilic" select="'абцдефгхијклмнопрстувзчшђћжАБЦДЕФГХИЈКЛМНОПРСТУВЗЧЂЂЋЖ'" />
     
     <xsl:template match="ns1:Propis">
-        <html>
+        <html xmlns="http://www.w3.org/1999/xhtml">
             <head>
                 <meta charset="utf-8" />
                 <title><xsl:value-of select="translate(translate(ns2:Naziv, $smallcase, $uppercase), $latin, $cyrilic)" /></title>
@@ -105,7 +106,9 @@
         </xsl:copy>
     </xsl:template>
     <xsl:template match="ns2:Stav//text()">
-        <xsl:copy-of select="translate(., $latin, $cyrilic)" />
+        <xsl:if test="normalize-space(.)">
+            <xsl:value-of select="translate(., $latin, $cyrilic)" />
+        </xsl:if>
     </xsl:template>
     <xsl:template match="ns2:Stav//Tacka">
         <a name="{@ns2:id}" />
@@ -120,7 +123,9 @@
         </xsl:copy>
     </xsl:template>
     <xsl:template match="ns2:Tacka//text()">
-        <li><xsl:value-of select="@ns2:rednaOznaka" />) <xsl:copy-of select="translate(., $latin, $cyrilic)" /></li>
+        <xsl:if test="normalize-space(.)">
+            <li><xsl:value-of select="@ns2:rednaOznaka" />) <xsl:copy-of select="translate(., $latin, $cyrilic)" /></li>
+        </xsl:if>
     </xsl:template>
     <xsl:template match="ns2:Tacka//ns2:Podtacka">
         <a name="{@ns2:id}" />
@@ -135,7 +140,9 @@
         </xsl:copy>
     </xsl:template>
     <xsl:template match="ns2:Podtacka//text()">
-        <li>(<xsl:value-of select="@ns2:rednaOznaka" />) <xsl:copy-of select="translate(., $latin, $cyrilic)" /></li>
+        <xsl:if test="normalize-space(.)">
+            <li>(<xsl:value-of select="@ns2:rednaOznaka" />) <xsl:copy-of select="translate(., $latin, $cyrilic)" /></li>
+        </xsl:if>
     </xsl:template>
     <xsl:template match="ns2:Podtacka//ns2:Alineja">
         <a name="{@ns2:id}" />
@@ -143,9 +150,47 @@
             <xsl:apply-templates /> 
         </ul>
     </xsl:template>
-    <xsl:template match="ns2:Alineja">
-        <li>- <xsl:copy-of select="translate(., $latin, $cyrilic)" /></li>
+    <xsl:template match="ns2:Alineja//text()">
+        <xsl:if test="normalize-space(.)">
+            <li>- <xsl:value-of select="translate(., $latin, $cyrilic)" /></li>
+        </xsl:if>
     </xsl:template>
     <!-- default rule: ignore any unspecific text node -->
     <xsl:template match="text()" />
+    
+    <xsl:template match="ns1:Amandmani">
+        <html>
+            <head>
+                <meta charset="utf-8" />
+                <title><xsl:value-of select="translate(translate(ns2:Naziv, $smallcase, $uppercase), $latin, $cyrilic)" /></title>
+            </head>
+            <body>
+                <h1>
+                    <xsl:value-of select="translate(translate(ns2:Naziv, $smallcase, $uppercase), $latin, $cyrilic)"></xsl:value-of>
+                </h1>
+                <xsl:apply-templates select="ns2:Amandman" />
+            </body>
+        </html>
+    </xsl:template>
+    
+    
+    <xsl:template match="ns3:Amandman">
+        <h2>АМАНДМАН <xsl:number format="I"/>.</h2>
+        <xsl:apply-templates />
+    </xsl:template>
+    <xsl:template match="ns3:Amandman//*">
+        <xsl:copy>
+            <xsl:copy-of select="@*" />
+            <xsl:apply-templates />
+        </xsl:copy>
+    </xsl:template>
+    <xsl:template match="ns3:Amandman//text()">
+        <xsl:copy-of select="translate(., $latin, $cyrilic)" />
+    </xsl:template>
+    <xsl:template match="ns3:Izmena">
+        <xsl:apply-templates />
+    </xsl:template>
+    <xsl:template match="ns3:Dopuna">
+        <xsl:apply-templates />
+    </xsl:template>
 </xsl:stylesheet>

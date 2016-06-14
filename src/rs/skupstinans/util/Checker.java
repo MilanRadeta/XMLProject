@@ -372,7 +372,7 @@ public class Checker {
 			}
 		}
 		if (amandman.getContent().size() == 0) {
-			messages.add("Nedostaje tim izmene");
+			messages.add("Nedostaje tip izmene");
 			messages.add("Nedostaje obrazloženje za predlaganje amandmana");
 		} else {
 			if (amandman.getContent().size() == 2) {
@@ -381,7 +381,7 @@ public class Checker {
 					case "Dopuna":
 					case "Izmena":
 					case "Brisanje":
-						checkAmandmanContent(messages, obj, propis, ElementFinder.findPropisElementById(references, propis));
+						checkAmandmanContent(amandman, messages, obj, propis, ElementFinder.findPropisElementById(references, propis));
 						break;
 					case "JAXBElement":
 						checkString(messages, ((JAXBElement<String>) obj).getValue(), "Nedostaje obrazloženje");
@@ -398,9 +398,10 @@ public class Checker {
 		}
 	}
 
-	public void checkAmandmanContent(List<String> messages, Object parent, Propis propis, Object references) {
+	public void checkAmandmanContent(Amandman amandman, List<String> messages, Object parent, Propis propis, Object references) {
 		if (references != null) {
 			if (parent instanceof Izmena) {
+				amandman.getContent().add(0, ElementConstants.getNameFromId(((ElementInterface) references).getId()) + " menja se i glasi:");
 				Izmena izmena = (Izmena) parent;
 				if (izmena.getClan() != null) {
 					if (izmena.getStav() == null && izmena.getTacka() == null && izmena.getPodtacka() == null
@@ -465,19 +466,18 @@ public class Checker {
 					messages.add("Nedostaje sadržaj izmene");
 				}
 			} else if (parent instanceof Dopuna) {
-
+				String sufix = references.getClass().getSimpleName();
+				if (sufix.equals("Clan")) {
+					sufix = "Član";
+				}
+				amandman.getContent().add(0, ElementConstants.getNameFromId(((ElementInterface) references).getId() + " - dodaje se novi " + sufix + " koji glasi:"));
 				Dopuna dopuna = (Dopuna) parent;
 				if (dopuna.getClan() != null) {
 					if (dopuna.getStav() == null && dopuna.getDeo() == null && dopuna.getGlava() == null
 							&& dopuna.getOdeljak() == null && dopuna.getPododeljak() == null) {
 						if (references instanceof Clan) {
-							if (((Clan) references).getNaziv() == null) {
-								messages.add(
-										"Da bi se dodao novi član, član nakon koga se dodaje se mora izmeniti da ima naziv");
-							} else {
-								boolean withoutNaziv = false;
-								checkClan(messages, dopuna.getClan(), "Član", withoutNaziv, "");
-							}
+							boolean withoutNaziv = false;
+							checkClan(messages, dopuna.getClan(), "Član", withoutNaziv, "");
 						} else {
 							messages.add("Novi član se može dodati jedino posle člana");
 						}
@@ -546,6 +546,9 @@ public class Checker {
 				} else {
 					messages.add("Nedostaje sadržaj dopune");
 				}
+			}
+			else if (parent instanceof Brisanje) {
+				amandman.getContent().add(0, ElementConstants.getNameFromId(((ElementInterface) references).getId()) + " briše se.");
 			}
 		} else {
 			messages.add("Referenca nije validna");

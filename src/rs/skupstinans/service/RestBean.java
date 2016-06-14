@@ -38,6 +38,7 @@ import rs.skupstinans.session.DatabaseBean;
 import rs.skupstinans.users.Odbornik;
 import rs.skupstinans.users.User;
 import rs.skupstinans.util.Checker;
+import rs.skupstinans.util.ElementConstants;
 import rs.skupstinans.util.ElementFinder;
 import rs.skupstinans.util.Query;
 import rs.skupstinans.util.TransformHelper;
@@ -185,21 +186,27 @@ public class RestBean implements RestBeanRemote {
 					checker.validate(retVal, amandman);
 					Amandmani amandmani = database.findAmendmentsForPropis(propis);
 					if (!amandmani.getAmandman().isEmpty()) {
-						amandman.setId(amandmani.getReferences() + "/"
-								+ (Integer.parseInt(amandmani.getAmandman().get(amandmani.getAmandman().size() - 1).getId().split("/")[1]) + 1));
+						amandman.setId(
+								amandmani.getReferences() + "/"
+										+ (Integer
+												.parseInt(amandmani.getAmandman()
+														.get(amandmani.getAmandman().size() - 1).getId().split("/")[1])
+												+ 1));
 					}
 					amandman.setUsernameDonosioca(user.getUsername());
 					amandmani.getAmandman().add(amandman);
+					ElementConstants.setAmandmaniNaziv(amandmani, propis);
 					database.predlogAmandmana(amandmani);
 				}
 			} catch (JAXBException e) {
 				e.printStackTrace();
 			}
 
-		} else {
-			retVal.add("Zabranjena akcija");
-		}
-		return retVal;
+		}else
+
+	{
+		retVal.add("Zabranjena akcija");
+	}return retVal;
 	}
 
 	public void povuciPredlogPropisa(@PathParam("id") String id) {
@@ -249,57 +256,55 @@ public class RestBean implements RestBeanRemote {
 	@Override
 	public void getPropisAsXML(String id) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void getPropisAsHTML(String id) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void getPropisAsPDF(String id) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void getAmendmentsAsXML(String id) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void getAmendmentsAsHTML(String id) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void getAmendmentsAsPDF(String id) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void getAmendmentAsXML(String id, String aid) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void getAmendmentAsHTML(String id, String aid) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override
 	public void getAmendmentAsPDF(String id, String aid) {
 		// TODO Auto-generated method stub
-		
+
 	}
 
-	
-	
 }
