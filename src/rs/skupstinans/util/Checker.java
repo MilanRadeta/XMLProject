@@ -144,6 +144,7 @@ public class Checker {
 		deoCounter++;
 		glavaCounter = 0;
 		deo.setId("d" + deoCounter);
+		deo.setRednaOznaka(ElementConstants.Deo[deoCounter-1]);
 		if (withoutNaziv) {
 			deo.setNaziv(null);
 		} else {
@@ -168,10 +169,12 @@ public class Checker {
 			glavaCounter++;
 			odeljakCounter = 0;
 			element.setId(String.format("%sg%s", idPrefix, glavaCounter));
+			element.setRednaOznaka(ElementConstants.Glava[glavaCounter - 1]);
 		} else if (group instanceof Odeljak) {
 			odeljakCounter++;
 			pododeljakCounter = 0;
 			element.setId(String.format("%so%s", idPrefix, odeljakCounter));
+			element.setRednaOznaka("" + odeljakCounter);
 		}
 		if (element.getContent().isEmpty()) {
 			messages.add(String.format("%s - nedostaje sadržaj", messagePrefix));
@@ -222,6 +225,7 @@ public class Checker {
 	public void checkPododeljak(List<String> messages, Pododeljak pododeljak, String messagePrefix, String idPrefix) {
 		pododeljakCounter++;
 		pododeljak.setId(String.format("%sp%s", idPrefix, pododeljakCounter));
+		pododeljak.setRednaOznaka(ElementConstants.Pododeljak[pododeljakCounter-1]);
 		checkString(messages, pododeljak.getNaziv(), String.format("%s - nedostaje naziv", messagePrefix));
 		if (pododeljak.getClan().isEmpty()) {
 			messages.add(String.format("%s - nedostaju �?lanovi", messagePrefix));
@@ -238,6 +242,7 @@ public class Checker {
 		clanCounter++;
 		stavCounter = 0;
 		clan.setId(String.format("%sc%s", idPrefix, clanCounter));
+		clan.setRednaOznaka(""+clanCounter);
 		if (withoutNaziv) {
 			clan.setNaziv(null);
 		} else {
@@ -266,11 +271,13 @@ public class Checker {
 			podtackaCounter = 0;
 			tackaCounter++;
 			element.setId(String.format("%sT%s", idPrefix, tackaCounter));
+			element.setRednaOznaka("" + tackaCounter);
 			break;
 		case "Podtacka":
 			alinejaCounter = 0;
 			podtackaCounter++;
 			element.setId(String.format("%st%s", idPrefix, podtackaCounter));
+			element.setRednaOznaka("" + podtackaCounter);
 			break;
 		case "Alineja":
 			alinejaCounter++;

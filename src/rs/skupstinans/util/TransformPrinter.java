@@ -34,6 +34,7 @@ import rs.skupstinans.amandman.Amandman;
 import rs.skupstinans.propis.Propis;
 
 public abstract class TransformPrinter {
+	// TODO: rename
 
 	private static TransformerFactory transformerFactory;
 	private static FopFactory fopFactory;

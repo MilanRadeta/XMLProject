@@ -2,4 +2,5 @@ eclipse.preferences.version=1
 encoding//src/rs/skupstinans/service/RestBean.java=UTF-8
 encoding//src/rs/skupstinans/session/DatabaseBean.java=UTF-8
 encoding//src/rs/skupstinans/util/Checker.java=UTF-8
+encoding//src/rs/skupstinans/util/ElementConstants.java=UTF-8
 encoding//src/rs/skupstinans/util/PropisValidationEventHandler.java=UTF-8

@@ -9,6 +9,7 @@
             </xsd:sequence>
             <xsd:attribute ref="id" use="required"/>
             <xsd:attribute ref="dopuna"/>
+            <xsd:attribute ref="rednaOznaka"/>
         </xsd:complexType>
     </xsd:element>
     <xsd:element name="Glava">
@@ -24,6 +25,7 @@
                 </xsd:choice>
             </xsd:sequence>
             <xsd:attribute ref="id" use="required"/>
+            <xsd:attribute ref="rednaOznaka"/>
         </xsd:complexType>
     </xsd:element>
     <xsd:element name="Odeljak">
@@ -39,6 +41,7 @@
                 </xsd:choice>
             </xsd:sequence>
             <xsd:attribute ref="id" use="required"/>
+            <xsd:attribute ref="rednaOznaka"/>
         </xsd:complexType>
     </xsd:element>
     <xsd:element name="Pododeljak">
@@ -48,6 +51,7 @@
                 <xsd:element maxOccurs="unbounded" minOccurs="1" ref="Clan"/>
             </xsd:sequence>
             <xsd:attribute ref="id" use="required"/>
+            <xsd:attribute ref="rednaOznaka"/>
         </xsd:complexType>
     </xsd:element>
     <xsd:element name="Clan">
@@ -57,6 +61,7 @@
                 <xsd:element maxOccurs="unbounded" ref="Stav"/>
             </xsd:sequence>
             <xsd:attribute ref="id" use="required"/>
+            <xsd:attribute ref="rednaOznaka"/>
         </xsd:complexType>
     </xsd:element>
     <xsd:element name="Stav">
@@ -66,6 +71,7 @@
                 <xsd:group ref="ElementiTeksta"/>
             </xsd:choice>
             <xsd:attribute ref="id" use="required"/>
+            <xsd:attribute ref="rednaOznaka"/>
         </xsd:complexType>
     </xsd:element>
     <xsd:element name="Tacka">
@@ -75,6 +81,7 @@
                 <xsd:element maxOccurs="unbounded" minOccurs="2" ref="Podtacka"/>
             </xsd:choice>
             <xsd:attribute ref="id" use="required"/>
+            <xsd:attribute ref="rednaOznaka"/>
         </xsd:complexType>
     </xsd:element>
     <xsd:element name="Podtacka">
@@ -84,6 +91,7 @@
                 <xsd:element maxOccurs="unbounded" minOccurs="2" ref="Alineja"/>
             </xsd:choice>
             <xsd:attribute ref="id" use="required"/>
+            <xsd:attribute ref="rednaOznaka"/>
         </xsd:complexType>
     </xsd:element>
     <xsd:element name="Alineja">
@@ -92,6 +100,7 @@
                 <xsd:group ref="ElementiTeksta"/>
             </xsd:choice>
             <xsd:attribute ref="id" use="required"/>
+            <xsd:attribute ref="rednaOznaka"/>
         </xsd:complexType>
     </xsd:element>
     <xsd:element name="Naziv" type="Naziv"/>
@@ -103,6 +112,7 @@
         </xsd:restriction>
     </xsd:simpleType>
     <xsd:attribute name="id" type="idType"/>
+    <xsd:attribute name="rednaOznaka" type="xsd:string"/>
     <xsd:attribute name="references" type="idType"/>
     <xsd:attribute default="true" name="dopuna" type="xsd:boolean"/>
     <xsd:element name="Referenca">
