@@ -63,8 +63,6 @@
     </xsd:element>
     <xsd:element name="Prilog" type="xsd:anyType"/>
     <xsd:element name="Naznaka" type="xsd:string"/>
-    <xsd:element name="MaterijalniPravniOsnov" type="xsd:string"/>
-    <xsd:element name="FormalniPravniOsnov" type="xsd:string"/>
     <xsd:attribute name="datumPredlaganjaPropisa" type="xsd:date"/>
     <xsd:attribute name="datumUsvajanjaPropisa" type="xsd:date"/>
     <xsd:attribute name="datumStupanjaNaSnagu" type="xsd:date"/>

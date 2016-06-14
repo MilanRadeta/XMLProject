@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xsl" href="PropisXHTML.xsl"?>
+<propis:Propis xmlns:elem="http://www.skupstinans.rs/elementi"
+ xmlns:propis="http://www.skupstinans.rs/propis"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://www.skupstinans.rs/propis file:/C:/EclipseWorkspace/XMLProject/data/XML/Propis.xsd" propis:brojPropisa="5" propis:status="usvojen u nacelu">
+    <elem:Naziv>OBARRP</elem:Naziv>
+    <elem:Clan elem:id="uR/I/sCjs">
+        <elem:Stav elem:id="t/ukf/THe/x"/>
+        <elem:Stav elem:id="X"/>
+    </elem:Clan>
+    <elem:Clan elem:id="gFi">
+        <elem:Stav elem:id="5"/>
+        <elem:Stav elem:id="a"/>
+    </elem:Clan>
+</propis:Propis>

@@ -1,5 +1,11 @@
 package rs.skupstinans.service;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -40,6 +46,7 @@ import rs.skupstinans.users.User;
 import rs.skupstinans.util.Checker;
 import rs.skupstinans.util.ElementFinder;
 import rs.skupstinans.util.Query;
+import rs.skupstinans.util.TransformPrinter;
 
 /**
  * Session Bean implementation class RestBean
@@ -63,7 +70,24 @@ public class RestBean implements RestBeanRemote {
 	@Consumes(MediaType.APPLICATION_XML)
 	@Produces(MediaType.APPLICATION_XML)
 	public Stav test(Stav stav) {
-		database.clearDatabase();
+		DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+		JAXBContext context;
+		try {
+			context = JAXBContext.newInstance(Propis.class.getPackage().getName());
+			JAXBHandle<Propis> handle = new JAXBHandle<>(context);
+			database.read("/propisi/1", metadata, handle);
+			Propis propis = handle.get();
+			File file = new File("C:/Test.html");
+			OutputStream out = new BufferedOutputStream(new FileOutputStream(file));
+			TransformPrinter.transformToXHTML(propis, out);
+			out.close();
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		return stav;
 	}
 
@@ -85,11 +109,11 @@ public class RestBean implements RestBeanRemote {
 		try {
 			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
 			JAXBHandle<Propis> handle = new JAXBHandle<>(context);
+			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
 			SearchHandle results = database.query(query);
 			if (results != null) {
 				MatchDocumentSummary[] summaries = results.getMatchResults();
 				for (MatchDocumentSummary summary : summaries) {
-					DocumentMetadataHandle metadata = new DocumentMetadataHandle();
 					database.read(summary.getUri(), metadata, handle);
 					propisi.add(handle.get());
 				}

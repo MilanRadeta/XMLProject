@@ -31,9 +31,8 @@ import rs.skupstinans.amandman.Amandman;
 import rs.skupstinans.amandman.Amandmani;
 import rs.skupstinans.propis.Propis;
 import rs.skupstinans.users.User;
+import rs.skupstinans.util.ConnectionProperties;
 import rs.skupstinans.util.Query;
-import rs.skupstinans.xmldb.util.Util;
-import rs.skupstinans.xmldb.util.Util.ConnectionProperties;
 
 /**
  * Session Bean implementation class DatabaseBean
@@ -53,7 +52,7 @@ public class DatabaseBean {
 	void init() {
 		ConnectionProperties props;
 		try {
-			props = Util.loadProperties();
+			props = ConnectionProperties.loadProperties();
 			client = DatabaseClientFactory.newClient(props.host, props.port, props.database, props.user, props.password,
 					props.authType);
 			xmlManager = client.newXMLDocumentManager();
