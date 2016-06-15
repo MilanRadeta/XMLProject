@@ -229,6 +229,10 @@ public class DatabaseBean {
 		xmlManager.write(URI, metadata, getPropisHandle(propis), t);
 	}
 
+	public boolean exists(String URI) {
+		return xmlManager.exists(URI) != null;
+	}
+	
 	public void read(String URI, DocumentMetadataHandle metadata, JAXBHandle<? extends Object> handle) {
 		xmlManager.read(URI, metadata, handle);
 	}

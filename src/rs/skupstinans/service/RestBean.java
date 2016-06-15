@@ -252,14 +252,19 @@ public class RestBean implements RestBeanRemote {
 		// TODO
 	}
 
+	// TODO: check user when needed
+	
 	@Override
 	public Propis getPropisAsXML(String id) {
 		try {
-			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
-			JAXBHandle<Propis> handle = new JAXBHandle<>(context);
-			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
-			database.read("/propisi/" + id, metadata, handle);
-			return handle.get();
+			String url = "/propisi/" + id;
+			if (database.exists(url)) {
+				JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
+				JAXBHandle<Propis> handle = new JAXBHandle<>(context);
+				DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+				database.read(url, metadata, handle);
+				return handle.get();
+			}
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		}
@@ -269,14 +274,18 @@ public class RestBean implements RestBeanRemote {
 	@Override
 	public String getPropisAsHTML(String id) {
 		try {
-			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
-			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
-			JAXBHandle<Propis> handle = new JAXBHandle<>(context);
-			database.read("/propisi/" + id, metadata, handle);
-			Propis propis = handle.get();
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			TransformHelper.transformToXHTML(propis, out);
-			return out.toString("UTF-8");
+			String url = "/propisi/" + id;
+			if (database.exists(url)) {
+				DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+				JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
+				JAXBHandle<Propis> handle = new JAXBHandle<>(context);
+				database.read("/propisi/" + id, metadata, handle);
+				Propis propis = handle.get();
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				TransformHelper.transformToXHTML(propis, out);
+
+				return out.toString("UTF-8");
+			}
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
@@ -288,14 +297,17 @@ public class RestBean implements RestBeanRemote {
 	@Override
 	public InputStream getPropisAsPDF(String id) {
 		try {
-			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
-			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
-			JAXBHandle<Propis> handle = new JAXBHandle<>(context);
-			database.read("/propisi/" + id, metadata, handle);
-			Propis propis = handle.get();
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			TransformHelper.transformToPDF(propis, out);
-			return new ByteArrayInputStream(out.toByteArray());
+			String url = "/propisi/" + id;
+			if (database.exists(url)) {
+				DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+				JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
+				JAXBHandle<Propis> handle = new JAXBHandle<>(context);
+				database.read("/propisi/" + id, metadata, handle);
+				Propis propis = handle.get();
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				TransformHelper.transformToPDF(propis, out);
+				return new ByteArrayInputStream(out.toByteArray());
+			}
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		}
@@ -305,11 +317,14 @@ public class RestBean implements RestBeanRemote {
 	@Override
 	public Amandmani getAmendmentsAsXML(String id) {
 		try {
-			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
-			JAXBHandle<Amandmani> handle = new JAXBHandle<>(context);
-			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
-			database.read("/amandmani/" + id, metadata, handle);
-			return handle.get();
+			String url = "/amandmani/" + id;
+			if (database.exists(url)) {
+				JAXBContext context = JAXBContext.newInstance(Amandmani.class.getPackage().getName());
+				JAXBHandle<Amandmani> handle = new JAXBHandle<>(context);
+				DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+				database.read("/amandmani/" + id, metadata, handle);
+				return handle.get();
+			}
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		}
@@ -320,14 +335,17 @@ public class RestBean implements RestBeanRemote {
 	@Override
 	public String getAmendmentsAsHTML(String id) {
 		try {
-			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
-			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
-			JAXBHandle<Amandmani> handle = new JAXBHandle<>(context);
-			database.read("/amandmani/" + id, metadata, handle);
-			Amandmani amandmani = handle.get();
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			TransformHelper.transformToXHTML(amandmani, out);
-			return out.toString("UTF-8");
+			String url = "/amandmani/" + id;
+			if (database.exists(url)) {
+				DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+				JAXBContext context = JAXBContext.newInstance(Amandmani.class.getPackage().getName());
+				JAXBHandle<Amandmani> handle = new JAXBHandle<>(context);
+				database.read("/amandmani/" + id, metadata, handle);
+				Amandmani amandmani = handle.get();
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				TransformHelper.transformToXHTML(amandmani, out);
+				return out.toString("UTF-8");
+			}
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
@@ -339,14 +357,17 @@ public class RestBean implements RestBeanRemote {
 	@Override
 	public InputStream getAmendmentsAsPDF(String id) {
 		try {
-			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
-			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
-			JAXBHandle<Amandmani> handle = new JAXBHandle<>(context);
-			database.read("/amandmani/" + id, metadata, handle);
-			Amandmani amandmani = handle.get();
-			ByteArrayOutputStream out = new ByteArrayOutputStream();
-			TransformHelper.transformToPDF(amandmani, out);
-			return new ByteArrayInputStream(out.toByteArray());
+			String url = "/amandmani/" + id;
+			if (database.exists(url)) {
+				DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+				JAXBContext context = JAXBContext.newInstance(Amandmani.class.getPackage().getName());
+				JAXBHandle<Amandmani> handle = new JAXBHandle<>(context);
+				database.read("/amandmani/" + id, metadata, handle);
+				Amandmani amandmani = handle.get();
+				ByteArrayOutputStream out = new ByteArrayOutputStream();
+				TransformHelper.transformToPDF(amandmani, out);
+				return new ByteArrayInputStream(out.toByteArray());
+			}
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		}
@@ -357,14 +378,17 @@ public class RestBean implements RestBeanRemote {
 	@Override
 	public Amandman getAmendmentAsXML(String id, String aid) {
 		try {
-			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
-			JAXBHandle<Amandmani> handle = new JAXBHandle<>(context);
-			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
-			database.read("/amandmani/" + id, metadata, handle);
-			Amandmani amandmani = handle.get();
-			for (Amandman am : amandmani.getAmandman()) {
-				if (am.getId().equals(id + "/" + aid)) {
-					return am;
+			String url = "/amandmani/" + id;
+			if (database.exists(url)) {
+				JAXBContext context = JAXBContext.newInstance(Amandmani.class.getPackage().getName());
+				JAXBHandle<Amandmani> handle = new JAXBHandle<>(context);
+				DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+				database.read("/amandmani/" + id, metadata, handle);
+				Amandmani amandmani = handle.get();
+				for (Amandman am : amandmani.getAmandman()) {
+					if (am.getId().equals(id + "/" + aid)) {
+						return am;
+					}
 				}
 			}
 		} catch (JAXBException e) {
@@ -377,16 +401,19 @@ public class RestBean implements RestBeanRemote {
 	@Override
 	public String getAmendmentAsHTML(String id, String aid) {
 		try {
-			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
-			JAXBHandle<Amandmani> handle = new JAXBHandle<>(context);
-			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
-			database.read("/amandmani/" + id, metadata, handle);
-			Amandmani amandmani = handle.get();
-			for (Amandman am : amandmani.getAmandman()) {
-				if (am.getId().equals(id + "/" + aid)) {
-					ByteArrayOutputStream out = new ByteArrayOutputStream();
-					TransformHelper.transformToXHTML(am, out);
-					return out.toString("UTF-8");
+			String url = "/amandmani/" + id;
+			if (database.exists(url)) {
+				JAXBContext context = JAXBContext.newInstance(Amandmani.class.getPackage().getName());
+				JAXBHandle<Amandmani> handle = new JAXBHandle<>(context);
+				DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+				database.read("/amandmani/" + id, metadata, handle);
+				Amandmani amandmani = handle.get();
+				for (Amandman am : amandmani.getAmandman()) {
+					if (am.getId().equals(id + "/" + aid)) {
+						ByteArrayOutputStream out = new ByteArrayOutputStream();
+						TransformHelper.transformToXHTML(am, out);
+						return out.toString("UTF-8");
+					}
 				}
 			}
 		} catch (JAXBException e) {
@@ -400,16 +427,19 @@ public class RestBean implements RestBeanRemote {
 	@Override
 	public InputStream getAmendmentAsPDF(String id, String aid) {
 		try {
-			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
-			JAXBHandle<Amandmani> handle = new JAXBHandle<>(context);
-			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
-			database.read("/amandmani/" + id, metadata, handle);
-			Amandmani amandmani = handle.get();
-			for (Amandman am : amandmani.getAmandman()) {
-				if (am.getId().equals(id + "/" + aid)) {
-					ByteArrayOutputStream out = new ByteArrayOutputStream();
-					TransformHelper.transformToPDF(am, out);
-					return new ByteArrayInputStream(out.toByteArray());
+			String url = "/amandmani/" + id;
+			if (database.exists(url)) {
+				JAXBContext context = JAXBContext.newInstance(Amandmani.class.getPackage().getName());
+				JAXBHandle<Amandmani> handle = new JAXBHandle<>(context);
+				DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+				database.read("/amandmani/" + id, metadata, handle);
+				Amandmani amandmani = handle.get();
+				for (Amandman am : amandmani.getAmandman()) {
+					if (am.getId().equals(id + "/" + aid)) {
+						ByteArrayOutputStream out = new ByteArrayOutputStream();
+						TransformHelper.transformToPDF(am, out);
+						return new ByteArrayInputStream(out.toByteArray());
+					}
 				}
 			}
 		} catch (JAXBException e) {

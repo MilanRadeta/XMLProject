@@ -107,35 +107,35 @@
             <xsl:apply-templates />
         </fo:block>
     </xsl:template>
-    <xsl:template match="ns2:Stav//*">
+    <xsl:template match="ns2:Stav/*">
         <xsl:copy>
             <xsl:copy-of select="@*" />
             <xsl:apply-templates />
         </xsl:copy>
     </xsl:template>
-    <xsl:template match="ns2:Stav//text()">
+    <xsl:template match="ns2:Stav/text()">
         <xsl:if test="normalize-space(.)">
             <xsl:value-of select="translate(., $latin, $cyrilic)" />
         </xsl:if>
     </xsl:template>
-    <xsl:template match="ns2:Stav//Tacka">
+    <xsl:template match="ns2:Stav/Tacka">
         <fo:list-block start-indent="12pt" end-indent="12pt">
                 <xsl:apply-templates /> 
             
         </fo:list-block>
     </xsl:template>
-    <xsl:template match="ns2:Tacka//*">
+    <xsl:template match="ns2:Tacka/*">
         <xsl:copy>
             <xsl:copy-of select="@*" />
             <xsl:apply-templates />
         </xsl:copy>
     </xsl:template>
-    <xsl:template match="ns2:Tacka//text()">
+    <xsl:template match="ns2:Tacka/text()">
         <xsl:if test="normalize-space(.)">
             <fo:list-item>
              <fo:list-item-label>
                  <fo:block>
-                     <xsl:value-of select="@ns2:rednaOznaka" />) 
+                     <xsl:value-of select="../@ns2:rednaOznaka" />) 
                  </fo:block>
              </fo:list-item-label>
              <fo:list-item-body>
@@ -144,23 +144,23 @@
             </fo:list-item>
         </xsl:if>
     </xsl:template>
-    <xsl:template match="ns2:Tacka//ns2:Podtacka">
+    <xsl:template match="ns2:Tacka/ns2:Podtacka">
         <fo:list-block start-indent="12pt" end-indent="12pt">
                 <xsl:apply-templates />
         </fo:list-block>
     </xsl:template>
-    <xsl:template match="ns2:Podtacka//*">
+    <xsl:template match="ns2:Podtacka/*">
         <xsl:copy>
             <xsl:copy-of select="@*" />
             <xsl:apply-templates />
         </xsl:copy>
     </xsl:template>
-    <xsl:template match="ns2:Podtacka//text()">
+    <xsl:template match="ns2:Podtacka/text()">
         <xsl:if test="normalize-space(.)">
             <fo:list-item>
              <fo:list-item-label>
                  <fo:block>
-                     (<xsl:value-of select="@ns2:rednaOznaka" />)
+                     (<xsl:value-of select="../@ns2:rednaOznaka" />)
                  </fo:block>
              </fo:list-item-label>
              <fo:list-item-body>
@@ -169,12 +169,12 @@
             </fo:list-item>
         </xsl:if>
     </xsl:template>
-    <xsl:template match="ns2:Podtacka//ns2:Alineja">
+    <xsl:template match="ns2:Podtacka/ns2:Alineja">
         <fo:list-block start-indent="12pt" end-indent="12pt">
             <xsl:apply-templates />
         </fo:list-block>
     </xsl:template>
-    <xsl:template match="ns2:Alineja//text()">
+    <xsl:template match="ns2:Alineja/text()">
         <xsl:if test="normalize-space(.)">
             <fo:list-item>
                 <fo:list-item-label>
@@ -192,10 +192,10 @@
     <xsl:template match="text()" />
     
     <xsl:template match="ns3:Amandmani">
-        <fo:root>
+        <fo:root font-family="Arial">
             <fo:layout-master-set>
                 <fo:simple-page-master
-                    master-name="propis-page"
+                    master-name="amandman-page"
                     page-height="29.7cm"
                     page-width="21cm"
                     margin-top="1cm"
@@ -204,8 +204,8 @@
                     margin-right="2.5cm">>
                     <fo:region-body margin="1in"/>
                 </fo:simple-page-master>
-                <fo:page-sequence-master master-name="amandman-page">
-                    <fo:repeatable-page-master-reference master-reference="propis-page" maximum-repeats="no-limit" />
+                <fo:page-sequence-master master-name="amandman-pages">
+                    <fo:repeatable-page-master-reference master-reference="amandman-page" maximum-repeats="no-limit" />
                 </fo:page-sequence-master>
             </fo:layout-master-set>
             <fo:page-sequence master-reference="amandman-pages" initial-page-number="1" country="rs" language="sr">
@@ -227,10 +227,10 @@
         <xsl:apply-templates />
     </xsl:template>
     <xsl:template match="ns3:Amandman">
-        <fo:root>
+        <fo:root font-family="Arial">
             <fo:layout-master-set>
                 <fo:simple-page-master
-                    master-name="propis-page"
+                    master-name="amandman-page"
                     page-height="29.7cm"
                     page-width="21cm"
                     margin-top="1cm"
@@ -239,8 +239,8 @@
                     margin-right="2.5cm">>
                     <fo:region-body margin="1in"/>
                 </fo:simple-page-master>
-                <fo:page-sequence-master master-name="amandman-page">
-                    <fo:repeatable-page-master-reference master-reference="propis-page" maximum-repeats="no-limit" />
+                <fo:page-sequence-master master-name="amandman-pages">
+                    <fo:repeatable-page-master-reference master-reference="amandman-page" maximum-repeats="no-limit" />
                 </fo:page-sequence-master>
             </fo:layout-master-set>
             <fo:page-sequence master-reference="amandman-pages" initial-page-number="1" country="rs" language="sr">
@@ -250,31 +250,24 @@
             </fo:page-sequence>
         </fo:root>
     </xsl:template>
-    <xsl:template match="ns3:Amandman//*">
-        <xsl:copy>
-            <xsl:copy-of select="@*" />
+    <xsl:template match="ns3:Amandman/text()">
+        <xsl:if test="normalize-space(.)">
+          <fo:block space-after="12pt" space-before="12pt" text-align="justify">
+              <xsl:value-of select="translate(., $latin, $cyrilic)" />    
+          </fo:block>
+        </xsl:if>
+    </xsl:template>
+    <xsl:template match="ns3:Izmena">
+        <fo:block>
             <xsl:apply-templates />
-        </xsl:copy>
-    </xsl:template>
-    <xsl:template match="ns3:Amandman//text()">
-        <fo:block space-after="12pt" space-before="12pt" text-align="justify">
-            <xsl:if test="normalize-space(.)">
-                <xsl:value-of select="translate(., $latin, $cyrilic)" />
-            </xsl:if>
         </fo:block>
     </xsl:template>
-    <xsl:template match="ns3:Amandman//ns3:Izmena">
-        <xsl:apply-templates />
-    </xsl:template>
-    <xsl:template match="ns3:Amandman//ns3:Dopuna">
-        <xsl:apply-templates />
-    </xsl:template>
-    <xsl:template match="ns3:Amandman//ns3:Brisanje">
-        <xsl:apply-templates />
-    </xsl:template>
-    <xsl:template match="ns3:Amandman//ns2:Obrazlozenje"><fo:block text-align="center" font-family="Arial" font-size="18px" font-weight="bold">Образложење</fo:block>
-        <fo:block space-after="12pt" space-before="12pt" text-align="justify">
-            <xsl:value-of select="translate(., $latin, $cyrilic)" />
+    <xsl:template match="ns3:Dopuna">
+        <fo:block>
+            <xsl:apply-templates />
         </fo:block>
+    </xsl:template>
+    <xsl:template match="ns3:Brisanje">
+        <xsl:apply-templates />
     </xsl:template>
 </xsl:stylesheet>

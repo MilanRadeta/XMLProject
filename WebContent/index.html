@@ -26,16 +26,11 @@
 					<h4>Rezultati pretrage</h4>
 					<div data-ng-repeat="result in searchResults">
 						<div>{{result.name}}</div>
-						<button class="btn btn-primary"
-							data-ng-click="openDocument(result)">Otvori</button>
+							<button class="btn btn-primary" data-ng-click="downloadXML(result)">XML</button>
+							<button class="btn btn-primary" data-ng-click="downloadXHTML(result)">XHTML</button>
+							<button class="btn btn-primary" data-ng-click="downloadPDF(result)">PDF</button>
 					</div>
 				</div>
-			</div>
-			<div data-ng-show="document">
-				<button class="btn btn-primary" data-ng-click="downloadXML()">XML</button>
-				<button class="btn btn-primary" data-ng-click="downloadXHTML()">XHTML</button>
-				<button class="btn btn-primary" data-ng-click="downloadPDF()">PDF</button>
-				<h2 data-ng-bind="document.name"></h2>
 			</div>
 			<div data-ng-show="loggedInUser">
 				<h3>Akti i amandmani</h3>
@@ -50,10 +45,18 @@
 							<th>{{myAct.brojPropisa}}</th>
 							<th>{{myAct.Naziv}}</th>
 							<td>&nbsp;</td>
-							<td><button class="btn btn-primary"
-									data-ng-click="openDocument(myAct)">Otvori</button></td>
-							<td><button class="btn btn-primary"
-									data-ng-click="removeAct(myAct)">Povuci</button></td>
+							<td>
+								<button class="btn btn-primary" data-ng-click="downloadXML(myAct)">XML</button>
+							</td>
+							<td>
+								<button class="btn btn-primary" data-ng-click="downloadXHTML(myAct)">XHTML</button>
+							</td>
+							<td>
+								<button class="btn btn-primary" data-ng-click="downloadPDF(myAct)">PDF</button>
+							</td>
+							<td>
+								<button class="btn btn-primary" data-ng-click="removeAct(myAct)">Povuci</button>
+							</td>
 						</tr>
 					</table>
 				</div>
@@ -72,8 +75,15 @@
 							<td>{{myAmendment.type}}</td>
 							<td>{{myAmendment.referenceString}}</td>
 							<td>&nbsp;</td>
-							<td><button class="btn btn-primary"
-									data-ng-click="readAmendment(myAmendment)">Procitaj</button></td>
+							<td>
+								<button class="btn btn-primary" data-ng-click="downloadAmendmentXML(myAmendment)">XML</button>
+							</td>
+							<td>
+								<button class="btn btn-primary" data-ng-click="downloadAmendmentXHTML(myAmendment)">XHTML</button>
+							</td>
+							<td>
+								<button class="btn btn-primary" data-ng-click="downloadAmendmentPDF(myAmendment)">PDF</button>
+							</td>
 							<td><button class="btn btn-primary"
 									data-ng-click="removeAmendment(myAmendment)">Povuci</button></td>
 						</tr>
@@ -150,6 +160,15 @@
 									data-ng-click="createAmendment(act)">Predloži amandman</button></td>
 							<td data-ng-show="act.usernameDonosioca == loggedInUser.username"><button class="btn btn-primary"
 									data-ng-click="removeAct(act)">Povuci</button></td>
+							<td>
+								<button class="btn btn-primary" data-ng-click="downloadXML(act)">XML</button>
+							</td>
+							<td>
+								<button class="btn btn-primary" data-ng-click="downloadXHTML(act)">XHTML</button>
+							</td>
+							<td>
+								<button class="btn btn-primary" data-ng-click="downloadPDF(act)">PDF</button>
+							</td>
 						</tr>
 					</table>
 				</div>

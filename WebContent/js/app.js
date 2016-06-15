@@ -2,7 +2,7 @@
 	// TODO: pravni osnov može da sadrži reference, promeniti šemu
 	app = angular.module('app', []);
 	
-	app.controller("appController", function($scope, $http) {
+	app.controller("appController", function($scope, $http, $window) {
 		$scope.document = null;
 		$scope.username = null;
 		$scope.password = null;
@@ -184,7 +184,6 @@
 				url : "api/act/findAmendmentsBy",
 				params: {username: $scope.loggedInUser.username, notUsvojen: true}
 			}).then(function(response) {
-				console.log(response.data);
 				var myAmendments = response.data;
 				$scope.myAmendments = [];
 				for (var index in myAmendments) {
@@ -385,7 +384,6 @@
 				}
 			}
 			formatParts();
-			$scope.openDocument(act);
 		}
 		
 		var formatId = function(id) {
@@ -410,7 +408,7 @@
 					}
 				}
 				else {
-					if (splits[index].startswith("c")) {
+					if (splits[index].startsWith("c")) {
 						formatString = "Član " + splits[index].substring(1);
 					}
 					else {
@@ -479,9 +477,40 @@
 				$scope.uploadingNewAct = false;
 			});
 		};
+
+		$scope.downloadPropis = function(url) { 
+			$http({
+				method : "GET",
+				url : url,
+				responseType: 'arraybuffer'
+			}).then(function(response) {
+				var type = "";
+				if (response.data == null) {
+					response.data = "Ne postoji dokument";
+				}
+				var file = new Blob([response.data]);
+				var fileURL = URL.createObjectURL(file);
+				$window.open(fileURL);
+			});
+		}
 		
-		$scope.openDocument = function() {
-			//TODO
+		$scope.downloadXML = function(act) {
+			$scope.downloadPropis("api/act/getPropisAsXML/" + act.brojPropisa);
+		};	
+		$scope.downloadXHTML = function(act) {
+			$scope.downloadPropis("api/act/getPropisAsHTML/" + act.brojPropisa);
+		};	
+		$scope.downloadPDF = function(act) {
+			$scope.downloadPropis("api/act/getPropisAsPDF/" + act.brojPropisa);
+		};	
+		$scope.downloadAmendmentXML = function(act) {
+			$scope.downloadPropis("api/act/getAmendmentAsXML/" + act.id);
+		};	
+		$scope.downloadAmendmentXHTML = function(act) {
+			$scope.downloadPropis("api/act/getAmendmentAsHTML/" + act.id);
+		};	
+		$scope.downloadAmendmentPDF = function(act) {
+			$scope.downloadPropis("api/act/getAmendmentAsPDF/" + act.id);
 		};	
 		
 		$scope.login(true);

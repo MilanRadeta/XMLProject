@@ -376,17 +376,20 @@ public class Checker {
 			messages.add("Nedostaje obrazloženje za predlaganje amandmana");
 		} else {
 			if (amandman.getContent().size() == 2) {
+				Object amendmentObject = null;
 				for (Object obj : amandman.getContent()) {
 					switch (obj.getClass().getSimpleName()) {
 					case "Dopuna":
 					case "Izmena":
 					case "Brisanje":
-						checkAmandmanContent(amandman, messages, obj, propis, ElementFinder.findPropisElementById(references, propis));
+						amendmentObject = obj;
 						break;
 					case "JAXBElement":
 						checkString(messages, ((JAXBElement<String>) obj).getValue(), "Nedostaje obrazloženje");
 					}
 				}
+
+				checkAmandmanContent(amandman, messages, amendmentObject, propis, ElementFinder.findPropisElementById(references, propis));
 			} else {
 				Object obj = amandman.getContent().get(0);
 				if (obj instanceof Dopuna || obj instanceof Izmena || obj instanceof Brisanje) {

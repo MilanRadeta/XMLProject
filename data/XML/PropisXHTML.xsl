@@ -98,58 +98,58 @@
             <xsl:apply-templates />
         </p>
     </xsl:template>
-    <xsl:template match="ns2:Stav//*">
+    <xsl:template match="ns2:Stav/*">
         <xsl:copy>
             <xsl:copy-of select="@*" />
             <xsl:apply-templates />
         </xsl:copy>
     </xsl:template>
-    <xsl:template match="ns2:Stav//text()">
+    <xsl:template match="ns2:Stav/text()">
         <xsl:if test="normalize-space(.)">
             <xsl:value-of select="translate(., $latin, $cyrilic)" />
         </xsl:if>
     </xsl:template>
-    <xsl:template match="ns2:Stav//Tacka">
+    <xsl:template match="ns2:Stav/Tacka">
         <a name="{@ns2:id}" />
         <ul style="list-style-type:none">
             <xsl:apply-templates /> 
         </ul>
     </xsl:template>
-    <xsl:template match="ns2:Tacka//*">
+    <xsl:template match="ns2:Tacka/*">
         <xsl:copy>
             <xsl:copy-of select="@*" />
             <xsl:apply-templates />
         </xsl:copy>
     </xsl:template>
-    <xsl:template match="ns2:Tacka//text()">
+    <xsl:template match="ns2:Tacka/text()">
         <xsl:if test="normalize-space(.)">
-            <li><xsl:value-of select="@ns2:rednaOznaka" />) <xsl:copy-of select="translate(., $latin, $cyrilic)" /></li>
+            <li><xsl:value-of select="../@ns2:rednaOznaka" />) <xsl:copy-of select="translate(., $latin, $cyrilic)" /></li>
         </xsl:if>
     </xsl:template>
-    <xsl:template match="ns2:Tacka//ns2:Podtacka">
+    <xsl:template match="ns2:Tacka/ns2:Podtacka">
         <a name="{@ns2:id}" />
         <ul style="list-style-type:none">
             <xsl:apply-templates /> 
         </ul>
     </xsl:template>
-    <xsl:template match="ns2:Podtacka//*">
+    <xsl:template match="ns2:Podtacka/*">
         <xsl:copy>
             <xsl:copy-of select="@*" />
             <xsl:apply-templates />
         </xsl:copy>
     </xsl:template>
-    <xsl:template match="ns2:Podtacka//text()">
+    <xsl:template match="ns2:Podtacka/text()">
         <xsl:if test="normalize-space(.)">
-            <li>(<xsl:value-of select="@ns2:rednaOznaka" />) <xsl:copy-of select="translate(., $latin, $cyrilic)" /></li>
+            <li>(<xsl:value-of select="../@ns2:rednaOznaka" />) <xsl:copy-of select="translate(., $latin, $cyrilic)" /></li>
         </xsl:if>
     </xsl:template>
-    <xsl:template match="ns2:Podtacka//ns2:Alineja">
+    <xsl:template match="ns2:Podtacka/ns2:Alineja">
         <a name="{@ns2:id}" />
         <ul style="list-style-type:none">
             <xsl:apply-templates /> 
         </ul>
     </xsl:template>
-    <xsl:template match="ns2:Alineja//text()">
+    <xsl:template match="ns2:Alineja/text()">
         <xsl:if test="normalize-space(.)">
             <li>- <xsl:value-of select="translate(., $latin, $cyrilic)" /></li>
         </xsl:if>
@@ -188,32 +188,20 @@
             </body>
         </html>
     </xsl:template>
-    <xsl:template match="ns3:Amandman//*">
-        <xsl:copy>
-            <xsl:copy-of select="@*" />
-            <xsl:apply-templates />
-        </xsl:copy>
-    </xsl:template>
-    <xsl:template match="ns3:Amandman//text()">
+    <xsl:template match="ns3:Amandman/text()">
         <p align="justify"> 
            <xsl:if test="normalize-space(.)">
                <xsl:value-of select="translate(., $latin, $cyrilic)" />
            </xsl:if>
         </p>
     </xsl:template>
-    <xsl:template match="ns3:Amandman//ns3:Izmena">
+    <xsl:template match="ns3:Izmena">
         <xsl:apply-templates />
     </xsl:template>
-    <xsl:template match="ns3:Amandman//ns3:Dopuna">
+    <xsl:template match="ns3:Dopuna">
         <xsl:apply-templates />
     </xsl:template>
-    <xsl:template match="ns3:Amandman//ns3:Brisanje">
+    <xsl:template match="ns3:Brisanje">
         <xsl:apply-templates />
-    </xsl:template>
-    <xsl:template match="ns3:Amandman//ns2:Obrazlozenje">
-        <h4 align="center">Образложење</h4>
-        <p align="justify">
-            <xsl:value-of select="translate(., $latin, $cyrilic)" />
-        </p>
     </xsl:template>
 </xsl:stylesheet>
