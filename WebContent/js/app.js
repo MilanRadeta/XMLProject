@@ -154,6 +154,7 @@
 				params: {predlog: true, inProcedure: true}
 			}).then(function(response) {
 				$scope.suggestedActs = response.data;
+				$scope.suggestedActs.removeable = false;
 				$scope.getMyAmendments();
 			});
 		};
@@ -486,7 +487,7 @@
 			}).then(function(response) {
 				var type = "";
 				if (response.data == null) {
-					response.data = "Ne postoji dokument";
+					return;
 				}
 				var file = new Blob([response.data]);
 				var fileURL = URL.createObjectURL(file);
@@ -496,12 +497,15 @@
 		
 		$scope.downloadXML = function(act) {
 			$scope.downloadPropis("api/act/getPropisAsXML/" + act.brojPropisa);
+			$scope.downloadPropis("api/act/getAmendmentsAsXML/" + act.brojPropisa);
 		};	
 		$scope.downloadXHTML = function(act) {
 			$scope.downloadPropis("api/act/getPropisAsHTML/" + act.brojPropisa);
+			$scope.downloadPropis("api/act/getAmendmentsAsHTML/" + act.brojPropisa);
 		};	
 		$scope.downloadPDF = function(act) {
 			$scope.downloadPropis("api/act/getPropisAsPDF/" + act.brojPropisa);
+			$scope.downloadPropis("api/act/getAmendmentsAsPDF/" + act.brojPropisa);
 		};	
 		$scope.downloadAmendmentXML = function(act) {
 			$scope.downloadPropis("api/act/getAmendmentAsXML/" + act.id);
@@ -512,6 +516,30 @@
 		$scope.downloadAmendmentPDF = function(act) {
 			$scope.downloadPropis("api/act/getAmendmentAsPDF/" + act.id);
 		};	
+		
+		$scope.startSession = function(act) {
+			// TODO: get its amendments
+			$scope.actInSession = act;
+		}
+
+		$scope.acceptActGenerally = function() {
+
+			$http({
+				method : "POST",
+				url : "api/act/usvojiPropisUNacelu",
+				data : $scope.actInSession.brojPropisa
+			}).then(function(response) {
+				$scope.actInSession = null;
+				$scope.suggestedActs = [];
+				$scope.getSuggestedActs();
+			});
+		}
+		$scope.dismissAct = function() {
+			// TODO:
+		}
+		$scope.acceptActCompletely = function() {
+			// TODO:
+		}
 		
 		$scope.login(true);
 		$scope.resetAct();

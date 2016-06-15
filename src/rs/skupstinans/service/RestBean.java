@@ -2,7 +2,6 @@ package rs.skupstinans.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
-import java.io.File;
 import java.io.InputStream;
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
@@ -36,6 +35,7 @@ import rs.skupstinans.propis.Propis;
 import rs.skupstinans.session.DatabaseBean;
 import rs.skupstinans.users.Odbornik;
 import rs.skupstinans.users.User;
+import rs.skupstinans.users.UserType;
 import rs.skupstinans.util.Checker;
 import rs.skupstinans.util.ElementConstants;
 import rs.skupstinans.util.ElementFinder;
@@ -64,18 +64,7 @@ public class RestBean implements RestBeanRemote {
 		if (test) {
 			database.clearDatabase();
 		} else {
-			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
-			JAXBContext context;
-			try {
-				context = JAXBContext.newInstance(Propis.class.getPackage().getName());
-				JAXBHandle<Propis> handle = new JAXBHandle<>(context);
-				database.read("/propisi/1", metadata, handle);
-				Propis propis = handle.get();
-				File file = new File("C:/Test.pdf");
-				TransformHelper.transformToPDF(propis, file);
-			} catch (JAXBException e) {
-				e.printStackTrace();
-			}
+			database.test("1");
 		}
 		return stav;
 	}
@@ -87,8 +76,8 @@ public class RestBean implements RestBeanRemote {
 		query.setPredlog(predlog);
 		query.setInProcedure(inProcedure);
 
-		User user = (User) request.getSession().getAttribute("user");
-		if (user != null && user instanceof Odbornik && user.getUsername().equals(username)) {
+		User user = getCurrentUser();
+		if (isUserLoggedIn() && user.getUsername().equals(username)) {
 			query.setUsername(username);
 		}
 		try {
@@ -116,8 +105,8 @@ public class RestBean implements RestBeanRemote {
 		Query query = new Query();
 		query.setType(Query.AMANDMAN);
 		query.setNotUsvojen(notUsvojen);
-		User user = (User) request.getSession().getAttribute("user");
-		if (user != null && user instanceof Odbornik && user.getUsername().equals(username)) {
+		User user = getCurrentUser();
+		if (isUserLoggedIn() && user.getUsername().equals(username)) {
 			query.setUsername(username);
 		}
 		try {
@@ -140,8 +129,8 @@ public class RestBean implements RestBeanRemote {
 
 	public List<String> predlogPropisa(Propis propis) {
 		List<String> retVal = new ArrayList<String>();
-		User user = (User) request.getSession().getAttribute("user");
-		if (user != null && user instanceof Odbornik) {
+		User user = getCurrentUser();
+		if (isUserLoggedIn()) {
 			checker.checkPropis(retVal, propis);
 			propis.setPreciscen(false);
 			propis.setBrojPropisa(new BigInteger("1"));
@@ -169,8 +158,8 @@ public class RestBean implements RestBeanRemote {
 
 	public List<String> predlogAmandmana(@PathParam("id") int propisId, Amandman amandman) {
 		List<String> retVal = new ArrayList<String>();
-		User user = (User) request.getSession().getAttribute("user");
-		if (user != null && user instanceof Odbornik) {
+		User user = getCurrentUser();
+		if (isUserLoggedIn()) {
 			amandman.setId(propisId + "/1");
 
 			try {
@@ -209,16 +198,14 @@ public class RestBean implements RestBeanRemote {
 	}
 
 	public void povuciPredlogPropisa(@PathParam("id") String id) {
-		User user = (User) request.getSession().getAttribute("user");
-		if (user != null && user instanceof Odbornik) {
-			database.deletePropis("/propisi/" + id, user);
+		if (isUserLoggedIn()) {
+			database.deletePropis("/propisi/" + id, getCurrentUser());
 		}
 	}
 
 	public void povuciPredlogAmandmana(@PathParam("id") String id, @PathParam("amendmentId") String amendmentId) {
-		User user = (User) request.getSession().getAttribute("user");
-		if (user != null && user instanceof Odbornik) {
-			database.deleteAmendment(id, amendmentId, user);
+		if (isUserLoggedIn()) {
+			database.deleteAmendment(id, amendmentId, getCurrentUser());
 		}
 	}
 
@@ -233,7 +220,10 @@ public class RestBean implements RestBeanRemote {
 	}
 
 	public void usvojiPropisUNacelu(String id) {
-		// TODO
+		User user = getCurrentUser();
+		if (isUserLoggedIn() && user.getUserType() == UserType.PREDSEDNIK) {
+			database.acceptActGenerally(id);
+		}
 	}
 
 	public void usvojiAmandman(String id) {
@@ -252,8 +242,6 @@ public class RestBean implements RestBeanRemote {
 		// TODO
 	}
 
-	// TODO: check user when needed
-	
 	@Override
 	public Propis getPropisAsXML(String id) {
 		try {
@@ -263,12 +251,26 @@ public class RestBean implements RestBeanRemote {
 				JAXBHandle<Propis> handle = new JAXBHandle<>(context);
 				DocumentMetadataHandle metadata = new DocumentMetadataHandle();
 				database.read(url, metadata, handle);
-				return handle.get();
+				Propis propis = handle.get();
+				if (isPredlogVisible(propis)) {
+					return propis;
+				}
 			}
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private User getCurrentUser() {
+		return (User) request.getSession().getAttribute("user");
+	}
+
+	private boolean isPredlogVisible(Propis propis) {
+		if (propis.getStatus().equals("predlog") && !isUserLoggedIn()) {
+			return false;
+		}
+		return true;
 	}
 
 	@Override
@@ -281,10 +283,12 @@ public class RestBean implements RestBeanRemote {
 				JAXBHandle<Propis> handle = new JAXBHandle<>(context);
 				database.read("/propisi/" + id, metadata, handle);
 				Propis propis = handle.get();
-				ByteArrayOutputStream out = new ByteArrayOutputStream();
-				TransformHelper.transformToXHTML(propis, out);
+				if (isPredlogVisible(propis)) {
+					ByteArrayOutputStream out = new ByteArrayOutputStream();
+					TransformHelper.transformToXHTML(propis, out);
 
-				return out.toString("UTF-8");
+					return out.toString("UTF-8");
+				}
 			}
 		} catch (JAXBException e) {
 			e.printStackTrace();
@@ -292,6 +296,14 @@ public class RestBean implements RestBeanRemote {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	private boolean isUserLoggedIn() {
+		User user = getCurrentUser();
+		if (user != null && user instanceof Odbornik) {
+			return true;
+		}
+		return false;
 	}
 
 	@Override
@@ -304,9 +316,11 @@ public class RestBean implements RestBeanRemote {
 				JAXBHandle<Propis> handle = new JAXBHandle<>(context);
 				database.read("/propisi/" + id, metadata, handle);
 				Propis propis = handle.get();
-				ByteArrayOutputStream out = new ByteArrayOutputStream();
-				TransformHelper.transformToPDF(propis, out);
-				return new ByteArrayInputStream(out.toByteArray());
+				if (isPredlogVisible(propis)) {
+					ByteArrayOutputStream out = new ByteArrayOutputStream();
+					TransformHelper.transformToPDF(propis, out);
+					return new ByteArrayInputStream(out.toByteArray());
+				}
 			}
 		} catch (JAXBException e) {
 			e.printStackTrace();
@@ -318,7 +332,7 @@ public class RestBean implements RestBeanRemote {
 	public Amandmani getAmendmentsAsXML(String id) {
 		try {
 			String url = "/amandmani/" + id;
-			if (database.exists(url)) {
+			if (isUserLoggedIn() && database.exists(url)) {
 				JAXBContext context = JAXBContext.newInstance(Amandmani.class.getPackage().getName());
 				JAXBHandle<Amandmani> handle = new JAXBHandle<>(context);
 				DocumentMetadataHandle metadata = new DocumentMetadataHandle();
@@ -336,7 +350,7 @@ public class RestBean implements RestBeanRemote {
 	public String getAmendmentsAsHTML(String id) {
 		try {
 			String url = "/amandmani/" + id;
-			if (database.exists(url)) {
+			if (isUserLoggedIn() && database.exists(url)) {
 				DocumentMetadataHandle metadata = new DocumentMetadataHandle();
 				JAXBContext context = JAXBContext.newInstance(Amandmani.class.getPackage().getName());
 				JAXBHandle<Amandmani> handle = new JAXBHandle<>(context);
@@ -358,7 +372,7 @@ public class RestBean implements RestBeanRemote {
 	public InputStream getAmendmentsAsPDF(String id) {
 		try {
 			String url = "/amandmani/" + id;
-			if (database.exists(url)) {
+			if (isUserLoggedIn() && database.exists(url)) {
 				DocumentMetadataHandle metadata = new DocumentMetadataHandle();
 				JAXBContext context = JAXBContext.newInstance(Amandmani.class.getPackage().getName());
 				JAXBHandle<Amandmani> handle = new JAXBHandle<>(context);
@@ -379,7 +393,7 @@ public class RestBean implements RestBeanRemote {
 	public Amandman getAmendmentAsXML(String id, String aid) {
 		try {
 			String url = "/amandmani/" + id;
-			if (database.exists(url)) {
+			if (isUserLoggedIn() && database.exists(url)) {
 				JAXBContext context = JAXBContext.newInstance(Amandmani.class.getPackage().getName());
 				JAXBHandle<Amandmani> handle = new JAXBHandle<>(context);
 				DocumentMetadataHandle metadata = new DocumentMetadataHandle();
@@ -402,7 +416,7 @@ public class RestBean implements RestBeanRemote {
 	public String getAmendmentAsHTML(String id, String aid) {
 		try {
 			String url = "/amandmani/" + id;
-			if (database.exists(url)) {
+			if (isUserLoggedIn() && database.exists(url)) {
 				JAXBContext context = JAXBContext.newInstance(Amandmani.class.getPackage().getName());
 				JAXBHandle<Amandmani> handle = new JAXBHandle<>(context);
 				DocumentMetadataHandle metadata = new DocumentMetadataHandle();
@@ -428,7 +442,7 @@ public class RestBean implements RestBeanRemote {
 	public InputStream getAmendmentAsPDF(String id, String aid) {
 		try {
 			String url = "/amandmani/" + id;
-			if (database.exists(url)) {
+			if (isUserLoggedIn() && database.exists(url)) {
 				JAXBContext context = JAXBContext.newInstance(Amandmani.class.getPackage().getName());
 				JAXBHandle<Amandmani> handle = new JAXBHandle<>(context);
 				DocumentMetadataHandle metadata = new DocumentMetadataHandle();

@@ -12,7 +12,6 @@
 <body>
 	<div data-ng-app="app" data-ng-controller="appController">
 		<div class="container">
-			<h2>Meni</h2>
 			<div>
 				<button class="btn btn-primary" data-ng-click="test()">Test</button>
 				<button data-ng-show="loggedInUser" class="btn btn-primary" data-ng-click="logout()">Logout</button>
@@ -155,8 +154,6 @@
 							<td data-ng-show="act.status == 'predlog'">NE</td>
 							<td data-ng-show="act.status == 'usvojen u nacelu'">DA</td>
 							<td><button class="btn btn-primary"
-									data-ng-click="openDocument(act)">Otvori</button></td>
-							<td><button class="btn btn-primary"
 									data-ng-click="createAmendment(act)">Predloži amandman</button></td>
 							<td data-ng-show="act.usernameDonosioca == loggedInUser.username"><button class="btn btn-primary"
 									data-ng-click="removeAct(act)">Povuci</button></td>
@@ -249,6 +246,103 @@
 								{{errorMessage}}</div>
 					</form>
 				</div>
+			</div>
+			
+			<div data-ng-show="loggedInUser.userType == 'PREDSEDNIK'">
+				<h3>Sednica</h3>
+				<div data-ng-show="actInSession">
+					<h4>Pretres dokumenta</h4>
+					<table class="table-condensed">
+						<tr>
+							<th>Broj propisa:</th>
+							<td>{{actInSession.brojPropisa}}</td>
+						</tr>
+						<tr>
+							<th>Naziv propisa:</th>
+							<td>{{actInSession.Naziv}}</td>
+						</tr>
+						<tr>
+							<th>Status propisa:</th>
+							<td>{{actInSession.status | uppercase}}</td>
+						</tr>
+						<!-- tr>
+							<th>Datum predlaganja:</th>
+							<td>{{actInSession.datumPredlaganjaPropisa}}</td>
+						</tr -->
+						<tr>
+							<td></td>
+							<td></td>
+							<td>
+								<button class="btn btn-primary" data-ng-click="downloadXML(actInSession)">XML</button>
+							</td>
+							<td>
+								<button class="btn btn-primary" data-ng-click="downloadXHTML(actInSession)">XHTML</button>
+							</td>
+							<td>
+								<button class="btn btn-primary" data-ng-click="downloadPDF(actInSession)">PDF</button>
+							</td>
+						</tr>
+						<tr data-ng-show="actInSession.status == 'predlog'">
+							<td>
+								<button class="btn btn-primary" data-ng-click="acceptActGenerally()">Načelno usvoji</button>
+							</td>
+							<td>
+								<button class="btn btn-primary" data-ng-click="dismissAct()">Odbaci</button>
+							</td>
+						</tr>
+						<tr data-ng-show="(actInSession.status != 'predlog') && (!actInSession.amendments || actInSession.amendments.length == 0)">
+							<td>
+								<button class="btn btn-primary" data-ng-click="previewActCompletely()">Pregledaj izmenjen akt</button>
+							</td>
+						</tr>
+						<tr data-ng-show="(actInSession.status != 'predlog') && (!actInSession.amendments || actInSession.amendments.length == 0)">
+							<td>
+								<button class="btn btn-primary" data-ng-click="acceptActCompletely()">Usvoji u celosti</button>
+							</td>
+							<td>
+								<button class="btn btn-primary" data-ng-click="dismissAct()">Odbaci</button>
+							</td>
+						</tr>
+						
+					</table>
+					<table class="table-condensed" data-ng-show="actInSession.amendments.length > 0">
+						<tr>
+							<th colspan="3">Amandmani</th>
+						</tr>
+						<tr>
+							<th>Redni broj amandmana</th>
+							<th>Odredba na koju utiče</th>
+							<th>Tip amandmana</th>
+							<th>Usvaja se</th>
+							<th>Odbacuje se</th>
+						</tr>
+						<tr data-ng-repeat="amendment in actInSession.amendments track by $index">
+							<td>{{$index + 1}}</td>
+							<td>{{formatId()</td>
+							<td>
+								<button class="btn btn-primary" data-ng-click="acceptActCompletely()">Usvoji u celosti</button>
+							</td>
+						</tr>
+					</table>
+				</div>
+				<table data-ng-hide="actInSession" class="table-condensed">
+					<tr>
+						<th>Broj propisa</th>
+						<th>Naziv propisa</th>
+						<th>Status</th>
+						<!-- th>Datum predlaganja</th -->
+					</tr>
+					<tr data-ng-repeat="act in suggestedActs">
+						<td>{{act.brojPropisa}}</td>
+						<td>{{act.Naziv}}</td>
+						<td>{{act.status | uppercase}}</td>
+						<!-- td>{{act.datumPredlaganjaPropisa}}</td -->
+						<td>
+							<button class="btn btn-primary"
+								data-ng-click="startSession(act)">Pretresi</button>
+						</td>
+					</tr>
+				</table>
 			</div>
 		</div>
 		<div class="container" data-ng-hide="loggedInUser">

@@ -232,7 +232,7 @@ public class DatabaseBean {
 	public boolean exists(String URI) {
 		return xmlManager.exists(URI) != null;
 	}
-	
+
 	public void read(String URI, DocumentMetadataHandle metadata, JAXBHandle<? extends Object> handle) {
 		xmlManager.read(URI, metadata, handle);
 	}
@@ -319,6 +319,39 @@ public class DatabaseBean {
 		}
 
 		return retVal;
+	}
+
+	public void acceptActGenerally(String propisId) {
+		try {
+			Transaction t = createTransaction();
+			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
+			JAXBHandle<Propis> handle = new JAXBHandle<>(context);
+			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+			read("/propisi/" + propisId, metadata, handle, t);
+			Propis propis = handle.get();
+			propis.setStatus("usvojen u nacelu");
+			write("/propisi/" + propisId, propis, t);
+			commitTransaction(t);
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
+	}
+
+
+	public void test(String propisId) {
+		try {
+			Transaction t = createTransaction();
+			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
+			JAXBHandle<Propis> handle = new JAXBHandle<>(context);
+			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+			read("/propisi/" + propisId, metadata, handle, t);
+			Propis propis = handle.get();
+			propis.setStatus("predlog");
+			write("/propisi/" + propisId, propis, t);
+			commitTransaction(t);
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
