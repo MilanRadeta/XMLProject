@@ -24,5 +24,15 @@
   <!-- Use file name nl_Bel instead of the default nl_BE -->
   <hyphenation-pattern lang="nl" country="BE">nl_Bel</hyphenation-pattern>
 
+	<renderers>
+	    <renderer mime="application/pdf">       
+	      <fonts>                           
+	            <font kerning="yes"  embed-url="./arial.ttf">
+                  <font-triplet name="Arial" style="normal" weight="normal"/>
+                </font>                     
+	        </fonts>
+	    </renderer>
+	  </renderers>
+
   <!-- etc. etc..... -->
 </fop>

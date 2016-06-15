@@ -18,10 +18,10 @@
                 <meta charset="utf-8" />
                 <title><xsl:value-of select="translate(translate(ns2:Naziv, $smallcase, $uppercase), $latin, $cyrilic)" /></title>
             </head>
-            <body>
+            <body style="margin:50px">
                 <xsl:apply-templates select="ns1:Preambula" />
                 <xsl:apply-templates select="ns2:Obrazlozenje" />
-                <h1>
+                <h1 align="center">
                     <xsl:value-of select="translate(translate(ns2:Naziv, $smallcase, $uppercase), $latin, $cyrilic)"></xsl:value-of>
                 </h1>
                 <xsl:apply-templates select="ns2:Deo" />
@@ -31,46 +31,45 @@
         </html>
     </xsl:template>
     <xsl:template match="ns1:Preambula">
-        <p>
+        <p align="justify">
             <xsl:value-of select="translate(ns1:PravniOsnov, $latin, $cyrilic)" />,
+            <xsl:apply-templates select="ns1:Saglasnost" />
         </p>
-        <xsl:apply-templates select="ns1:Saglasnost" />
-        <p>
+        <p align="justify">
             <xsl:value-of select="translate(ns1:DonosilacPropisa/ns2:Naziv, $latin, $cyrilic)" />
             доноси
         </p>
     </xsl:template>
     <xsl:template match="ns2:Obrazlozenje">
-        <h4>Образложење</h4>
-        <p>
+        <h4 align="center">Образложење</h4>
+        <p align="justify">
             <xsl:value-of select="translate(., $latin, $cyrilic)" />
         </p>
     </xsl:template>
     <xsl:template match="ns1:Saglasnost">
-        <p>
-        , уз сагласност коју доноси
-        <xsl:value-of select="translate(ns2:Naziv, $latin, $cyrilic)" />
-        са следећом назнаком
-            <p>
-                <xsl:value-of select="translate(ns1:Naznaka, $latin, $cyrilic)" />
-            </p>
-        </p>
+      , уз сагласност коју доноси
+      <xsl:value-of select="translate(ns2:Naziv, $latin, $cyrilic)" />
+      са следећом назнаком
+      <p align="justify">
+          <xsl:value-of select="translate(ns1:Naznaka, $latin, $cyrilic)" />
+      </p>
+        
     </xsl:template>
     <xsl:template match="ns2:Clan">
         <a name="{@ns2:id}" />
-        <h2><xsl:value-of select="translate(ns2:Naziv, $latin, $cyrilic)"></xsl:value-of></h2>
-        <h2>Члан <xsl:value-of select="@ns2:rednaOznaka" />.</h2>
+        <h2 align="center"><xsl:value-of select="translate(ns2:Naziv, $latin, $cyrilic)" /></h2>
+        <h2 align="center">Члан <xsl:value-of select="@ns2:rednaOznaka" />.</h2>
         <xsl:apply-templates select="ns2:Stav" />
     </xsl:template>
     <xsl:template match="ns2:Deo">
         <a name="{@ns2:id}" />
-        <h2>Део <xsl:value-of select="translate(@ns2:rednaOznaka, $latin, $cyrilic)" /></h2>
-        <h2><xsl:value-of select="translate(translate(ns2:Naziv, $latin, $cyrilic), $smallcase, $uppercase)" /></h2>
+        <h2 align="center">Део <xsl:value-of select="translate(@ns2:rednaOznaka, $latin, $cyrilic)" /></h2>
+        <h2 align="center"><xsl:value-of select="translate(translate(ns2:Naziv, $latin, $cyrilic), $smallcase, $uppercase)" /></h2>
         <xsl:apply-templates select="ns2:Glava" />
     </xsl:template>
     <xsl:template match="ns2:Glava">
         <a name="{@ns2:id}" />
-        <h2>
+        <h2 align="center">
             <xsl:value-of select="@ns2:rednaOznaka" />.
             <xsl:value-of select="translate(translate(ns2:Naziv, $latin, $cyrilic), $smallcase, $uppercase)" />
         </h2>
@@ -79,7 +78,7 @@
     </xsl:template>
     <xsl:template match="ns2:Odeljak">
         <a name="{@ns2:id}" />
-        <h2>
+        <h2 align="center">
             <xsl:value-of select="@ns2:rednaOznaka" />.
             <xsl:value-of select="translate(ns2:Naziv, $latin, $cyrilic)"/>
         </h2>
@@ -88,14 +87,14 @@
     </xsl:template>
     <xsl:template match="ns2:Pododeljak">
         <a name="{@ns2:id}" />
-        <h2>
+        <h2 align="center">
             <xsl:value-of select="translate(@ns2:rednaOznaka, $latin, $cyrilic)" />) <xsl:value-of select="translate(ns2:Naziv, $latin, $cyrilic)" />
         </h2>
         <xsl:apply-templates select="ns2:Clan" />
     </xsl:template>
     <xsl:template match="ns2:Stav">
         <a name="{@ns2:id}" />
-        <p>
+        <p align="justify">
             <xsl:apply-templates />
         </p>
     </xsl:template>
@@ -164,8 +163,8 @@
                 <meta charset="utf-8" />
                 <title><xsl:value-of select="translate(translate(ns2:Naziv, $smallcase, $uppercase), $latin, $cyrilic)" /></title>
             </head>
-            <body>
-                <h1>
+            <body style="margin:50px">
+                <h1 align="center">
                     <xsl:value-of select="translate(translate(ns2:Naziv, $smallcase, $uppercase), $latin, $cyrilic)"></xsl:value-of>
                 </h1>
                 <xsl:apply-templates select="ns3:Amandman" />
@@ -174,9 +173,20 @@
     </xsl:template>
     
     
-    <xsl:template match="ns3:Amandman">
-        <h2>АМАНДМАН <xsl:number format="I"/>.</h2>
+    <xsl:template match="ns3:Amandmani/ns3:Amandman">
+        <h2 align="center">АМАНДМАН <xsl:number format="I"/>.</h2>
         <xsl:apply-templates />
+    </xsl:template>
+    <xsl:template match="ns3:Amandman">
+        <html>
+            <head>
+                <meta charset="utf-8" />
+                <title><xsl:value-of select="translate(translate(ns2:Naziv, $smallcase, $uppercase), $latin, $cyrilic)" /></title>
+            </head>
+            <body style="margin:50px">
+                <xsl:apply-templates />
+            </body>
+        </html>
     </xsl:template>
     <xsl:template match="ns3:Amandman//*">
         <xsl:copy>
@@ -185,7 +195,7 @@
         </xsl:copy>
     </xsl:template>
     <xsl:template match="ns3:Amandman//text()">
-        <p> 
+        <p align="justify"> 
            <xsl:if test="normalize-space(.)">
                <xsl:value-of select="translate(., $latin, $cyrilic)" />
            </xsl:if>
@@ -201,8 +211,8 @@
         <xsl:apply-templates />
     </xsl:template>
     <xsl:template match="ns3:Amandman//ns2:Obrazlozenje">
-        <h4>Образложење</h4>
-        <p>
+        <h4 align="center">Образложење</h4>
+        <p align="justify">
             <xsl:value-of select="translate(., $latin, $cyrilic)" />
         </p>
     </xsl:template>

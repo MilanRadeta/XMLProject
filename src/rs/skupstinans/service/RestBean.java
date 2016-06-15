@@ -1,11 +1,6 @@
 package rs.skupstinans.service;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -61,23 +56,22 @@ public class RestBean implements RestBeanRemote {
 	private Checker checker;
 
 	public Stav test(Stav stav) {
-		DocumentMetadataHandle metadata = new DocumentMetadataHandle();
-		JAXBContext context;
-		try {
-			context = JAXBContext.newInstance(Propis.class.getPackage().getName());
-			JAXBHandle<Propis> handle = new JAXBHandle<>(context);
-			database.read("/propisi/1", metadata, handle);
-			Propis propis = handle.get();
-			File file = new File("C:/Test.html");
-			OutputStream out = new BufferedOutputStream(new FileOutputStream(file));
-			TransformHelper.transformToXHTML(propis, out);
-			out.close();
-		} catch (JAXBException e) {
-			e.printStackTrace();
-		} catch (FileNotFoundException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+		boolean test = false;
+		if (test) {
+			database.clearDatabase();
+		} else {
+			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+			JAXBContext context;
+			try {
+				context = JAXBContext.newInstance(Propis.class.getPackage().getName());
+				JAXBHandle<Propis> handle = new JAXBHandle<>(context);
+				database.read("/propisi/1", metadata, handle);
+				Propis propis = handle.get();
+				File file = new File("C:/Test.pdf");
+				TransformHelper.transformToPDF(propis, file);
+			} catch (JAXBException e) {
+				e.printStackTrace();
+			}
 		}
 		return stav;
 	}
@@ -202,11 +196,12 @@ public class RestBean implements RestBeanRemote {
 				e.printStackTrace();
 			}
 
-		}else
+		} else
 
-	{
-		retVal.add("Zabranjena akcija");
-	}return retVal;
+		{
+			retVal.add("Zabranjena akcija");
+		}
+		return retVal;
 	}
 
 	public void povuciPredlogPropisa(@PathParam("id") String id) {

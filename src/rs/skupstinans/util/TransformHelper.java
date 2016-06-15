@@ -67,7 +67,6 @@ public abstract class TransformHelper {
 	}
 
 	public static void transformToPDF(Object obj, File file) {
-		// TODO: make xsl for pdf
 		try {
 			String xslFilepath = TransformHelper.class.getClassLoader().getResource("PropisPDF.xsl").getPath();
 			
@@ -83,7 +82,7 @@ public abstract class TransformHelper {
 			Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, userAgent, outStream);
 			Result res = new SAXResult(fop.getDefaultHandler());
 			xslFoTransformer.transform(source, res);
-			
+
 			OutputStream out = new BufferedOutputStream(new FileOutputStream(file));
 			out.write(outStream.toByteArray());
 			out.close();
@@ -103,7 +102,6 @@ public abstract class TransformHelper {
 	}
 
 	public static <T> void transformToXHTML(Object obj, OutputStream out) {
-		// TODO: make xsl
 		try {
 			String xslFilepath = TransformHelper.class.getClassLoader().getResource("PropisXHTML.xsl").getPath();
 
@@ -113,7 +111,7 @@ public abstract class TransformHelper {
 			File xsltFile = new File(xslFilepath);
 			StreamSource transformSource = new StreamSource(xsltFile);
 			Transformer xslTransformer = transformerFactory.newTransformer(transformSource);
-			StreamResult result = new StreamResult(System.out);
+			StreamResult result = new StreamResult(out);
 			xslTransformer.transform(source, result);
 		} catch (TransformerConfigurationException e) {
 			e.printStackTrace();
