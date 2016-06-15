@@ -1,6 +1,10 @@
 package rs.skupstinans.service;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
@@ -249,57 +253,169 @@ public class RestBean implements RestBeanRemote {
 	}
 
 	@Override
-	public void getPropisAsXML(String id) {
-		// TODO Auto-generated method stub
+	public Propis getPropisAsXML(String id) {
+		try {
+			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
+			JAXBHandle<Propis> handle = new JAXBHandle<>(context);
+			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+			database.read("/propisi/" + id, metadata, handle);
+			return handle.get();
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public String getPropisAsHTML(String id) {
+		try {
+			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
+			JAXBHandle<Propis> handle = new JAXBHandle<>(context);
+			database.read("/propisi/" + id, metadata, handle);
+			Propis propis = handle.get();
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			TransformHelper.transformToXHTML(propis, out);
+			return out.toString("UTF-8");
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public InputStream getPropisAsPDF(String id) {
+		try {
+			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
+			JAXBHandle<Propis> handle = new JAXBHandle<>(context);
+			database.read("/propisi/" + id, metadata, handle);
+			Propis propis = handle.get();
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			TransformHelper.transformToPDF(propis, out);
+			return new ByteArrayInputStream(out.toByteArray());
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public Amandmani getAmendmentsAsXML(String id) {
+		try {
+			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
+			JAXBHandle<Amandmani> handle = new JAXBHandle<>(context);
+			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+			database.read("/amandmani/" + id, metadata, handle);
+			return handle.get();
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
+		return null;
 
 	}
 
 	@Override
-	public void getPropisAsHTML(String id) {
-		// TODO Auto-generated method stub
+	public String getAmendmentsAsHTML(String id) {
+		try {
+			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
+			JAXBHandle<Amandmani> handle = new JAXBHandle<>(context);
+			database.read("/amandmani/" + id, metadata, handle);
+			Amandmani amandmani = handle.get();
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			TransformHelper.transformToXHTML(amandmani, out);
+			return out.toString("UTF-8");
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	@Override
+	public InputStream getAmendmentsAsPDF(String id) {
+		try {
+			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
+			JAXBHandle<Amandmani> handle = new JAXBHandle<>(context);
+			database.read("/amandmani/" + id, metadata, handle);
+			Amandmani amandmani = handle.get();
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			TransformHelper.transformToPDF(amandmani, out);
+			return new ByteArrayInputStream(out.toByteArray());
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
+		return null;
 
 	}
 
 	@Override
-	public void getPropisAsPDF(String id) {
-		// TODO Auto-generated method stub
+	public Amandman getAmendmentAsXML(String id, String aid) {
+		try {
+			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
+			JAXBHandle<Amandmani> handle = new JAXBHandle<>(context);
+			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+			database.read("/amandmani/" + id, metadata, handle);
+			Amandmani amandmani = handle.get();
+			for (Amandman am : amandmani.getAmandman()) {
+				if (am.getId().equals(id + "/" + aid)) {
+					return am;
+				}
+			}
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
+		return null;
 
 	}
 
 	@Override
-	public void getAmendmentsAsXML(String id) {
-		// TODO Auto-generated method stub
-
+	public String getAmendmentAsHTML(String id, String aid) {
+		try {
+			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
+			JAXBHandle<Amandmani> handle = new JAXBHandle<>(context);
+			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+			database.read("/amandmani/" + id, metadata, handle);
+			Amandmani amandmani = handle.get();
+			for (Amandman am : amandmani.getAmandman()) {
+				if (am.getId().equals(id + "/" + aid)) {
+					ByteArrayOutputStream out = new ByteArrayOutputStream();
+					TransformHelper.transformToXHTML(am, out);
+					return out.toString("UTF-8");
+				}
+			}
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	@Override
-	public void getAmendmentsAsHTML(String id) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void getAmendmentsAsPDF(String id) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void getAmendmentAsXML(String id, String aid) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void getAmendmentAsHTML(String id, String aid) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void getAmendmentAsPDF(String id, String aid) {
-		// TODO Auto-generated method stub
-
+	public InputStream getAmendmentAsPDF(String id, String aid) {
+		try {
+			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
+			JAXBHandle<Amandmani> handle = new JAXBHandle<>(context);
+			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+			database.read("/amandmani/" + id, metadata, handle);
+			Amandmani amandmani = handle.get();
+			for (Amandman am : amandmani.getAmandman()) {
+				if (am.getId().equals(id + "/" + aid)) {
+					ByteArrayOutputStream out = new ByteArrayOutputStream();
+					TransformHelper.transformToPDF(am, out);
+					return new ByteArrayInputStream(out.toByteArray());
+				}
+			}
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 }

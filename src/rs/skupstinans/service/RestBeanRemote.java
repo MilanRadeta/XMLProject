@@ -1,5 +1,6 @@
 package rs.skupstinans.service;
 
+import java.io.InputStream;
 import java.util.List;
 
 import javax.ejb.Remote;
@@ -14,6 +15,7 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.MediaType;
 
 import rs.skupstinans.amandman.Amandman;
+import rs.skupstinans.amandman.Amandmani;
 import rs.skupstinans.elementi.Stav;
 import rs.skupstinans.propis.Propis;
 
@@ -99,45 +101,45 @@ public interface RestBeanRemote {
 	@GET
 	@Path("/getPropisAsXML/{id}")
 	@Produces(MediaType.APPLICATION_XML)
-	public void getPropisAsXML(@QueryParam("id") String id);
+	public Propis getPropisAsXML(@PathParam("id") String id);
 
 	@GET
 	@Path("/getPropisAsHTML/{id}")
 	@Produces(MediaType.TEXT_HTML)
-	public void getPropisAsHTML(@QueryParam("id") String id);
+	public String getPropisAsHTML(@PathParam("id") String id);
 
 	@GET
 	@Path("/getPropisAsPDF/{id}")
 	@Produces("application/pdf")
-	public void getPropisAsPDF(@QueryParam("id") String id);
+	public InputStream getPropisAsPDF(@PathParam("id") String id);
 
 	@GET
 	@Path("/getAmendmentsAsXML/{id}")
 	@Produces(MediaType.APPLICATION_XML)
-	public void getAmendmentsAsXML(@QueryParam("id") String id);
+	public Amandmani getAmendmentsAsXML(@PathParam("id") String id);
 
 	@GET
 	@Path("/getAmendmentsAsHTML/{id}")
 	@Produces(MediaType.TEXT_HTML)
-	public void getAmendmentsAsHTML(@QueryParam("id") String id);
+	public String getAmendmentsAsHTML(@PathParam("id") String id);
 
 	@GET
 	@Path("/getAmendmentsAsPDF/{id}")
 	@Produces("application/pdf")
-	public void getAmendmentsAsPDF(@QueryParam("id") String id);
+	public InputStream getAmendmentsAsPDF(@PathParam("id") String id);
 
 	@GET
 	@Path("/getAmendmentAsXML/{id}/{aid}")
 	@Produces(MediaType.APPLICATION_XML)
-	public void getAmendmentAsXML(@QueryParam("id") String id, @QueryParam("aid") String aid);
+	public Amandman getAmendmentAsXML(@PathParam("id") String id, @PathParam("aid") String aid);
 
 	@GET
 	@Path("/getAmendmentAsHTML/{id}/{aid}")
 	@Produces(MediaType.TEXT_HTML)
-	public void getAmendmentAsHTML(@QueryParam("id") String id, @QueryParam("aid") String aid);
+	public String getAmendmentAsHTML(@PathParam("id") String id, @PathParam("aid") String aid);
 
 	@GET
 	@Path("/getAmendmentAsPDF/{id}/{aid}")
 	@Produces("application/pdf")
-	public void getAmendmentAsPDF(@QueryParam("id") String id, @QueryParam("aid") String aid);
+	public InputStream getAmendmentAsPDF(@PathParam("id") String id, @PathParam("aid") String aid);
 }

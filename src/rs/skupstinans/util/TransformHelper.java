@@ -100,6 +100,31 @@ public abstract class TransformHelper {
 			e.printStackTrace();
 		}
 	}
+	public static void transformToPDF(Object obj, OutputStream outStream) {
+		try {
+			String xslFilepath = TransformHelper.class.getClassLoader().getResource("PropisPDF.xsl").getPath();
+			
+			JAXBContext context = JAXBContext.newInstance(obj.getClass().getPackage().getName());
+			JAXBSource source = new JAXBSource(context, obj);
+
+			File xsltFile = new File(xslFilepath);
+			StreamSource transformSource = new StreamSource(xsltFile);
+			
+			FOUserAgent userAgent = fopFactory.newFOUserAgent();
+			Transformer xslFoTransformer = transformerFactory.newTransformer(transformSource);
+			Fop fop = fopFactory.newFop(MimeConstants.MIME_PDF, userAgent, outStream);
+			Result res = new SAXResult(fop.getDefaultHandler());
+			xslFoTransformer.transform(source, res);
+		} catch (TransformerConfigurationException e) {
+			e.printStackTrace();
+		} catch (FOPException e) {
+			e.printStackTrace();
+		} catch (TransformerException e) {
+			e.printStackTrace();
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public static <T> void transformToXHTML(Object obj, OutputStream out) {
 		try {
