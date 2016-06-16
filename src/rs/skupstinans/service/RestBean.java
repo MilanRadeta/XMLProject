@@ -69,17 +69,8 @@ public class RestBean implements RestBeanRemote {
 		return stav;
 	}
 
-	public List<Propis> findBy(@QueryParam("username") String username, @QueryParam("predlog") boolean predlog,
-			@QueryParam("inProcedure") boolean inProcedure) {
-		List<Propis> propisi = new ArrayList<>();
-		Query query = new Query();
-		query.setPredlog(predlog);
-		query.setInProcedure(inProcedure);
-
-		User user = getCurrentUser();
-		if (isUserLoggedIn() && user.getUsername().equals(username)) {
-			query.setUsername(username);
-		}
+	public List<Propis> search(Query query) {
+		List<Propis> retVal = new ArrayList<>();
 		try {
 			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
 			JAXBHandle<Propis> handle = new JAXBHandle<>(context);
@@ -89,13 +80,26 @@ public class RestBean implements RestBeanRemote {
 				MatchDocumentSummary[] summaries = results.getMatchResults();
 				for (MatchDocumentSummary summary : summaries) {
 					database.read(summary.getUri(), metadata, handle);
-					propisi.add(handle.get());
+					retVal.add(handle.get());
 				}
 			}
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		}
-		return propisi;
+		return retVal;
+	}
+	
+	public List<Propis> findBy(@QueryParam("username") String username, @QueryParam("predlog") boolean predlog,
+			@QueryParam("inProcedure") boolean inProcedure) {
+		Query query = new Query();
+		query.setPredlog(predlog);
+		query.setInProcedure(inProcedure);
+
+		User user = getCurrentUser();
+		if (isUserLoggedIn() && user.getUsername().equals(username)) {
+			query.setUsername(username);
+		}
+		return search(query);
 	}
 
 	public List<Amandman> findBy(@QueryParam("username") String username,

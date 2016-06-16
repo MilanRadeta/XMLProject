@@ -3,6 +3,7 @@ package rs.skupstinans.session;
 import java.io.IOException;
 import java.math.BigInteger;
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -14,6 +15,9 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
 import javax.xml.transform.dom.DOMResult;
 
 import org.w3c.dom.Document;
@@ -487,6 +491,14 @@ public class DatabaseBean {
 			propis.setPreambula(preambula);
 			propis.setObrazlozenje(null);
 			propis.setStatus("usvojen u celosti");
+			GregorianCalendar gcal = new GregorianCalendar();
+			XMLGregorianCalendar xgcal;
+			try {
+				xgcal = DatatypeFactory.newInstance().newXMLGregorianCalendar(gcal);
+				propis.setDatumUsvajanjaPropisa(xgcal);
+			} catch (DatatypeConfigurationException e) {
+				e.printStackTrace();
+			}
 			write("/propisi/" + propisId, "/usvojeni", propis, t);
 			commitTransaction(t);
 		} catch (JAXBException e) {

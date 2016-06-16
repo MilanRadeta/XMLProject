@@ -18,10 +18,17 @@ import rs.skupstinans.amandman.Amandman;
 import rs.skupstinans.amandman.Amandmani;
 import rs.skupstinans.elementi.Stav;
 import rs.skupstinans.propis.Propis;
+import rs.skupstinans.util.Query;
 
 @Remote
 public interface RestBeanRemote {
 
+	@GET
+	@Path("/search")
+	@Consumes(MediaType.APPLICATION_JSON)
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Propis> search(Query query);
+	
 	@POST
 	@Path("/test")
 	@Consumes(MediaType.APPLICATION_XML)
