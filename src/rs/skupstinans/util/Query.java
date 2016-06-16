@@ -1,5 +1,7 @@
 package rs.skupstinans.util;
 
+import java.util.Date;
+
 import javax.xml.bind.annotation.XmlSchema;
 import javax.xml.namespace.QName;
 
@@ -22,6 +24,22 @@ public class Query {
 	private boolean notUsvojen = true;
 	private String text;
 
+	private String naziv;
+	private String brojGlasila;
+	private String status;
+	private Date datumAcceptedOd;
+	private Date datumAcceptedDo;
+	private Date datumReleasedOd;
+	private Date datumReleasedDo;
+	private Date datumVazenjaOd;
+	private Date datumVazenjaDo;
+	private Date datumPrimenaOd;
+	private Date datumPrimenaDo;
+	private Date datumStupanjeOd;
+	private Date datumStupanjeDo;
+	private Date datumPredlogOd;
+	private Date datumPredlogDo;
+	
 	public String getUsername() {
 		return username;
 	}
@@ -106,6 +124,25 @@ public class Query {
 			queryDef = boostQuery(queryDef, boostQuery, qb);
 		}
 
+
+		if (naziv != null && !naziv.equals("")) {
+			String namespace = clanNamespace;
+			String elementName = "Naziv";
+			String[] splits = naziv.split(" ");
+			boostQuery = null;
+			for (String split : splits) {
+				split = split.trim();
+				if (boostQuery != null) {
+					boostQuery = qb.and(qb.word(qb.element(new QName(namespace, elementName)), split));
+				}
+				else {
+					boostQuery = qb.word(qb.element(new QName(namespace, elementName)), split);
+				}
+			}
+			queryDef = boostQuery(queryDef, boostQuery, qb);
+		}
+		
+		
 		if (brojPropisa != -1) {
 			String namespace = propisNamespace;
 			String elementName = "Propis";
@@ -131,6 +168,7 @@ public class Query {
 			}
 
 			if (inProcedure) {
+				System.out.println("IN PROCEDURE");
 				if (statusQuery != null) {
 					statusQuery = qb.or(statusQuery,
 							qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
@@ -207,4 +245,123 @@ public class Query {
 		this.accepted = accepted;
 	}
 
+	public String getNaziv() {
+		return naziv;
+	}
+
+	public void setNaziv(String naziv) {
+		this.naziv = naziv;
+	}
+
+	public String getBrojGlasila() {
+		return brojGlasila;
+	}
+
+	public void setBrojGlasila(String brojGlasila) {
+		this.brojGlasila = brojGlasila;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public Date getDatumAcceptedOd() {
+		return datumAcceptedOd;
+	}
+
+	public void setDatumAcceptedOd(Date datumAcceptedOd) {
+		this.datumAcceptedOd = datumAcceptedOd;
+	}
+
+	public Date getDatumAcceptedDo() {
+		return datumAcceptedDo;
+	}
+
+	public void setDatumAcceptedDo(Date datumAcceptedDo) {
+		this.datumAcceptedDo = datumAcceptedDo;
+	}
+
+	public Date getDatumReleasedOd() {
+		return datumReleasedOd;
+	}
+
+	public void setDatumReleasedOd(Date datumReleasedOd) {
+		this.datumReleasedOd = datumReleasedOd;
+	}
+
+	public Date getDatumReleasedDo() {
+		return datumReleasedDo;
+	}
+
+	public void setDatumReleasedDo(Date datumReleasedDo) {
+		this.datumReleasedDo = datumReleasedDo;
+	}
+
+	public Date getDatumVazenjaOd() {
+		return datumVazenjaOd;
+	}
+
+	public void setDatumVazenjaOd(Date datumVazenjaOd) {
+		this.datumVazenjaOd = datumVazenjaOd;
+	}
+
+	public Date getDatumVazenjaDo() {
+		return datumVazenjaDo;
+	}
+
+	public void setDatumVazenjaDo(Date datumVazenjaDo) {
+		this.datumVazenjaDo = datumVazenjaDo;
+	}
+
+	public Date getDatumPrimenaOd() {
+		return datumPrimenaOd;
+	}
+
+	public void setDatumPrimenaOd(Date datumPrimenaOd) {
+		this.datumPrimenaOd = datumPrimenaOd;
+	}
+
+	public Date getDatumPrimenaDo() {
+		return datumPrimenaDo;
+	}
+
+	public void setDatumPrimenaDo(Date datumPrimenaDo) {
+		this.datumPrimenaDo = datumPrimenaDo;
+	}
+
+	public Date getDatumStupanjeOd() {
+		return datumStupanjeOd;
+	}
+
+	public void setDatumStupanjeOd(Date datumStupanjeOd) {
+		this.datumStupanjeOd = datumStupanjeOd;
+	}
+
+	public Date getDatumStupanjeDo() {
+		return datumStupanjeDo;
+	}
+
+	public void setDatumStupanjeDo(Date datumStupanjeDo) {
+		this.datumStupanjeDo = datumStupanjeDo;
+	}
+
+	public Date getDatumPredlogOd() {
+		return datumPredlogOd;
+	}
+
+	public void setDatumPredlogOd(Date datumPredlogOd) {
+		this.datumPredlogOd = datumPredlogOd;
+	}
+
+	public Date getDatumPredlogDo() {
+		return datumPredlogDo;
+	}
+
+	public void setDatumPredlogDo(Date datumPredlogDo) {
+		this.datumPredlogDo = datumPredlogDo;
+	}
 }

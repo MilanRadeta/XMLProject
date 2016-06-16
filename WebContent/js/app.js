@@ -635,6 +635,17 @@
 				$scope.searchResults = response.data;
 			});
 		}
+
+		$scope.searchQuery = {};
+		$scope.querySearch = function() {
+			$http({
+				method : "POST",
+				url : "api/act/search",
+				data : $scope.searchQuery
+			}).then(function(response) {
+				$scope.searchResults = response.data;
+			});
+		}
 		
 		$scope.login(true);
 		$scope.resetAct();

@@ -27,7 +27,7 @@
 							<th>Naziv propisa</th>
 							<td><input type="text" data-ng-model="searchQuery.naziv" /></td>
 						</tr>
-						<tr>
+						<tr data-ng-hide="true">
 							<th>Broj glasila</th>
 							<td><input type="text" data-ng-model="searchQuery.brojGlasila" /></td>
 						</tr>
@@ -42,8 +42,8 @@
 						</tr>
 						<tr>
 							<th>Status propisa</th>
-							<td><input type="radio" data-ng-model="searchQuery.acceptedAct" data-ng-value="false" /></td>
-							<td><input type="radio" data-ng-model="searchQuery.acceptedAct" data-ng-value="true" /></td>
+							<td><input type="checkbox" data-ng-model="searchQuery.inProcedure" /></td>
+							<td><input type="checkbox" data-ng-model="searchQuery.accepted" /></td>
 						</tr>
 						<tr>
 							<td></td>
@@ -51,26 +51,31 @@
 							<th>Datum do</th>
 						</tr>
 						<tr>
+							<th>Datum predlaganja</th>
+							<td><input type="date" data-ng-model="searchQuery.datumPredlogOd" /></td>
+							<td><input type="date" data-ng-model="searchQuery.datumPredlogDo" /></td>
+						</tr>
+						<tr>
 							<th>Datum usvajanja</th>
 							<td><input type="date" data-ng-model="searchQuery.datumAcceptedOd" /></td>
 							<td><input type="date" data-ng-model="searchQuery.datumAcceptedDo" /></td>
 						</tr>
-						<tr>
+						<tr data-ng-hide="true">
 							<th>Datum objavljivanja</th>
 							<td><input type="date" data-ng-model="searchQuery.datumReleasedOd" /></td>
 							<td><input type="date" data-ng-model="searchQuery.datumReleasedDo" /></td>
 						</tr>
-						<tr>
+						<tr data-ng-hide="true">
 							<th>Datum važenja</th>
 							<td><input type="date" data-ng-model="searchQuery.datumVazenjeOd" /></td>
 							<td><input type="date" data-ng-model="searchQuery.datumVazenjeDo" /></td>
 						</tr>
-						<tr>
+						<tr data-ng-hide="true">
 							<th>Datum primene</th>
 							<td><input type="date" data-ng-model="searchQuery.datumPrimenaOd" /></td>
 							<td><input type="date" data-ng-model="searchQuery.datumPrimenaDo" /></td>
 						</tr>
-						<tr>
+						<tr data-ng-hide="true">
 							<th>Datum stupanja na snagu</th>
 							<td><input type="date" data-ng-model="searchQuery.datumStupanjeOd" /></td>
 							<td><input type="date" data-ng-model="searchQuery.datumStupanjeDo" /></td>
