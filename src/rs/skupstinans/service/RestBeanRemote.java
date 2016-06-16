@@ -75,9 +75,9 @@ public interface RestBeanRemote {
 	public void usvojiPropisUNacelu(String id);
 
 	@POST
-	@Path("/usvojiPropisUPojedinostima")
+	@Path("/usvojiPropisUPojedinostima/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void usvojiPropisUPojedinostima(Amandmani amandmani);
+	public void usvojiPropisUPojedinostima(@PathParam("id") String id, List<String> amandmani);
 
 	@POST
 	@Path("/usvojiPropisUCelosti")

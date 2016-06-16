@@ -152,8 +152,9 @@
 							<td>{{act.brojPropisa}}</td>
 							<td>{{act.Naziv}}</td>							
 							<td data-ng-show="act.status == 'predlog'">NE</td>
-							<td data-ng-show="act.status == 'usvojen u nacelu'">DA</td>
-							<td><button class="btn btn-primary"
+							<td data-ng-show="act.status != 'predlog'">DA</td>
+							<td><button data-ng-show="act.status != 'usvojen u pojedinostima'"
+									class="btn btn-primary"
 									data-ng-click="createAmendment(act)">Predloži amandman</button></td>
 							<td data-ng-show="act.usernameDonosioca == loggedInUser.username"><button class="btn btn-primary"
 									data-ng-click="removeAct(act)">Povuci</button></td>

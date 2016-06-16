@@ -349,24 +349,31 @@ public class DatabaseBean {
 		}
 	}
 
-	public void acceptActWithAmendments(Amandmani amandmani) {
-		List<Amandman> toRemove = new ArrayList<>();
-		for (Amandman am : amandmani.getAmandman()) {
-			if (!am.isUsvojen()) {
-				toRemove.add(am);
-			}
-		}
-		amandmani.getAmandman().removeAll(toRemove);
+	public void acceptActWithAmendments(String propisId, List<String> amandmani) {
 		try {
 			Transaction t = createTransaction();
-			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
-			JAXBHandle<Propis> handle = new JAXBHandle<>(context);
 			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
-			read("/propisi/" + amandmani.getReferences(), metadata, handle, t);
+			JAXBContext context = JAXBContext.newInstance(Amandmani.class.getPackage().getName());
+			JAXBHandle<Amandmani> aHandle = new JAXBHandle<>(context);
+			read("/amandmani/" + propisId, metadata, aHandle, t);
+			context = JAXBContext.newInstance(Propis.class.getPackage().getName());
+			JAXBHandle<Propis> handle = new JAXBHandle<>(context);
+			read("/propisi/" + propisId, metadata, handle, t);
 			Propis propis = handle.get();
+			Amandmani aDoc = aHandle.get();
+			List<Amandman> toRemove = new ArrayList<>();
+			for (Amandman a: aDoc.getAmandman()) {
+				if (!amandmani.contains(a.getId())) {
+					toRemove.add(a);
+				}
+				else {
+					a.setUsvojen(true);
+				}
+			}
+			aDoc.getAmandman().removeAll(toRemove);
 			propis.setStatus("usvojen u pojedinostima");
-			write("/propisi/" + propis.getBrojPropisa(), propis, t);
-			write("/amandmani/" + propis.getBrojPropisa(), amandmani, t);
+			write("/propisi/" + propisId, propis, t);
+			write("/amandmani/" + propisId, aDoc, t);
 			commitTransaction(t);
 		} catch (JAXBException e) {
 			e.printStackTrace();

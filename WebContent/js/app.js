@@ -155,6 +155,11 @@
 			}).then(function(response) {
 				$scope.suggestedActs = response.data;
 				$scope.suggestedActs.removeable = false;
+				for (var index in $scope.suggestedActs) {
+					if ($scope.suggestedActs[index].status != "usvojen u pojedinostima") {
+						$scope.suggestedActsEditable.push($scope.suggestedActs[index]);
+					}
+				}
 				$scope.getMyAmendments();
 			});
 		};
@@ -517,41 +522,45 @@
 		};	
 		
 		$scope.startSession = function(act) {
-
-			$http({
-				method : "GET",
-				url : "api/act/getAmendmentsForId/" + act.brojPropisa
-			}).then(function(response) {
-				console.log(response.data);
-				$scope.actInSession = act;
-				$scope.actInSession.amendments = [];
-				var amendments = response.data;
-				if (amendments) {
-					$scope.actInSession.orgAmendments = amendments;
-					amendments = amendments.Amandman
-					for (var index in amendments) {
-						var am = amendments[index];
-						am.viewRef = formatId(am.references);
-						for (var contentIndex in am.content) {
-							for (var key in am.content[contentIndex]) {
-								switch (key) {
-								case "Izmena":
-								case "Brisanje":
-								case "Dopuna":
-									am.type = key;
+			if (act.status != 'usvojen u pojedinostima') {
+				$http({
+					method : "GET",
+					url : "api/act/getAmendmentsForId/" + act.brojPropisa
+				}).then(function(response) {
+					console.log(response.data);
+					$scope.actInSession = act;
+					$scope.actInSession.amendments = [];
+					var amendments = response.data;
+					if (amendments) {
+						$scope.actInSession.orgAmendments = amendments;
+						amendments = amendments.Amandman
+						for (var index in amendments) {
+							var am = amendments[index];
+							am.viewRef = formatId(am.references);
+							for (var contentIndex in am.content) {
+								for (var key in am.content[contentIndex]) {
+									switch (key) {
+									case "Izmena":
+									case "Brisanje":
+									case "Dopuna":
+										am.type = key;
+									}
+									if (am.type) {
+										break;
+									}
 								}
 								if (am.type) {
 									break;
 								}
 							}
-							if (am.type) {
-								break;
-							}
+							$scope.actInSession.amendments.push(am);
 						}
-						$scope.actInSession.amendments.push(am);
 					}
-				}
-			});
+				});
+			}
+			else {
+				$scope.actInSession = act;
+			}
 		}
 
 		$scope.acceptActGenerally = function() {
@@ -583,6 +592,7 @@
 		}
 		
 		$scope.confirmAmendments = function() {
+			var data = [];
 			var ams = $scope.actInSession.amendments;
 			$scope.actInSession.errorStatus = false;
 			for (var index in ams) {
@@ -591,15 +601,18 @@
 					$scope.actInSession.errorStatus = true;
 					return;
 				}
+				if (am.usvojen) {
+					data.push(am.id);
+				}
 			}
 			
-			// TODO: make a list of ids that are accepted and send it
+			
 			
 			if (!$scope.actInSession.errorStatus) {
 				$http({
 					method : "POST",
-					url : "api/act/usvojiPropisUPojedinostima",
-					data : $scope.actInSession.orgAmendments
+					url : "api/act/usvojiPropisUPojedinostima/" + 	$scope.actInSession.orgAmendments.references,
+					data : data
 				}).then(function(response) {
 					$scope.actInSession = null;
 					$scope.suggestedActs = [];
