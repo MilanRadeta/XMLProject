@@ -36,6 +36,8 @@ import com.marklogic.client.query.StructuredQueryDefinition;
 
 import rs.skupstinans.amandman.Amandman;
 import rs.skupstinans.amandman.Amandmani;
+import rs.skupstinans.propis.DonosilacPropisa;
+import rs.skupstinans.propis.Preambula;
 import rs.skupstinans.propis.Propis;
 import rs.skupstinans.users.User;
 import rs.skupstinans.util.Checker;
@@ -477,6 +479,13 @@ public class DatabaseBean {
 			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
 			read("/propisi/" + propisId, metadata, handle, t);
 			Propis propis = handle.get();
+			Preambula preambula = new Preambula();
+			preambula.setPravniOsnov(propis.getObrazlozenje());
+			DonosilacPropisa donosilac = new DonosilacPropisa();
+			donosilac.setNaziv("Skupština grada Novog Sada");
+			preambula.setDonosilacPropisa(donosilac);
+			propis.setPreambula(preambula);
+			propis.setObrazlozenje(null);
 			propis.setStatus("usvojen u celosti");
 			write("/propisi/" + propisId, "/usvojeni", propis, t);
 			commitTransaction(t);
