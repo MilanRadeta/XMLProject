@@ -43,6 +43,31 @@ public class ElementFinder {
 		return findElement("//*[@elem:usernameDonosioca='" + username + "']", amandmani, namespaceMappings);
 	}
 
+	public static Node findNode(String expression, Node node) {
+		Map<String, String> namespaceMappings = new HashMap<String, String>();
+		namespaceMappings.put("elem", "http://www.skupstinans.rs/elementi");
+		namespaceMappings.put("am", "http://www.skupstinans.rs/amandmani");
+		namespaceMappings.put("p", "http://www.skupstinans.rs/amandmani");
+		return findNode(expression, node, namespaceMappings);
+	}
+
+	public static Node findNode(String expression, Node node, Map<String, String> namespaceMappings) {
+		Node retVal = null;
+		try {
+
+			XPathFactory xPathFactory = XPathFactory.newInstance();
+			XPath xPath = xPathFactory.newXPath();
+			xPath.setNamespaceContext(new NamespaceContext(namespaceMappings));
+
+			XPathExpression xPathExpression = xPath.compile(expression);
+
+			retVal = (Node) xPathExpression.evaluate(node, XPathConstants.NODE);
+		} catch (XPathExpressionException e) {
+			e.printStackTrace();
+		}
+		return retVal;
+	}
+
 	@SuppressWarnings("unchecked")
 	public static <T> List<T> findElement(String expression, Object object, Map<String, String> namespaceMappings) {
 		List<T> retVal = new ArrayList<>();

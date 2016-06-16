@@ -213,8 +213,6 @@ public class RestBean implements RestBeanRemote {
 	public Amandmani getAmendmentsForId(String id) {
 		try {
 			String url = "/amandmani/" + id;
-			System.out.println(isUserLoggedIn());
-			System.out.println(database.exists(url));
 			if (isUserLoggedIn() && database.exists(url)) {
 				JAXBContext context = JAXBContext.newInstance(Amandmani.class.getPackage().getName());
 

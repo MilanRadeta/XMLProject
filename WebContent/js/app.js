@@ -155,11 +155,6 @@
 			}).then(function(response) {
 				$scope.suggestedActs = response.data;
 				$scope.suggestedActs.removeable = false;
-				for (var index in $scope.suggestedActs) {
-					if ($scope.suggestedActs[index].status != "usvojen u pojedinostima") {
-						$scope.suggestedActsEditable.push($scope.suggestedActs[index]);
-					}
-				}
 				$scope.getMyAmendments();
 			});
 		};
@@ -322,11 +317,11 @@
 		
 		$scope.closeNewAct = function() {
 			$scope.showNewAct = false;
-			$scope.amendmentAct = null;
 			$scope.resetAct();
 		};
 		
 		$scope.resetAct = function() {
+			$scope.actInSession = null;
 			$scope.nazivPropisa = "";
 			$scope.obrazlozenje = "";
 			$scope.materijalniPravniOsnov = "";
@@ -348,6 +343,7 @@
 				method : "DELETE",
 				url : "api/act/povuciPredlogPropisa/" + act.brojPropisa
 			}).then(function(response) {
+				$scope.getSuggestedActs();
 				$scope.getMyActs();
 				$scope.getMyAmendments();
 			});
@@ -360,6 +356,7 @@
 				url : "api/act/povuciPredlogAmandmana/" + amendment.id
 			}).then(function(response) {
 				$scope.getMyAmendments();
+				$scope.actInSession = null;
 			});
 		}
 		
@@ -522,45 +519,40 @@
 		};	
 		
 		$scope.startSession = function(act) {
-			if (act.status != 'usvojen u pojedinostima') {
-				$http({
-					method : "GET",
-					url : "api/act/getAmendmentsForId/" + act.brojPropisa
-				}).then(function(response) {
-					console.log(response.data);
-					$scope.actInSession = act;
-					$scope.actInSession.amendments = [];
-					var amendments = response.data;
-					if (amendments) {
-						$scope.actInSession.orgAmendments = amendments;
-						amendments = amendments.Amandman
-						for (var index in amendments) {
-							var am = amendments[index];
-							am.viewRef = formatId(am.references);
-							for (var contentIndex in am.content) {
-								for (var key in am.content[contentIndex]) {
-									switch (key) {
-									case "Izmena":
-									case "Brisanje":
-									case "Dopuna":
-										am.type = key;
-									}
-									if (am.type) {
-										break;
-									}
+			$http({
+				method : "GET",
+				url : "api/act/getAmendmentsForId/" + act.brojPropisa
+			}).then(function(response) {
+				console.log(response.data);
+				$scope.actInSession = act;
+				$scope.actInSession.amendments = [];
+				var amendments = response.data;
+				if (amendments) {
+					$scope.actInSession.orgAmendments = amendments;
+					amendments = amendments.Amandman
+					for (var index in amendments) {
+						var am = amendments[index];
+						am.viewRef = formatId(am.references);
+						for (var contentIndex in am.content) {
+							for (var key in am.content[contentIndex]) {
+								switch (key) {
+								case "Izmena":
+								case "Brisanje":
+								case "Dopuna":
+									am.type = key;
 								}
 								if (am.type) {
 									break;
 								}
 							}
-							$scope.actInSession.amendments.push(am);
+							if (am.type) {
+								break;
+							}
 						}
+						$scope.actInSession.amendments.push(am);
 					}
-				});
-			}
-			else {
-				$scope.actInSession = act;
-			}
+				}
+			});
 		}
 
 		$scope.acceptActGenerally = function() {
@@ -611,7 +603,7 @@
 			if (!$scope.actInSession.errorStatus) {
 				$http({
 					method : "POST",
-					url : "api/act/usvojiPropisUPojedinostima/" + 	$scope.actInSession.orgAmendments.references,
+					url : "api/act/usvojiPropisUPojedinostima/" + 	$scope.actInSession.brojPropisa,
 					data : data
 				}).then(function(response) {
 					$scope.actInSession = null;

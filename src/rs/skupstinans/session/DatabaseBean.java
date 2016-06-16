@@ -7,10 +7,17 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.transform.dom.DOMResult;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Node;
 
 import com.marklogic.client.DatabaseClient;
 import com.marklogic.client.DatabaseClientFactory;
@@ -31,8 +38,10 @@ import rs.skupstinans.amandman.Amandman;
 import rs.skupstinans.amandman.Amandmani;
 import rs.skupstinans.propis.Propis;
 import rs.skupstinans.users.User;
+import rs.skupstinans.util.Checker;
 import rs.skupstinans.util.ConnectionProperties;
 import rs.skupstinans.util.ElementConstants;
+import rs.skupstinans.util.ElementFinder;
 import rs.skupstinans.util.Query;
 
 /**
@@ -42,6 +51,9 @@ import rs.skupstinans.util.Query;
 @LocalBean
 public class DatabaseBean {
 
+	@EJB
+	private Checker checker;
+	
 	private DatabaseClient client;
 	private XMLDocumentManager xmlManager;
 
@@ -172,7 +184,7 @@ public class DatabaseBean {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void deletePropis(String URI) {
 		deletePropis(URI, null);
 	}
@@ -356,28 +368,100 @@ public class DatabaseBean {
 			JAXBContext context = JAXBContext.newInstance(Amandmani.class.getPackage().getName());
 			JAXBHandle<Amandmani> aHandle = new JAXBHandle<>(context);
 			read("/amandmani/" + propisId, metadata, aHandle, t);
+			Amandmani aDoc = aHandle.get();
+			delete("/amandmani/" + propisId, t);
 			context = JAXBContext.newInstance(Propis.class.getPackage().getName());
 			JAXBHandle<Propis> handle = new JAXBHandle<>(context);
 			read("/propisi/" + propisId, metadata, handle, t);
 			Propis propis = handle.get();
-			Amandmani aDoc = aHandle.get();
 			List<Amandman> toRemove = new ArrayList<>();
-			for (Amandman a: aDoc.getAmandman()) {
+			for (Amandman a : aDoc.getAmandman()) {
 				if (!amandmani.contains(a.getId())) {
 					toRemove.add(a);
-				}
-				else {
+				} else {
 					a.setUsvojen(true);
 				}
 			}
 			aDoc.getAmandman().removeAll(toRemove);
+			propis = primeniAmandmane(propis, aDoc);
+			ArrayList<String> messages = new ArrayList<>();
+			checker.checkPropis(messages, propis);
+			if (messages.size() > 0) {
+				rollbackTransaction(t);
+				return;
+			}
 			propis.setStatus("usvojen u pojedinostima");
 			write("/propisi/" + propisId, propis, t);
-			write("/amandmani/" + propisId, aDoc, t);
 			commitTransaction(t);
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		}
+	}
+
+	public Propis primeniAmandmane(Propis propis, Amandmani amandmani) {
+		try {
+			JAXBContext amandmanContext = JAXBContext.newInstance(amandmani.getClass().getPackage().getName());
+			Marshaller marshaller = amandmanContext.createMarshaller();
+
+			DOMResult res = new DOMResult();
+
+			marshaller.marshal(amandmani, res);
+			Document amandmanDoc = (Document) res.getNode();
+
+			JAXBContext propisContext = JAXBContext.newInstance(propis.getClass().getPackage().getName());
+			marshaller = propisContext.createMarshaller();
+
+			res = new DOMResult();
+
+			marshaller.marshal(propis, res);
+			Document propisDoc = (Document) res.getNode();
+			
+			for (Amandman am : amandmani.getAmandman()) {
+				Node propisNode = ElementFinder.findNode("//*[@elem:id='" + am.getReferences() + "']", propisDoc);
+				Node amNode = ElementFinder.findNode("//*[@elem:id='" + am.getId() + "']", amandmanDoc);
+				for (int i = 0; i < amNode.getChildNodes().getLength(); i++) {
+					Node childNode = amNode.getChildNodes().item(i);
+					if (childNode.getNodeType() == Node.ELEMENT_NODE) {
+						switch (childNode.getLocalName()) {
+						case "Dopuna":
+						case "Izmena":
+							for (int j = 0; j < childNode.getChildNodes().getLength(); j++) {
+								Node grandchildNode = childNode.getChildNodes().item(j);
+								if (grandchildNode.getNodeType() == Node.ELEMENT_NODE) {
+									if (childNode.getLocalName().equals("Dopuna")) {
+										propisNode.getParentNode().insertBefore(propisDoc.importNode(grandchildNode, true), propisNode.getNextSibling());
+									}
+									else {
+										propisNode.getParentNode().replaceChild(propisDoc.importNode(grandchildNode, true), propisNode);
+									}
+									break;
+								}
+							}
+							break;
+						case "Brisanje":
+							propisNode.getParentNode().removeChild(propisNode);
+						}
+						break;
+					}
+				}
+			}
+			Unmarshaller unmarshaller = propisContext.createUnmarshaller();
+			propis = (Propis) unmarshaller.unmarshal(propisDoc);
+			return propis;
+			/* TODO:
+			 * primeni dopune i izmene nad propis documentom
+			 * konvertuj u propis objekat
+			 * checkiraj propis uzimajući u obzir dopune
+			 * primeni brisanje
+			 * 
+			 * NOTE: treba zbog referenci
+			 * NOTE: preskociti, to bi trebalo da se kontroliše amandmanima
+			*/
+
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public void test(String propisId) {
