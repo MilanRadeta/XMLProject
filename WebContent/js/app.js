@@ -39,7 +39,7 @@
 					resetElementDict(elementDict, "Pododeljak", xw);
 					if ($scope.amendmentAct) {
 						if ($scope.amendmentType == 'Izmena') {
-							// TODO: error
+							element.type = Član;
 						}
 					}
 				case "Clan":
@@ -620,6 +620,20 @@
 					$scope.getMyActs();
 				});
 			}
+		}
+		
+		$scope.textSearch = function() {
+			$http({
+				method : "POST",
+				url : "api/act/search",
+				data : {
+					text: $scope.searchTerm,
+					accepted: true,
+					inProcedure: true
+				}
+			}).then(function(response) {
+				$scope.searchResults = response.data;
+			});
 		}
 		
 		$scope.login(true);

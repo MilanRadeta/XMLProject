@@ -256,10 +256,6 @@ public class RestBean implements RestBeanRemote {
 		}
 	}
 
-	public void odbaciPredlogAmandmana(String id) {
-		// TODO
-	}
-
 	@Override
 	public Propis getPropisAsXML(String id) {
 		try {

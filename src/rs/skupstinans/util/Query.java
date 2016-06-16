@@ -15,10 +15,12 @@ public class Query {
 	private int brojPropisa = -1;
 	private boolean predlog;
 	private boolean inProcedure;
+	private boolean accepted;
 	public final static int PROPIS = 0;
 	public final static int AMANDMAN = 1;
 	private int type = PROPIS;
 	private boolean notUsvojen = true;
+	private String text;
 
 	public String getUsername() {
 		return username;
@@ -67,7 +69,7 @@ public class Query {
 	public void setNotUsvojen(boolean notUsvojen) {
 		this.notUsvojen = notUsvojen;
 	}
-	
+
 	public StructuredQueryDefinition createQueryDefinition(StructuredQueryBuilder qb) {
 
 		StructuredQueryDefinition queryDef = null;
@@ -89,6 +91,20 @@ public class Query {
 			queryDef = boostQuery(queryDef, boostQuery, qb);
 		}
 		
+		if (text != null) {
+			String[] splits = text.split(" ");
+			boostQuery = null;
+			for (String split : splits) {
+				split = split.trim();
+				if (boostQuery != null) {
+					boostQuery = qb.and(boostQuery, qb.term(split));
+				}
+				else {
+					boostQuery = qb.term(split);
+				}
+			}
+			queryDef = boostQuery(queryDef, boostQuery, qb);
+		}
 
 		if (brojPropisa != -1) {
 			String namespace = propisNamespace;
@@ -105,29 +121,54 @@ public class Query {
 					qb.attribute(new QName(attributeNamespace, attributeName))), brojPropisa);
 			queryDef = boostQuery(queryDef, boostQuery, qb);
 		}
-		
+
 		if (type == Query.PROPIS) {
-			if (predlog && inProcedure) {
-				boostQuery = qb.or(
-						qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
-								qb.attribute(new QName(propisNamespace, "status"))), "predlog"),
-						qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
-								qb.attribute(new QName(propisNamespace, "status"))), "usvojen u nacelu"),
-						qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
-								qb.attribute(new QName(propisNamespace, "status"))), "usvojen u pojedinostima"));
-				queryDef = boostQuery(queryDef, boostQuery, qb);
-			} else if (predlog) {
-				boostQuery = qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
+			StructuredQueryDefinition statusQuery = null;
+			if (predlog) {
+				statusQuery = qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
 						qb.attribute(new QName(propisNamespace, "status"))), "predlog");
-				queryDef = boostQuery(queryDef, boostQuery, qb);
-			} else if (inProcedure) {
-				boostQuery = qb.or(
-						qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
-								qb.attribute(new QName(propisNamespace, "status"))), "usvojen u nacelu"),
-						qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
-								qb.attribute(new QName(propisNamespace, "status"))), "usvojen u pojedinostima"));
-				queryDef = boostQuery(queryDef, boostQuery, qb);
+
 			}
+
+			if (inProcedure) {
+				if (statusQuery != null) {
+					statusQuery = qb.or(statusQuery,
+							qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
+									qb.attribute(new QName(propisNamespace, "status"))), "usvojen u nacelu"),
+							qb.value(
+									qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
+											qb.attribute(new QName(propisNamespace, "status"))),
+									"usvojen u pojedinostima"));
+				} else {
+					statusQuery = qb.or(
+							qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
+									qb.attribute(new QName(propisNamespace, "status"))), "usvojen u nacelu"),
+							qb.value(
+									qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
+											qb.attribute(new QName(propisNamespace, "status"))),
+									"usvojen u pojedinostima"));
+				}
+			}
+
+			if (accepted) {
+
+				if (statusQuery != null) {
+					statusQuery = qb
+							.or(statusQuery,
+									qb.value(
+											qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
+													qb.attribute(new QName(propisNamespace, "status"))),
+											"usvojen u celosti"));
+				} else {
+					statusQuery = qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
+							qb.attribute(new QName(propisNamespace, "status"))), "usvojen u celosti");
+				}
+			}
+
+			if (statusQuery != null) {
+				queryDef = boostQuery(queryDef, statusQuery, qb);
+			}
+
 		} else {
 			if (notUsvojen) {
 				boostQuery = qb.not(qb.value(qb.elementAttribute(qb.element(new QName(amandmaniNamespace, "Amandman")),
@@ -137,7 +178,6 @@ public class Query {
 		}
 		return queryDef;
 	}
-
 
 	private StructuredQueryDefinition boostQuery(StructuredQueryDefinition orgDef, StructuredQueryDefinition boost,
 			StructuredQueryBuilder builder) {
@@ -150,5 +190,21 @@ public class Query {
 		}
 		return orgDef;
 	}
-	
+
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
+
+	public boolean isAccepted() {
+		return accepted;
+	}
+
+	public void setAccepted(boolean accepted) {
+		this.accepted = accepted;
+	}
+
 }

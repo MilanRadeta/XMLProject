@@ -461,7 +461,8 @@ public class DatabaseBean {
 			 * propis objekat checkiraj propis uzimajući u obzir dopune primeni
 			 * brisanje
 			 * 
-			 * NOTE: treba zbog referenci NOTE: preskociti, to bi trebalo da se
+			 * NOTE: treba zbog referenci
+			 * NOTE: preskociti, to bi trebalo da se
 			 * kontroliše amandmanima
 			 */
 

@@ -23,7 +23,7 @@ import rs.skupstinans.util.Query;
 @Remote
 public interface RestBeanRemote {
 
-	@GET
+	@POST
 	@Path("/search")
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Produces(MediaType.APPLICATION_JSON)
@@ -95,12 +95,7 @@ public interface RestBeanRemote {
 	@Path("/odbaciPredlogPropisa/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void odbaciPredlogPropisa(@PathParam("id") String id);
-
-	@DELETE
-	@Path("/odbaciPredlogAmandmana/")
-	@Consumes(MediaType.APPLICATION_JSON)
-	public void odbaciPredlogAmandmana(String id);
-
+	
 	@GET
 	@Path("/getPropisAsXML/{id}")
 	@Produces(MediaType.APPLICATION_XML)
