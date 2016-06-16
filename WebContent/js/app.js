@@ -580,7 +580,16 @@
 			});
 		}
 		$scope.acceptActCompletely = function() {
-			// TODO:
+			$http({
+				method : "POST",
+				url : "api/act/usvojiPropisUCelosti/" + $scope.actInSession.brojPropisa
+			}).then(function(response) {
+				$scope.actInSession = null;
+				$scope.suggestedActs = [];
+				$scope.myActs = [];
+				$scope.getSuggestedActs();
+				$scope.getMyActs();
+			});
 		}
 		
 		$scope.confirmAmendments = function() {
@@ -597,8 +606,6 @@
 					data.push(am.id);
 				}
 			}
-			
-			
 			
 			if (!$scope.actInSession.errorStatus) {
 				$http({

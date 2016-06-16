@@ -241,7 +241,9 @@ public class RestBean implements RestBeanRemote {
 	}
 
 	public void usvojiPropisUCelosti(String id) {
-		// TODO
+		if (isUserLoggedIn() && getCurrentUser().getUserType() == UserType.PREDSEDNIK) {
+			database.acceptAct(id);
+		}
 	}
 
 	public void odbaciPredlogPropisa(String id) {

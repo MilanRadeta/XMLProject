@@ -80,9 +80,9 @@ public interface RestBeanRemote {
 	public void usvojiPropisUPojedinostima(@PathParam("id") String id, List<String> amandmani);
 
 	@POST
-	@Path("/usvojiPropisUCelosti")
+	@Path("/usvojiPropisUCelosti/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void usvojiPropisUCelosti(String id);
+	public void usvojiPropisUCelosti(@PathParam("id") String id);
 
 	@DELETE
 	@Path("/odbaciPredlogPropisa/{id}")

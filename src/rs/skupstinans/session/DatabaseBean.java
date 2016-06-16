@@ -53,7 +53,7 @@ public class DatabaseBean {
 
 	@EJB
 	private Checker checker;
-	
+
 	private DatabaseClient client;
 	private XMLDocumentManager xmlManager;
 
@@ -415,7 +415,7 @@ public class DatabaseBean {
 
 			marshaller.marshal(propis, res);
 			Document propisDoc = (Document) res.getNode();
-			
+
 			for (Amandman am : amandmani.getAmandman()) {
 				Node propisNode = ElementFinder.findNode("//*[@elem:id='" + am.getReferences() + "']", propisDoc);
 				Node amNode = ElementFinder.findNode("//*[@elem:id='" + am.getId() + "']", amandmanDoc);
@@ -429,10 +429,12 @@ public class DatabaseBean {
 								Node grandchildNode = childNode.getChildNodes().item(j);
 								if (grandchildNode.getNodeType() == Node.ELEMENT_NODE) {
 									if (childNode.getLocalName().equals("Dopuna")) {
-										propisNode.getParentNode().insertBefore(propisDoc.importNode(grandchildNode, true), propisNode.getNextSibling());
-									}
-									else {
-										propisNode.getParentNode().replaceChild(propisDoc.importNode(grandchildNode, true), propisNode);
+										propisNode.getParentNode().insertBefore(
+												propisDoc.importNode(grandchildNode, true),
+												propisNode.getNextSibling());
+									} else {
+										propisNode.getParentNode()
+												.replaceChild(propisDoc.importNode(grandchildNode, true), propisNode);
 									}
 									break;
 								}
@@ -448,20 +450,39 @@ public class DatabaseBean {
 			Unmarshaller unmarshaller = propisContext.createUnmarshaller();
 			propis = (Propis) unmarshaller.unmarshal(propisDoc);
 			return propis;
-			/* TODO:
-			 * primeni dopune i izmene nad propis documentom
-			 * konvertuj u propis objekat
-			 * checkiraj propis uzimajući u obzir dopune
-			 * primeni brisanje
+			/*
+			 * TODO: primeni dopune i izmene nad propis documentom konvertuj u
+			 * propis objekat checkiraj propis uzimajući u obzir dopune primeni
+			 * brisanje
 			 * 
-			 * NOTE: treba zbog referenci
-			 * NOTE: preskociti, to bi trebalo da se kontroliše amandmanima
-			*/
+			 * NOTE: treba zbog referenci NOTE: preskociti, to bi trebalo da se
+			 * kontroliše amandmanima
+			 */
 
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		}
 		return null;
+	}
+
+	public void acceptAct(String propisId) {
+		try {
+			Transaction t = createTransaction();
+			String url = "/amandmani/" + propisId;
+			if (exists(url)) {
+				delete(url, t);
+			}
+			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
+			JAXBHandle<Propis> handle = new JAXBHandle<>(context);
+			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+			read("/propisi/" + propisId, metadata, handle, t);
+			Propis propis = handle.get();
+			propis.setStatus("usvojen u celosti");
+			write("/propisi/" + propisId, "/usvojeni", propis, t);
+			commitTransaction(t);
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void test(String propisId) {
