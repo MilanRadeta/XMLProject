@@ -46,7 +46,7 @@ import javax.xml.bind.annotation.XmlType;
     "stav"
 })
 @XmlRootElement(name = "Clan")
-public class Clan {
+public class Clan extends DefaultElement {
 
     @XmlElement(name = "Naziv")
     protected String naziv;

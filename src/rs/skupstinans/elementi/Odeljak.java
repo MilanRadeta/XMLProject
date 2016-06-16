@@ -53,7 +53,7 @@ import javax.xml.bind.annotation.XmlType;
     "content"
 })
 @XmlRootElement(name = "Odeljak")
-public class Odeljak implements ElementInterface {
+public class Odeljak extends DefaultElement {
 
     @XmlElementRefs({
         @XmlElementRef(name = "Pododeljak", namespace = "http://www.skupstinans.rs/elementi", type = Pododeljak.class, required = false),

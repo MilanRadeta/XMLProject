@@ -47,7 +47,7 @@ import javax.xml.bind.annotation.XmlType;
     "glava"
 })
 @XmlRootElement(name = "Deo")
-public class Deo {
+public class Deo extends DefaultElement {
 
     @XmlElement(name = "Naziv")
     protected String naziv;

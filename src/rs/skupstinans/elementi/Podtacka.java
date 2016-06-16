@@ -49,7 +49,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
     "content"
 })
 @XmlRootElement(name = "Podtacka")
-public class Podtacka implements ElementInterface {
+public class Podtacka extends DefaultElement {
 
     @XmlElementRefs({
         @XmlElementRef(name = "StrucniIzraz", namespace = "http://www.skupstinans.rs/elementi", type = JAXBElement.class, required = false),

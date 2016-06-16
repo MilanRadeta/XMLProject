@@ -46,7 +46,7 @@ import javax.xml.bind.annotation.XmlType;
     "clan"
 })
 @XmlRootElement(name = "Pododeljak")
-public class Pododeljak {
+public class Pododeljak extends DefaultElement {
 
     @XmlElement(name = "Naziv", required = true)
     protected String naziv;

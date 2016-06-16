@@ -24,7 +24,7 @@ import rs.skupstinans.amandman.Izmena;
 import rs.skupstinans.elementi.Alineja;
 import rs.skupstinans.elementi.Clan;
 import rs.skupstinans.elementi.Deo;
-import rs.skupstinans.elementi.ElementInterface;
+import rs.skupstinans.elementi.DefaultElement;
 import rs.skupstinans.elementi.Glava;
 import rs.skupstinans.elementi.Odeljak;
 import rs.skupstinans.elementi.Pododeljak;
@@ -165,7 +165,7 @@ public class Checker {
 
 	@SuppressWarnings("unchecked")
 	public void checkGroup(List<String> messages, Object group, String messagePrefix, String idPrefix) {
-		ElementInterface element = (ElementInterface) group;
+		DefaultElement element = (DefaultElement) group;
 		if (group instanceof Glava) {
 			glavaCounter++;
 			odeljakCounter = 0;
@@ -261,7 +261,7 @@ public class Checker {
 
 	@SuppressWarnings("rawtypes")
 	public void checkSubElements(List<String> messages, Object parent, String messagePrefix, String idPrefix) {
-		ElementInterface element = (ElementInterface) parent;
+		DefaultElement element = (DefaultElement) parent;
 		switch (parent.getClass().getSimpleName()) {
 		case "Stav":
 			tackaCounter = 0;
@@ -405,7 +405,7 @@ public class Checker {
 	public void checkAmandmanContent(Amandman amandman, List<String> messages, Object parent, Propis propis, Object references) {
 		if (references != null) {
 			if (parent instanceof Izmena) {
-				amandman.getContent().add(0, ElementConstants.getNameFromId(((ElementInterface) references).getId()) + " menja se i glasi:");
+				amandman.getContent().add(0, ElementConstants.getNameFromId(((DefaultElement) references).getId()) + " menja se i glasi:");
 				Izmena izmena = (Izmena) parent;
 				if (izmena.getClan() != null) {
 					if (izmena.getStav() == null && izmena.getTacka() == null && izmena.getPodtacka() == null
@@ -474,7 +474,7 @@ public class Checker {
 				if (sufix.equals("Clan")) {
 					sufix = "Član";
 				}
-				amandman.getContent().add(0, ElementConstants.getNameFromId(((ElementInterface) references).getId() + " - dodaje se novi " + sufix + " koji glasi:"));
+				amandman.getContent().add(0, ElementConstants.getNameFromId(((DefaultElement) references).getId() + " - dodaje se novi " + sufix + " koji glasi:"));
 				Dopuna dopuna = (Dopuna) parent;
 				if (dopuna.getClan() != null) {
 					if (dopuna.getStav() == null && dopuna.getDeo() == null && dopuna.getGlava() == null
@@ -552,7 +552,7 @@ public class Checker {
 				}
 			}
 			else if (parent instanceof Brisanje) {
-				amandman.getContent().add(0, ElementConstants.getNameFromId(((ElementInterface) references).getId()) + " briše se.");
+				amandman.getContent().add(0, ElementConstants.getNameFromId(((DefaultElement) references).getId()) + " briše se.");
 			}
 		} else {
 			messages.add("Referenca nije validna");
