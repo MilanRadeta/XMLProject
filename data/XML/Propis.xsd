@@ -83,6 +83,7 @@
                 <xsd:enumeration value="usvojen u celosti"/>
                 <xsd:enumeration value="usvojen u nacelu"/>
                 <xsd:enumeration value="predlog"/>
+                <xsd:enumeration value="usvojen u pojedinostima"/>
             </xsd:restriction>
         </xsd:simpleType>
     </xsd:attribute>

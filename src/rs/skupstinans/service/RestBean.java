@@ -236,8 +236,12 @@ public class RestBean implements RestBeanRemote {
 		}
 	}
 
-	public void usvojiAmandman(String id) {
-		// TODO
+	public void usvojiPropisUPojedinostima(Amandmani amandmani) {
+		// TODO: change to receive list of ids of amandman elements
+		// TODO: change url to receive propis id
+		if (isUserLoggedIn() && getCurrentUser().getUserType() == UserType.PREDSEDNIK) {
+			database.acceptActWithAmendments(amandmani);
+		}
 	}
 
 	public void usvojiPropisUCelosti(String id) {

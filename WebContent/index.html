@@ -320,12 +320,17 @@
 							<td>{{$index + 1}}</td>
 							<td>{{amendment.viewRef}}</td>
 							<td>{{amendment.type}}</td>
-							<td><input type="radio" data-ng-model="amendment.accepted" data-ng-value="true"/></td>
-							<td><input type="radio" data-ng-model="amendment.accepted" data-ng-value="false"/></td>
+							<td><input type="radio" data-ng-model="amendment.usvojen" data-ng-value="true"/></td>
+							<td><input type="radio" data-ng-model="amendment.usvojen" data-ng-value="false"/></td>
 						</tr>
 						<tr>
 							<td>
 								<button class="btn btn-primary" data-ng-click="confirmAmendments()">Potvrdi</button>
+							</td>
+						</tr>
+						<tr>
+							<td>
+								<div class="alert alert-danger" role="alert" data-ng-show="actInSession.errorStatus">Svi amandmani moraju da se pretresu</div>
 							</td>
 						</tr>
 					</table>

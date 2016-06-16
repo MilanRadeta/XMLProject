@@ -112,15 +112,20 @@ public class Query {
 						qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
 								qb.attribute(new QName(propisNamespace, "status"))), "predlog"),
 						qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
-								qb.attribute(new QName(propisNamespace, "status"))), "usvojen u nacelu"));
+								qb.attribute(new QName(propisNamespace, "status"))), "usvojen u nacelu"),
+						qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
+								qb.attribute(new QName(propisNamespace, "status"))), "usvojen u pojedinostima"));
 				queryDef = boostQuery(queryDef, boostQuery, qb);
 			} else if (predlog) {
 				boostQuery = qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
 						qb.attribute(new QName(propisNamespace, "status"))), "predlog");
 				queryDef = boostQuery(queryDef, boostQuery, qb);
 			} else if (inProcedure) {
-				boostQuery = qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
-						qb.attribute(new QName(propisNamespace, "status"))), "usvojen u nacelu");
+				boostQuery = qb.or(
+						qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
+								qb.attribute(new QName(propisNamespace, "status"))), "usvojen u nacelu"),
+						qb.value(qb.elementAttribute(qb.element(new QName(propisNamespace, "Propis")),
+								qb.attribute(new QName(propisNamespace, "status"))), "usvojen u pojedinostima"));
 				queryDef = boostQuery(queryDef, boostQuery, qb);
 			}
 		} else {

@@ -210,11 +210,19 @@ public class DatabaseBean {
 	}
 
 	public void write(String URI, Propis propis) {
-		xmlManager.write(URI, getPropisHandle(propis));
+		Transaction t = createTransaction();
+		xmlManager.write(URI, getPropisHandle(propis), t);
+		commitTransaction(t);
 	}
 
 	public void write(String URI, Propis propis, Transaction t) {
 		xmlManager.write(URI, getPropisHandle(propis), t);
+	}
+
+	public void write(String URI, Amandmani amandmani) {
+		Transaction t = createTransaction();
+		write(URI, amandmani, t);
+		commitTransaction(t);
 	}
 
 	public void write(String URI, Amandmani amandmani, Transaction t) {
@@ -341,6 +349,29 @@ public class DatabaseBean {
 		}
 	}
 
+	public void acceptActWithAmendments(Amandmani amandmani) {
+		List<Amandman> toRemove = new ArrayList<>();
+		for (Amandman am : amandmani.getAmandman()) {
+			if (!am.isUsvojen()) {
+				toRemove.add(am);
+			}
+		}
+		amandmani.getAmandman().removeAll(toRemove);
+		try {
+			Transaction t = createTransaction();
+			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
+			JAXBHandle<Propis> handle = new JAXBHandle<>(context);
+			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+			read("/propisi/" + amandmani.getReferences(), metadata, handle, t);
+			Propis propis = handle.get();
+			propis.setStatus("usvojen u pojedinostima");
+			write("/propisi/" + propis.getBrojPropisa(), propis, t);
+			write("/amandmani/" + propis.getBrojPropisa(), amandmani, t);
+			commitTransaction(t);
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
+	}
 
 	public void test(String propisId) {
 		try {

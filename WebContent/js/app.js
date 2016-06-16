@@ -527,6 +527,7 @@
 				$scope.actInSession.amendments = [];
 				var amendments = response.data;
 				if (amendments) {
+					$scope.actInSession.orgAmendments = amendments;
 					amendments = amendments.Amandman
 					for (var index in amendments) {
 						var am = amendments[index];
@@ -582,7 +583,31 @@
 		}
 		
 		$scope.confirmAmendments = function() {
-			// TODO
+			var ams = $scope.actInSession.amendments;
+			$scope.actInSession.errorStatus = false;
+			for (var index in ams) {
+				var am = ams[index];
+				if (am.usvojen == null || am.usvojen == undefined) {
+					$scope.actInSession.errorStatus = true;
+					return;
+				}
+			}
+			
+			// TODO: make a list of ids that are accepted and send it
+			
+			if (!$scope.actInSession.errorStatus) {
+				$http({
+					method : "POST",
+					url : "api/act/usvojiPropisUPojedinostima",
+					data : $scope.actInSession.orgAmendments
+				}).then(function(response) {
+					$scope.actInSession = null;
+					$scope.suggestedActs = [];
+					$scope.myActs = [];
+					$scope.getSuggestedActs();
+					$scope.getMyActs();
+				});
+			}
 		}
 		
 		$scope.login(true);
