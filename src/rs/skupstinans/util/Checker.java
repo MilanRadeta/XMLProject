@@ -163,6 +163,7 @@ public class Checker {
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public void checkGroup(List<String> messages, Object group, String messagePrefix, String idPrefix) {
 		ElementInterface element = (ElementInterface) group;
 		if (group instanceof Glava) {
@@ -179,7 +180,7 @@ public class Checker {
 		if (element.getContent().isEmpty()) {
 			messages.add(String.format("%s - nedostaje sadržaj", messagePrefix));
 		} else {
-			checkString(messages, (String) element.getContent().get(0),
+			checkString(messages, ((JAXBElement<String>) element.getContent().get(0)).getValue(),
 					String.format("%s - nedostaje naziv", messagePrefix));
 			int odeljakCounter = 0;
 			int pododeljakCounter = 0;

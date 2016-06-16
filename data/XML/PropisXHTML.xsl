@@ -109,7 +109,7 @@
             <xsl:value-of select="translate(., $latin, $cyrilic)" />
         </xsl:if>
     </xsl:template>
-    <xsl:template match="ns2:Stav/Tacka">
+    <xsl:template match="ns2:Stav/ns2:Tacka">
         <a name="{@ns2:id}" />
         <ul style="list-style-type:none">
             <xsl:apply-templates /> 

@@ -160,7 +160,7 @@ public class DatabaseBean {
 			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
 			read(URI, metadata, handle, t);
 			Propis propis = handle.get();
-			if (propis.getUsernameDonosioca().equals(user.getUsername())) {
+			if (user == null || propis.getUsernameDonosioca().equals(user.getUsername())) {
 				if (!propis.getStatus().equals("usvojen u celosti")) {
 					delete(URI, t);
 					delete("/amandmani/" + propis.getBrojPropisa(), t);
@@ -171,6 +171,10 @@ public class DatabaseBean {
 			rollbackTransaction(t);
 			e.printStackTrace();
 		}
+	}
+	
+	public void deletePropis(String URI) {
+		deletePropis(URI, null);
 	}
 
 	public void deleteAmendment(String propisId, String amendmentId, User user) {

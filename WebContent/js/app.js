@@ -485,8 +485,7 @@
 				url : url,
 				responseType: 'arraybuffer'
 			}).then(function(response) {
-				var type = "";
-				if (response.data == null) {
+				if (!response.data || response.data.byteLength == 0) {
 					return;
 				}
 				var file = new Blob([response.data]);
@@ -518,8 +517,40 @@
 		};	
 		
 		$scope.startSession = function(act) {
-			// TODO: get its amendments
-			$scope.actInSession = act;
+
+			$http({
+				method : "GET",
+				url : "api/act/getAmendmentsForId/" + act.brojPropisa
+			}).then(function(response) {
+				console.log(response.data);
+				$scope.actInSession = act;
+				$scope.actInSession.amendments = [];
+				var amendments = response.data;
+				if (amendments) {
+					amendments = amendments.Amandman
+					for (var index in amendments) {
+						var am = amendments[index];
+						am.viewRef = formatId(am.references);
+						for (var contentIndex in am.content) {
+							for (var key in am.content[contentIndex]) {
+								switch (key) {
+								case "Izmena":
+								case "Brisanje":
+								case "Dopuna":
+									am.type = key;
+								}
+								if (am.type) {
+									break;
+								}
+							}
+							if (am.type) {
+								break;
+							}
+						}
+						$scope.actInSession.amendments.push(am);
+					}
+				}
+			});
 		}
 
 		$scope.acceptActGenerally = function() {
@@ -535,10 +566,23 @@
 			});
 		}
 		$scope.dismissAct = function() {
-			// TODO:
+			$http({
+				method : "DELETE",
+				url : "api/act/odbaciPredlogPropisa/" + $scope.actInSession.brojPropisa
+			}).then(function(response) {
+				$scope.actInSession = null;
+				$scope.suggestedActs = [];
+				$scope.myActs = [];
+				$scope.getSuggestedActs();
+				$scope.getMyActs();
+			});
 		}
 		$scope.acceptActCompletely = function() {
 			// TODO:
+		}
+		
+		$scope.confirmAmendments = function() {
+			// TODO
 		}
 		
 		$scope.login(true);

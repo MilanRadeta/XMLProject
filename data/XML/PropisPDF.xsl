@@ -45,101 +45,91 @@
         </fo:root>
     </xsl:template>
     <xsl:template match="ns1:Preambula">
-        <fo:block space-after="12pt" space-before="12pt" text-align="justify">
+        <fo:block padding="20px" space-after="12pt" space-before="12pt" text-align="justify">
             <xsl:value-of select="translate(ns1:PravniOsnov, $latin, $cyrilic)" />,
             <xsl:apply-templates select="ns1:Saglasnost" />
-        </fo:block>
-        <fo:block space-after="12pt" space-before="12pt" text-align="justify">
+       </fo:block>
+        <fo:block padding="20px" space-after="12pt" space-before="12pt" text-align="justify">
             <xsl:value-of select="translate(ns1:DonosilacPropisa/ns2:Naziv, $latin, $cyrilic)" />
             доноси
-        </fo:block>
+       </fo:block>
     </xsl:template>
     <xsl:template match="ns2:Obrazlozenje">
-        <fo:block text-align="center" font-family="Arial" font-size="18px" font-weight="bold">Образложење</fo:block>
-        <fo:block space-after="12pt" space-before="12pt" text-align="justify">
-            <xsl:value-of select="translate(., $latin, $cyrilic)" />
+        <fo:block padding="20px" text-align="center" font-family="Arial" font-size="18px" font-weight="bold">Образложење
         </fo:block>
+        <fo:block padding="20px" space-after="12pt" space-before="12pt" text-align="justify">
+            <xsl:value-of select="translate(., $latin, $cyrilic)" />
+       </fo:block>
     </xsl:template>
     <xsl:template match="ns1:Saglasnost">
         , уз сагласност коју доноси
         <xsl:value-of select="translate(ns2:Naziv, $latin, $cyrilic)" />
         са следећом назнаком
-        <fo:block space-after="12pt" space-before="12pt" text-align="justify">
+        <fo:block padding="20px" space-after="12pt" space-before="12pt" text-align="justify">
             <xsl:value-of select="translate(ns1:Naznaka, $latin, $cyrilic)" />
-        </fo:block>
+       </fo:block>
         
     </xsl:template>
     <xsl:template match="ns2:Clan">
-        <fo:block text-align="center" font-family="Arial" font-size="20px" font-weight="bold"><xsl:value-of select="translate(ns2:Naziv, $latin, $cyrilic)" /></fo:block>
-        <fo:block text-align="center" font-family="Arial" font-size="20px" font-weight="bold">Члан <xsl:value-of select="@ns2:rednaOznaka" />.</fo:block>
+        <fo:block padding="20px" text-align="center" font-family="Arial" font-size="20px" font-weight="bold"><xsl:value-of select="translate(ns2:Naziv, $latin, $cyrilic)" /></fo:block>
+        <fo:block padding="20px" text-align="center" font-family="Arial" font-size="20px" font-weight="bold">Члан <xsl:value-of select="@ns2:rednaOznaka" />.</fo:block>
         <xsl:apply-templates select="ns2:Stav" />
     </xsl:template>
     <xsl:template match="ns2:Deo">
-        <fo:block text-align="center" font-family="Arial" font-size="24px" font-weight="bold">Део <xsl:value-of select="translate(@ns2:rednaOznaka, $latin, $cyrilic)" /></fo:block>
-        <fo:block text-align="center" font-family="Arial" font-size="24px" font-weight="bold"><xsl:value-of select="translate(translate(ns2:Naziv, $latin, $cyrilic), $smallcase, $uppercase)" /></fo:block>
+        <fo:block padding="20px" text-align="center" font-family="Arial" font-size="24px" font-weight="bold">Део <xsl:value-of select="translate(@ns2:rednaOznaka, $latin, $cyrilic)" /></fo:block>
+        <fo:block padding="20px" text-align="center" font-family="Arial" font-size="24px" font-weight="bold"><xsl:value-of select="translate(translate(ns2:Naziv, $latin, $cyrilic), $smallcase, $uppercase)" /></fo:block>
         <xsl:apply-templates select="ns2:Glava" />
     </xsl:template>
     <xsl:template match="ns2:Glava">
-        <fo:block text-align="center" font-family="Arial" font-size="22px" font-weight="bold">
+        <fo:block padding="20px" text-align="center" font-family="Arial" font-size="22px" font-weight="bold">
             <xsl:value-of select="@ns2:rednaOznaka" />.
             <xsl:value-of select="translate(translate(ns2:Naziv, $latin, $cyrilic), $smallcase, $uppercase)" />
-        </fo:block>
+       </fo:block>
         <xsl:apply-templates select="ns2:Odeljak" />
         <xsl:apply-templates select="ns2:Clan" />
     </xsl:template>
     <xsl:template match="ns2:Odeljak">
-        <fo:block text-align="center" font-family="Arial" font-size="20px" font-weight="bold" font-style="italic">
+        <fo:block padding="20px" text-align="center" font-family="Arial" font-size="20px" font-weight="bold" font-style="italic">
             <xsl:value-of select="@ns2:rednaOznaka" />.
             <xsl:value-of select="translate(ns2:Naziv, $latin, $cyrilic)"/>
-        </fo:block>
+       </fo:block>
         <xsl:apply-templates select="ns2:Pododeljak" />
         <xsl:apply-templates select="ns2:Clan" />
     </xsl:template>
     <xsl:template match="ns2:Pododeljak">
-        <fo:block text-align="center" font-family="Arial" font-size="20px" font-weight="bold" font-style="italic">
+        <fo:block padding="20px" text-align="center" font-family="Arial" font-size="20px" font-weight="bold" font-style="italic">
             <xsl:value-of select="translate(@ns2:rednaOznaka, $latin, $cyrilic)" />)
             <xsl:value-of select="translate(ns2:Naziv, $latin, $cyrilic)" />
-        </fo:block>
+       </fo:block>
         <xsl:apply-templates select="ns2:Clan" />
     </xsl:template>
     <xsl:template match="ns2:Stav">
-        <fo:block space-after="12pt" space-before="12pt" text-align="justify">
+        <fo:block padding="20px" space-after="12pt" space-before="12pt" text-align="justify">
             <xsl:apply-templates />
-        </fo:block>
-    </xsl:template>
-    <xsl:template match="ns2:Stav/*">
-        <xsl:copy>
-            <xsl:copy-of select="@*" />
-            <xsl:apply-templates />
-        </xsl:copy>
+       </fo:block>
     </xsl:template>
     <xsl:template match="ns2:Stav/text()">
         <xsl:if test="normalize-space(.)">
             <xsl:value-of select="translate(., $latin, $cyrilic)" />
         </xsl:if>
     </xsl:template>
-    <xsl:template match="ns2:Stav/Tacka">
+    <xsl:template match="ns2:Stav/ns2:Tacka">
         <fo:list-block start-indent="12pt" end-indent="12pt">
-                <xsl:apply-templates /> 
-            
-        </fo:list-block>
-    </xsl:template>
-    <xsl:template match="ns2:Tacka/*">
-        <xsl:copy>
-            <xsl:copy-of select="@*" />
             <xsl:apply-templates />
-        </xsl:copy>
+        </fo:list-block>
     </xsl:template>
     <xsl:template match="ns2:Tacka/text()">
         <xsl:if test="normalize-space(.)">
             <fo:list-item>
-             <fo:list-item-label>
-                 <fo:block>
+             <fo:list-item-label end-indent="label-end()">
+                 <fo:block padding="20px">
                      <xsl:value-of select="../@ns2:rednaOznaka" />) 
-                 </fo:block>
+                </fo:block>
              </fo:list-item-label>
-             <fo:list-item-body>
-                 <xsl:copy-of select="translate(., $latin, $cyrilic)" />
+             <fo:list-item-body start-indent="body-start()">
+                 <fo:block padding="20px">
+                    <xsl:value-of select="translate(., $latin, $cyrilic)" />
+                </fo:block>
              </fo:list-item-body>
             </fo:list-item>
         </xsl:if>
@@ -149,23 +139,19 @@
                 <xsl:apply-templates />
         </fo:list-block>
     </xsl:template>
-    <xsl:template match="ns2:Podtacka/*">
-        <xsl:copy>
-            <xsl:copy-of select="@*" />
-            <xsl:apply-templates />
-        </xsl:copy>
-    </xsl:template>
     <xsl:template match="ns2:Podtacka/text()">
         <xsl:if test="normalize-space(.)">
             <fo:list-item>
-             <fo:list-item-label>
-                 <fo:block>
-                     (<xsl:value-of select="../@ns2:rednaOznaka" />)
-                 </fo:block>
-             </fo:list-item-label>
-             <fo:list-item-body>
-                 <xsl:copy-of select="translate(., $latin, $cyrilic)" />
-             </fo:list-item-body>
+                 <fo:list-item-label end-indent="label-end()">
+                     <fo:block padding="20px">
+                         (<xsl:value-of select="../@ns2:rednaOznaka" />)
+                    </fo:block>
+                 </fo:list-item-label>
+                <fo:list-item-body start-indent="body-start()">
+                    <fo:block padding="20px">
+                     <xsl:copy-of select="translate(., $latin, $cyrilic)" />
+                   </fo:block>
+                 </fo:list-item-body>
             </fo:list-item>
         </xsl:if>
     </xsl:template>
@@ -177,13 +163,15 @@
     <xsl:template match="ns2:Alineja/text()">
         <xsl:if test="normalize-space(.)">
             <fo:list-item>
-                <fo:list-item-label>
-                    <fo:block>
+                <fo:list-item-label end-indent="label-end()">
+                    <fo:block padding="20px">
                         -
-                    </fo:block>
+                   </fo:block>
                 </fo:list-item-label>
-                <fo:list-item-body>
+                <fo:list-item-body start-indent="body-start()">
+                    <fo:block padding="20px">
                     <xsl:value-of select="translate(., $latin, $cyrilic)" />
+                   </fo:block>
                 </fo:list-item-body>
             </fo:list-item>
         </xsl:if>
@@ -212,7 +200,7 @@
                 <fo:flow flow-name="xsl-region-body">
                     <fo:block text-align="center" font-family="Arial" font-size="32px" font-weight="bold" padding="30px">
                         <xsl:value-of select="translate(translate(ns2:Naziv, $smallcase, $uppercase), $latin, $cyrilic)" />
-                    </fo:block>
+                   </fo:block>
                     <xsl:apply-templates />
                 </fo:flow>
             </fo:page-sequence>
@@ -223,7 +211,7 @@
     <xsl:template match="ns3:Amandmani/ns3:Amandman">
         <fo:block text-align="center" font-family="Arial" font-size="20px" font-weight="bold" padding="30px">
             АМАНДМАН <xsl:number format="I"/>.
-        </fo:block>
+       </fo:block>
         <xsl:apply-templates />
     </xsl:template>
     <xsl:template match="ns3:Amandman">
@@ -252,20 +240,20 @@
     </xsl:template>
     <xsl:template match="ns3:Amandman/text()">
         <xsl:if test="normalize-space(.)">
-          <fo:block space-after="12pt" space-before="12pt" text-align="justify">
+          <fo:block padding="20px" space-after="12pt" space-before="12pt" text-align="justify">
               <xsl:value-of select="translate(., $latin, $cyrilic)" />    
-          </fo:block>
+         </fo:block>
         </xsl:if>
     </xsl:template>
     <xsl:template match="ns3:Izmena">
-        <fo:block>
+        <fo:block padding="20px">
             <xsl:apply-templates />
-        </fo:block>
+       </fo:block>
     </xsl:template>
     <xsl:template match="ns3:Dopuna">
-        <fo:block>
+        <fo:block padding="20px">
             <xsl:apply-templates />
-        </fo:block>
+       </fo:block>
     </xsl:template>
     <xsl:template match="ns3:Brisanje">
         <xsl:apply-templates />

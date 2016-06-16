@@ -209,13 +209,23 @@ public class RestBean implements RestBeanRemote {
 		}
 	}
 
-	public List<Propis> nadjiSvePropise() {
-		// TODO
-		return null;
-	}
+	@Override
+	public Amandmani getAmendmentsForId(String id) {
+		try {
+			String url = "/amandmani/" + id;
+			System.out.println(isUserLoggedIn());
+			System.out.println(database.exists(url));
+			if (isUserLoggedIn() && database.exists(url)) {
+				JAXBContext context = JAXBContext.newInstance(Amandmani.class.getPackage().getName());
 
-	public List<Propis> nadjiSveAmandmane() {
-		// TODO
+				JAXBHandle<Amandmani> handle = new JAXBHandle<>(context);
+				DocumentMetadataHandle metadata = new DocumentMetadataHandle();
+				database.read(url, metadata, handle);
+				return handle.get();
+			}
+		} catch (JAXBException e) {
+			e.printStackTrace();
+		}
 		return null;
 	}
 
@@ -234,11 +244,13 @@ public class RestBean implements RestBeanRemote {
 		// TODO
 	}
 
-	public void odbaciPrelogPropisa(String id) {
-		// TODO
+	public void odbaciPredlogPropisa(String id) {
+		if (isUserLoggedIn() && getCurrentUser().getUserType() == UserType.PREDSEDNIK) {
+			database.deletePropis("/propisi/" + id);
+		}
 	}
 
-	public void odbaciPrelogAmandmana(String id) {
+	public void odbaciPredlogAmandmana(String id) {
 		// TODO
 	}
 

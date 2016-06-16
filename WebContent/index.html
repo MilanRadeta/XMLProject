@@ -318,9 +318,14 @@
 						</tr>
 						<tr data-ng-repeat="amendment in actInSession.amendments track by $index">
 							<td>{{$index + 1}}</td>
-							<td>{{formatId()</td>
+							<td>{{amendment.viewRef}}</td>
+							<td>{{amendment.type}}</td>
+							<td><input type="radio" data-ng-model="amendment.accepted" data-ng-value="true"/></td>
+							<td><input type="radio" data-ng-model="amendment.accepted" data-ng-value="false"/></td>
+						</tr>
+						<tr>
 							<td>
-								<button class="btn btn-primary" data-ng-click="acceptActCompletely()">Usvoji u celosti</button>
+								<button class="btn btn-primary" data-ng-click="confirmAmendments()">Potvrdi</button>
 							</td>
 						</tr>
 					</table>

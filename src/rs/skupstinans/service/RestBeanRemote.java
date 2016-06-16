@@ -64,15 +64,11 @@ public interface RestBeanRemote {
 	public void povuciPredlogAmandmana(@PathParam("id") String id, @PathParam("amendmentId") String amendmentId);
 
 	@GET
-	@Path("/nadjiSvePropise")
+	@Path("/getAmendmentsForId/{id}")
+	@Consumes(MediaType.TEXT_PLAIN)
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Propis> nadjiSvePropise();
-
-	@GET
-	@Path("/nadjiSveAmandmane")
-	@Produces(MediaType.APPLICATION_JSON)
-	public List<Propis> nadjiSveAmandmane();
-
+	public Amandmani getAmendmentsForId(@PathParam("id") String id);
+	
 	@POST
 	@Path("/usvojiPropisUNacelu")
 	@Consumes(MediaType.APPLICATION_JSON)
@@ -89,14 +85,14 @@ public interface RestBeanRemote {
 	public void usvojiPropisUCelosti(String id);
 
 	@DELETE
-	@Path("/odbaciPrelogPropisa")
+	@Path("/odbaciPredlogPropisa/{id}")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void odbaciPrelogPropisa(String id);
+	public void odbaciPredlogPropisa(@PathParam("id") String id);
 
 	@DELETE
-	@Path("/odbaciPrelogAmandmana")
+	@Path("/odbaciPredlogAmandmana/")
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void odbaciPrelogAmandmana(String id);
+	public void odbaciPredlogAmandmana(String id);
 
 	@GET
 	@Path("/getPropisAsXML/{id}")
