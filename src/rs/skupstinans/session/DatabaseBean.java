@@ -44,6 +44,7 @@ import rs.skupstinans.propis.DonosilacPropisa;
 import rs.skupstinans.propis.Preambula;
 import rs.skupstinans.propis.Propis;
 import rs.skupstinans.users.User;
+import rs.skupstinans.users.Users;
 import rs.skupstinans.util.Checker;
 import rs.skupstinans.util.ConnectionProperties;
 import rs.skupstinans.util.ElementConstants;
@@ -461,8 +462,7 @@ public class DatabaseBean {
 			 * propis objekat checkiraj propis uzimajući u obzir dopune primeni
 			 * brisanje
 			 * 
-			 * NOTE: treba zbog referenci
-			 * NOTE: preskociti, to bi trebalo da se
+			 * NOTE: treba zbog referenci NOTE: preskociti, to bi trebalo da se
 			 * kontroliše amandmanima
 			 */
 
@@ -507,20 +507,40 @@ public class DatabaseBean {
 		}
 	}
 
-	public void test(String propisId) {
+	public Users getUsers() {
 		try {
-			Transaction t = createTransaction();
-			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
-			JAXBHandle<Propis> handle = new JAXBHandle<>(context);
+			JAXBContext context = JAXBContext.newInstance(Users.class.getPackage().getName());
+			JAXBHandle<Users> handle = new JAXBHandle<>(context);
 			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
-			read("/propisi/" + propisId, metadata, handle, t);
-			Propis propis = handle.get();
-			propis.setStatus("predlog");
-			write("/propisi/" + propisId, propis, t);
-			commitTransaction(t);
+			read("/users", metadata, handle);
+			return handle.get();
 		} catch (JAXBException e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 
+	public void test() {
+		Users users = new Users();
+		User user = new User();
+		user.setUsername("odbornik");
+		user.setPassword("odbornik");
+		user.setUserType("ODBORNIK");
+		users.getUser().add(user);
+		user = new User();
+		user.setUsername("predsednik");
+		user.setPassword("predsednik");
+		user.setUserType("PREDSEDNIK");
+		users.getUser().add(user);
+
+		try {
+			JAXBContext context = JAXBContext.newInstance(Users.class.getPackage().getName());
+			JAXBHandle<Users> handle = new JAXBHandle<>(context);
+			handle.set(users);
+			xmlManager.write("/users", handle);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 }

@@ -115,7 +115,7 @@
 			$http({
 				method : "POST",
 				url : "api/user/login",
-				data: {username: $scope.username, password:  $scope.password}
+				data: {Username: $scope.username, Password:  $scope.password}
 			}).then(function(response) {
 				if (response.data) {
 					$scope.loggedInUser = response.data;
@@ -173,7 +173,7 @@
 			$http({
 				method : "GET",
 				url : "api/act/findBy",
-				params: {username: $scope.loggedInUser.username, predlog: true, inProcedure: true}
+				params: {username: $scope.loggedInUser.Username, predlog: true, inProcedure: true}
 			}).then(function(response) {
 				$scope.myActs = response.data;
 			});
@@ -183,7 +183,7 @@
 			$http({
 				method : "GET",
 				url : "api/act/findAmendmentsBy",
-				params: {username: $scope.loggedInUser.username, notUsvojen: true}
+				params: {username: $scope.loggedInUser.Username, notUsvojen: true}
 			}).then(function(response) {
 				var myAmendments = response.data;
 				$scope.myAmendments = [];

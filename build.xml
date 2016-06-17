@@ -37,6 +37,7 @@
 		<xjc schema="${data.dir}/XML/Elementi.xsd" destdir="${gen.dir}"/>
 		<xjc schema="${data.dir}/XML/Propis.xsd" destdir="${gen.dir}"/>
 		<xjc schema="${data.dir}/XML/Amandman.xsd" destdir="${gen.dir}"/>
+		<xjc schema="${data.dir}/XML/User.xsd" destdir="${gen.dir}"/>
 	</target>
 
 	<target name="main" depends="generate_classes"/>

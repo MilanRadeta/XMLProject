@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+    targetNamespace="http://www.skupstinans.rs/users" xmlns="http://www.skupstinans.rs/users">
+
+    <xs:element name="Users">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element maxOccurs="unbounded" minOccurs="0" ref="User"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="User">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="Username"/>
+                <xs:element ref="Password"/>
+                <xs:element ref="UserType"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="Username" type="xs:string"/>
+    <xs:element name="Password" type="xs:string"/>
+    <xs:element name="UserType">
+        <xs:simpleType>
+            <xs:restriction base="xs:string">
+                <xs:enumeration value="PREDSEDNIK"/>
+                <xs:enumeration value="ODBORNIK"/>
+            </xs:restriction>
+        </xs:simpleType>
+    </xs:element>
+</xs:schema>

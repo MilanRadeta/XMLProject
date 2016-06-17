@@ -33,9 +33,7 @@ import rs.skupstinans.amandman.Amandmani;
 import rs.skupstinans.elementi.Stav;
 import rs.skupstinans.propis.Propis;
 import rs.skupstinans.session.DatabaseBean;
-import rs.skupstinans.users.Odbornik;
 import rs.skupstinans.users.User;
-import rs.skupstinans.users.UserType;
 import rs.skupstinans.util.Checker;
 import rs.skupstinans.util.ElementConstants;
 import rs.skupstinans.util.ElementFinder;
@@ -64,7 +62,7 @@ public class RestBean implements RestBeanRemote {
 		if (test) {
 			database.clearDatabase();
 		} else {
-			database.test("1");
+			database.test();
 		}
 		return stav;
 	}
@@ -231,27 +229,30 @@ public class RestBean implements RestBeanRemote {
 		return null;
 	}
 
+	private boolean isUserPredsednik() {
+		return getCurrentUser().getUserType().equals("PREDSEDNIK");
+	}
+	
 	public void usvojiPropisUNacelu(String id) {
-		User user = getCurrentUser();
-		if (isUserLoggedIn() && user.getUserType() == UserType.PREDSEDNIK) {
+		if (isUserLoggedIn() && isUserPredsednik()) {
 			database.acceptActGenerally(id);
 		}
 	}
 
 	public void usvojiPropisUPojedinostima(String id, List<String> amandmani) {
-		if (isUserLoggedIn() && getCurrentUser().getUserType() == UserType.PREDSEDNIK) {
+		if (isUserLoggedIn() && isUserPredsednik()) {
 			database.acceptActWithAmendments(id, amandmani);
 		}
 	}
 
 	public void usvojiPropisUCelosti(String id) {
-		if (isUserLoggedIn() && getCurrentUser().getUserType() == UserType.PREDSEDNIK) {
+		if (isUserLoggedIn() && isUserPredsednik()) {
 			database.acceptAct(id);
 		}
 	}
 
 	public void odbaciPredlogPropisa(String id) {
-		if (isUserLoggedIn() && getCurrentUser().getUserType() == UserType.PREDSEDNIK) {
+		if (isUserLoggedIn() && isUserPredsednik()) {
 			database.deletePropis("/propisi/" + id);
 		}
 	}
@@ -314,7 +315,7 @@ public class RestBean implements RestBeanRemote {
 
 	private boolean isUserLoggedIn() {
 		User user = getCurrentUser();
-		if (user != null && user instanceof Odbornik) {
+		if (user != null) {
 			return true;
 		}
 		return false;

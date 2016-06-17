@@ -45,17 +45,17 @@
 							<td><input type="checkbox" data-ng-model="searchQuery.inProcedure" /></td>
 							<td><input type="checkbox" data-ng-model="searchQuery.accepted" /></td>
 						</tr>
-						<tr>
+						<tr data-ng-hide="true">
 							<td></td>
 							<th>Datum od</th>
 							<th>Datum do</th>
 						</tr>
-						<tr>
+						<tr data-ng-hide="true">
 							<th>Datum predlaganja</th>
 							<td><input type="date" data-ng-model="searchQuery.datumPredlogOd" /></td>
 							<td><input type="date" data-ng-model="searchQuery.datumPredlogDo" /></td>
 						</tr>
-						<tr>
+						<tr data-ng-hide="true">
 							<th>Datum usvajanja</th>
 							<td><input type="date" data-ng-model="searchQuery.datumAcceptedOd" /></td>
 							<td><input type="date" data-ng-model="searchQuery.datumAcceptedDo" /></td>
@@ -231,7 +231,7 @@
 							<td><button
 									class="btn btn-primary"
 									data-ng-click="createAmendment(act)">Predloži amandman</button></td>
-							<td data-ng-show="act.usernameDonosioca == loggedInUser.username"><button class="btn btn-primary"
+							<td data-ng-show="act.usernameDonosioca == loggedInUser.Username"><button class="btn btn-primary"
 									data-ng-click="removeAct(act)">Povuci</button></td>
 							<td>
 								<button class="btn btn-primary" data-ng-click="downloadXML(act)">XML</button>
@@ -324,7 +324,7 @@
 				</div>
 			</div>
 			
-			<div data-ng-show="loggedInUser.userType == 'PREDSEDNIK'">
+			<div data-ng-show="loggedInUser.UserType == 'PREDSEDNIK'">
 				<h3>Sednica</h3>
 				<div data-ng-show="actInSession">
 					<h4>Pretres dokumenta</h4>

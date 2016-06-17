@@ -1,5 +1,6 @@
 package rs.skupstinans.service;
 
+import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 import javax.servlet.http.HttpServletRequest;
@@ -10,7 +11,9 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 
+import rs.skupstinans.session.DatabaseBean;
 import rs.skupstinans.users.User;
+import rs.skupstinans.users.Users;
 
 /**
  * Session Bean implementation class UsersBean
@@ -22,6 +25,11 @@ public class UsersBean implements UsersBeanRemote {
 
 	@Context
 	private HttpServletRequest request;
+	
+	@EJB
+	private DatabaseBean database;
+	
+	private static Users users = null;	
 	
 	@POST
 	@Path("/login")
@@ -35,13 +43,18 @@ public class UsersBean implements UsersBeanRemote {
 			retval.setUserType(loggedInUser.getUserType());
 			return retval;
 		}
-		if (User.getUsers().contains(user)) {
-			user = User.getUsers().get(User.getUsers().indexOf(user));
-			request.getSession().setAttribute("user", user);
-			User retval = new User();
-			retval.setUsername(user.getUsername());
-			retval.setUserType(user.getUserType());
-			return retval;
+		if (users == null) {
+			users = database.getUsers();
+		}
+		
+		for (User u : users.getUser()) {
+			if (u.getUsername().equals(user.getUsername()) && u.getPassword().equals(user.getPassword())) {
+				request.getSession().setAttribute("user", u);
+				User retval = new User();
+				retval.setUsername(u.getUsername());
+				retval.setUserType(u.getUserType());
+				return retval;	
+			}	
 		}
 		return null;
 	}
