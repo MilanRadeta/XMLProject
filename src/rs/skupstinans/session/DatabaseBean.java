@@ -2,6 +2,7 @@ package rs.skupstinans.session;
 
 import java.io.IOException;
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.GregorianCalendar;
 import java.util.List;
@@ -37,6 +38,8 @@ import com.marklogic.client.query.QueryManager;
 import com.marklogic.client.query.StringQueryDefinition;
 import com.marklogic.client.query.StructuredQueryBuilder;
 import com.marklogic.client.query.StructuredQueryDefinition;
+import com.marklogic.client.semantics.GraphManager;
+import com.marklogic.client.semantics.RDFMimeTypes;
 
 import rs.skupstinans.amandman.Amandman;
 import rs.skupstinans.amandman.Amandmani;
@@ -63,6 +66,7 @@ public class DatabaseBean {
 
 	private DatabaseClient client;
 	private XMLDocumentManager xmlManager;
+	private GraphManager graphManager;
 
 	private List<Transaction> transactions = new ArrayList<>();
 
@@ -76,6 +80,8 @@ public class DatabaseBean {
 			client = DatabaseClientFactory.newClient(props.host, props.port, props.database, props.user, props.password,
 					props.authType);
 			xmlManager = client.newXMLDocumentManager();
+			graphManager = client.newGraphManager();
+			graphManager.setDefaultMimetype(RDFMimeTypes.NTRIPLES);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -124,7 +130,33 @@ public class DatabaseBean {
 		StringHandle stringHandle = new StringHandle("<brojPropisa>" + brojPropisa + "</brojPropisa>");
 		xmlManager.write("/brojPropisa", stringHandle, t);
 		write("/propisi/" + brojPropisa, "/predlozi", propis, t);
+
+		stringHandle = new StringHandle()
+				.with("<http://www.skupstinans.rs/propis/" + brojPropisa
+						+ "> <http://www.skupstinans.rs/predicate/brojPropisa> \"" + brojPropisa + "\" ."
+						+ "<http://www.skupstinans.rs/propis/" + brojPropisa
+						+ "> <http://www.skupstinans.rs/predicate/status> \"" + propis.getStatus() + "\" ."
+						+ "<http://www.skupstinans.rs/propis/" + brojPropisa
+						+ "> <http://www.skupstinans.rs/predicate/usernameDonosioca> \"" + propis.getUsernameDonosioca()
+						+ "\" ." + "<http://www.skupstinans.rs/propis/" + brojPropisa
+						+ "> <http://www.skupstinans.rs/predicate/datumPredlaganja> \""
+						+ formatDate(propis.getDatumPredlaganjaPropisa()) + "\"^^" + xmlSchemaDateURI + " .")
+				.withMimetype(RDFMimeTypes.NTRIPLES);
+		desc = xmlManager.exists("/metadata", t);
+		if (desc == null) {
+			graphManager.write("/metadata", stringHandle, t);
+		}
+		else {
+			graphManager.merge("/metadata", stringHandle, t);
+		}
 		commitTransaction(t);
+	}
+
+	private static String xmlSchemaDateURI = "<http://www.w3.org/2001/XMLSchema#date>";
+	
+	private String formatDate(XMLGregorianCalendar date) {
+		SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+		return format.format(date.toGregorianCalendar().getTime());
 	}
 
 	public void predlogAmandmana(Amandmani amandmani) {
@@ -353,8 +385,8 @@ public class DatabaseBean {
 	}
 
 	public void acceptActGenerally(String propisId) {
+		Transaction t = createTransaction();
 		try {
-			Transaction t = createTransaction();
 			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
 			JAXBHandle<Propis> handle = new JAXBHandle<>(context);
 			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
@@ -363,14 +395,15 @@ public class DatabaseBean {
 			propis.setStatus("usvojen u nacelu");
 			write("/propisi/" + propisId, propis, t);
 			commitTransaction(t);
-		} catch (JAXBException e) {
+		} catch (Exception e) {
+			rollbackTransaction(t);
 			e.printStackTrace();
 		}
 	}
 
 	public void acceptActWithAmendments(String propisId, List<String> amandmani) {
+		Transaction t = createTransaction();
 		try {
-			Transaction t = createTransaction();
 			DocumentMetadataHandle metadata = new DocumentMetadataHandle();
 			JAXBContext context = JAXBContext.newInstance(Amandmani.class.getPackage().getName());
 			JAXBHandle<Amandmani> aHandle = new JAXBHandle<>(context);
@@ -400,7 +433,8 @@ public class DatabaseBean {
 			propis.setStatus("usvojen u pojedinostima");
 			write("/propisi/" + propisId, propis, t);
 			commitTransaction(t);
-		} catch (JAXBException e) {
+		} catch (Exception e) {
+			rollbackTransaction(t);
 			e.printStackTrace();
 		}
 	}
@@ -473,8 +507,8 @@ public class DatabaseBean {
 	}
 
 	public void acceptAct(String propisId) {
+		Transaction t = createTransaction();
 		try {
-			Transaction t = createTransaction();
 			String url = "/amandmani/" + propisId;
 			if (exists(url)) {
 				delete(url, t);
@@ -502,7 +536,8 @@ public class DatabaseBean {
 			}
 			write("/propisi/" + propisId, "/usvojeni", propis, t);
 			commitTransaction(t);
-		} catch (JAXBException e) {
+		} catch (Exception e) {
+			rollbackTransaction(t);
 			e.printStackTrace();
 		}
 	}
@@ -521,26 +556,30 @@ public class DatabaseBean {
 	}
 
 	public void test() {
-		Users users = new Users();
-		User user = new User();
-		user.setUsername("odbornik");
-		user.setPassword("odbornik");
-		user.setUserType("ODBORNIK");
-		users.getUser().add(user);
-		user = new User();
-		user.setUsername("predsednik");
-		user.setPassword("predsednik");
-		user.setUserType("PREDSEDNIK");
-		users.getUser().add(user);
+		boolean userInit = false;
+		if (userInit) {
+			Users users = new Users();
+			User user = new User();
+			user.setUsername("odbornik");
+			user.setPassword("odbornik");
+			user.setUserType("ODBORNIK");
+			users.getUser().add(user);
+			user = new User();
+			user.setUsername("predsednik");
+			user.setPassword("predsednik");
+			user.setUserType("PREDSEDNIK");
+			users.getUser().add(user);
 
-		try {
-			JAXBContext context = JAXBContext.newInstance(Users.class.getPackage().getName());
-			JAXBHandle<Users> handle = new JAXBHandle<>(context);
-			handle.set(users);
-			xmlManager.write("/users", handle);
-		}
-		catch (Exception e) {
-			e.printStackTrace();
+			try {
+				JAXBContext context = JAXBContext.newInstance(Users.class.getPackage().getName());
+				JAXBHandle<Users> handle = new JAXBHandle<>(context);
+				handle.set(users);
+				xmlManager.write("/users", handle);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		} else {
+
 		}
 	}
 }
