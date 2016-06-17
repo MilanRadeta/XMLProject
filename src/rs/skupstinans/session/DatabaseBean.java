@@ -40,6 +40,8 @@ import com.marklogic.client.query.StructuredQueryBuilder;
 import com.marklogic.client.query.StructuredQueryDefinition;
 import com.marklogic.client.semantics.GraphManager;
 import com.marklogic.client.semantics.RDFMimeTypes;
+import com.marklogic.client.semantics.SPARQLQueryDefinition;
+import com.marklogic.client.semantics.SPARQLQueryManager;
 
 import rs.skupstinans.amandman.Amandman;
 import rs.skupstinans.amandman.Amandmani;
@@ -67,6 +69,7 @@ public class DatabaseBean {
 	private DatabaseClient client;
 	private XMLDocumentManager xmlManager;
 	private GraphManager graphManager;
+	private SPARQLQueryManager sparqlQueryManager;
 
 	private List<Transaction> transactions = new ArrayList<>();
 
@@ -82,6 +85,7 @@ public class DatabaseBean {
 			xmlManager = client.newXMLDocumentManager();
 			graphManager = client.newGraphManager();
 			graphManager.setDefaultMimetype(RDFMimeTypes.NTRIPLES);
+			sparqlQueryManager = client.newSPARQLQueryManager();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -135,6 +139,8 @@ public class DatabaseBean {
 				.with("<http://www.skupstinans.rs/propis/" + brojPropisa
 						+ "> <http://www.skupstinans.rs/predicate/brojPropisa> \"" + brojPropisa + "\" ."
 						+ "<http://www.skupstinans.rs/propis/" + brojPropisa
+						+ "> <http://www.skupstinans.rs/predicate/naziv> \"" + propis.getNaziv() + "\" ."
+						+ "<http://www.skupstinans.rs/propis/" + brojPropisa
 						+ "> <http://www.skupstinans.rs/predicate/status> \"" + propis.getStatus() + "\" ."
 						+ "<http://www.skupstinans.rs/propis/" + brojPropisa
 						+ "> <http://www.skupstinans.rs/predicate/usernameDonosioca> \"" + propis.getUsernameDonosioca()
@@ -167,6 +173,33 @@ public class DatabaseBean {
 
 	public void predlogAmandmana(Amandmani amandmani, Transaction t) {
 		write("/amandmani/" + amandmani.getReferences(), amandmani, t);
+
+		SPARQLQueryDefinition qdef = sparqlQueryManager.newQueryDefinition(""
+				+ "WITH </metadata> "
+				+ "DELETE {"
+				+ "<http://www.skupstinans.rs/amandman/" + amandmani.getReferences() + "> <http://www.skupstinans.rs/predicate/brojAmandmana> ?o ."
+				+ "}"
+				+ "WHERE {"
+				+ "<http://www.skupstinans.rs/amandman/" + amandmani.getReferences() + "> <http://www.skupstinans.rs/predicate/brojAmandmana> ?o ."
+				+ "}");
+		sparqlQueryManager.executeUpdate(qdef, t);
+
+		StringHandle stringHandle = new StringHandle()
+				.with("<http://www.skupstinans.rs/amandman/" + amandmani.getReferences()
+						+ "> <http://www.skupstinans.rs/predicate/referencira> "
+						+ "<http://www.skupstinans.rs/propis/" + amandmani.getReferences() + "> ."
+						+ "<http://www.skupstinans.rs/amandman/" + amandmani.getReferences()
+						+ "> <http://www.skupstinans.rs/predicate/brojAmandmana> \""
+						+ amandmani.getAmandman().size() + "\" .")
+				.withMimetype(RDFMimeTypes.NTRIPLES);
+		
+		DocumentDescriptor desc = xmlManager.exists("/metadata", t);
+		if (desc == null) {
+			graphManager.write("/metadata", stringHandle, t);
+		}
+		else {
+			graphManager.merge("/metadata", stringHandle, t);
+		}
 	}
 
 	private JAXBHandle<Propis> getPropisHandle(Propis propis) {
@@ -215,6 +248,25 @@ public class DatabaseBean {
 				if (!propis.getStatus().equals("usvojen u celosti")) {
 					delete(URI, t);
 					delete("/amandmani/" + propis.getBrojPropisa(), t);
+
+					SPARQLQueryDefinition qdef = sparqlQueryManager.newQueryDefinition(""
+							+ "WITH </metadata> "
+							+ "DELETE {"
+							+ "<http://www.skupstinans.rs/propis/" + propis.getBrojPropisa() + "> ?p ?o ."
+							+ "}"
+							+ "WHERE {"
+							+ "<http://www.skupstinans.rs/propis/" + propis.getBrojPropisa() + "> ?p ?o ."
+							+ "}");
+					sparqlQueryManager.executeUpdate(qdef, t);
+					 qdef = sparqlQueryManager.newQueryDefinition(""
+								+ "WITH </metadata> "
+								+ "DELETE {"
+								+ "<http://www.skupstinans.rs/amandman/" + propis.getBrojPropisa() + "> ?p ?o ."
+								+ "}"
+								+ "WHERE {"
+								+ "<http://www.skupstinans.rs/amandman/" + propis.getBrojPropisa() + "> ?p ?o ."
+								+ "}");
+					sparqlQueryManager.executeUpdate(qdef, t);
 				}
 			}
 			commitTransaction(t);
@@ -394,6 +446,20 @@ public class DatabaseBean {
 			Propis propis = handle.get();
 			propis.setStatus("usvojen u nacelu");
 			write("/propisi/" + propisId, propis, t);
+
+			SPARQLQueryDefinition qdef = sparqlQueryManager.newQueryDefinition(""
+					+ "WITH </metadata> "
+					+ "DELETE {"
+					+ "<http://www.skupstinans.rs/propis/" + propisId + "> <http://www.skupstinans.rs/predicate/status> ?o ."
+					+ "}"
+					+ "INSERT {"
+					+ "<http://www.skupstinans.rs/propis/" + propisId + "> <http://www.skupstinans.rs/predicate/status> \"" + propis.getStatus() + "\" ."
+					+ "}"
+					+ "WHERE {"
+					+ "<http://www.skupstinans.rs/propis/" + propisId + "> <http://www.skupstinans.rs/predicate/status> ?o ."
+					+ "}");
+			sparqlQueryManager.executeUpdate(qdef, t);
+			
 			commitTransaction(t);
 		} catch (Exception e) {
 			rollbackTransaction(t);
@@ -410,6 +476,18 @@ public class DatabaseBean {
 			read("/amandmani/" + propisId, metadata, aHandle, t);
 			Amandmani aDoc = aHandle.get();
 			delete("/amandmani/" + propisId, t);
+
+			SPARQLQueryDefinition qdef;
+			 qdef = sparqlQueryManager.newQueryDefinition(""
+						+ "WITH </metadata> "
+						+ "DELETE {"
+						+ "<http://www.skupstinans.rs/amandman/" + propisId + "> ?p ?o ."
+						+ "}"
+						+ "WHERE {"
+						+ "<http://www.skupstinans.rs/amandman/" + propisId + "> ?p ?o ."
+						+ "}");
+			sparqlQueryManager.executeUpdate(qdef, t);
+			
 			context = JAXBContext.newInstance(Propis.class.getPackage().getName());
 			JAXBHandle<Propis> handle = new JAXBHandle<>(context);
 			read("/propisi/" + propisId, metadata, handle, t);
@@ -432,6 +510,20 @@ public class DatabaseBean {
 			}
 			propis.setStatus("usvojen u pojedinostima");
 			write("/propisi/" + propisId, propis, t);
+
+
+			qdef = sparqlQueryManager.newQueryDefinition(""
+					+ "WITH </metadata> "
+					+ "DELETE {"
+					+ "<http://www.skupstinans.rs/propis/" + propisId + "> <http://www.skupstinans.rs/predicate/status> ?o ."
+					+ "}"
+					+ "INSERT {"
+					+ "<http://www.skupstinans.rs/propis/" + propisId + "> <http://www.skupstinans.rs/predicate/status> \"" + propis.getStatus() + "\" ."
+					+ "}"
+					+ "WHERE {"
+					+ "<http://www.skupstinans.rs/propis/" + propisId + "> <http://www.skupstinans.rs/predicate/status> ?o ."
+					+ "}");
+			sparqlQueryManager.executeUpdate(qdef, t);
 			commitTransaction(t);
 		} catch (Exception e) {
 			rollbackTransaction(t);
@@ -512,6 +604,17 @@ public class DatabaseBean {
 			String url = "/amandmani/" + propisId;
 			if (exists(url)) {
 				delete(url, t);
+				SPARQLQueryDefinition qdef;
+				 qdef = sparqlQueryManager.newQueryDefinition(""
+							+ "WITH </metadata> "
+							+ "DELETE {"
+							+ "<http://www.skupstinans.rs/amandman/" + propisId + "> ?p ?o ."
+							+ "}"
+							+ "WHERE {"
+							+ "<http://www.skupstinans.rs/amandman/" + propisId + "> ?p ?o ."
+							+ "}");
+				qdef.setBaseUri("/metadata");
+				sparqlQueryManager.executeUpdate(qdef, t);
 			}
 			JAXBContext context = JAXBContext.newInstance(Propis.class.getPackage().getName());
 			JAXBHandle<Propis> handle = new JAXBHandle<>(context);
@@ -535,6 +638,33 @@ public class DatabaseBean {
 				e.printStackTrace();
 			}
 			write("/propisi/" + propisId, "/usvojeni", propis, t);
+
+			SPARQLQueryDefinition qdef = sparqlQueryManager.newQueryDefinition(""
+					+ "WITH </metadata> "
+					+ "DELETE {"
+					+ "<http://www.skupstinans.rs/propis/" + propisId + "> <http://www.skupstinans.rs/predicate/status> ?o ."
+					+ "}"
+					+ "INSERT {"
+					+ "<http://www.skupstinans.rs/propis/" + propisId + "> <http://www.skupstinans.rs/predicate/status> \"" + propis.getStatus() + "\" ."
+					+ "}"
+					+ "WHERE {"
+					+ "<http://www.skupstinans.rs/propis/" + propisId + "> <http://www.skupstinans.rs/predicate/status> ?o ."
+					+ "}");
+			sparqlQueryManager.executeUpdate(qdef, t);
+			
+			StringHandle stringHandle = new StringHandle()
+					.with("<http://www.skupstinans.rs/propis/" + propisId
+								+ "> <http://www.skupstinans.rs/predicate/datumUsvajanja>  \""
+							+ formatDate(propis.getDatumPredlaganjaPropisa()) + "\"^^" + xmlSchemaDateURI + " .")
+					.withMimetype(RDFMimeTypes.NTRIPLES);
+			
+			DocumentDescriptor desc = xmlManager.exists("/metadata", t);
+			if (desc == null) {
+				graphManager.write("/metadata", stringHandle, t);
+			}
+			else {
+				graphManager.merge("/metadata", stringHandle, t);
+			}
 			commitTransaction(t);
 		} catch (Exception e) {
 			rollbackTransaction(t);
